@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pain Interviews · SheBlooms Stage 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#5B75FE;
+  --ink:#0A0A08;
+  --soft:#F7F8FF;
+  --border:#D8D9E5;
+  --muted:#888;
+  --white:#fff;
+  --green-bg:#f0fdf4;--green:#0f6e56;--green-bd:#bbf7d0;
+  --red-bg:#fef2f2;--red:#991b1b;--red-bd:#fecaca;
+}
+body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
+.page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
+
+/* ── HEADER ───────────────────────────────── */
+.doc-header{text-align:center;margin-bottom:40px;padding-bottom:28px;border-bottom:1.5px solid var(--ink)}
+.brand{font-family:'Instrument Serif',serif;font-style:normal;font-size:28px;color:var(--brand);letter-spacing:-.01em;margin-bottom:10px}
+.doc-stage{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--brand);margin-bottom:4px}
+.doc-title{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:500;color:var(--ink);line-height:1.3}
+
+/* ── INTRO BOX ─────────────────────────────── */
+.intro{background:var(--soft);border-left:3px solid var(--brand);padding:12px 16px;margin-bottom:32px;font-size:12px;color:#444;line-height:1.7;border-radius:0 6px 6px 0}
+.intro strong{color:var(--ink);font-weight:600}
+
+/* ── TABS ───────────────────────────────────── */
+.tabs{display:flex;gap:0;border-bottom:1.5px solid var(--border);margin-bottom:28px}
+.tab{padding:9px 20px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;border:none;background:transparent;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1.5px;transition:all .15s}
+.tab.active{color:var(--brand);border-bottom-color:var(--brand)}
+.tab:hover:not(.active){color:var(--ink)}
+.tab-panel{display:none}.tab-panel.active{display:block}
+
+/* ── SECTION HEADER ─────────────────────────── */
+.section{margin-bottom:28px}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.section-num{width:22px;height:22px;border-radius:50%;background:var(--brand);color:#fff;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.section-title{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--brand)}
+.section-note{font-size:11px;color:var(--muted);margin-left:32px;margin-top:-8px;margin-bottom:12px;line-height:1.5}
+
+/* ── SCRIPT BLOCKS ──────────────────────────── */
+.script-phase{margin-bottom:20px}
+.phase-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--brand);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.q-block{padding:12px 16px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;display:flex;gap:12px;align-items:flex-start;transition:border-color .15s}
+.q-block:focus-within{border-color:var(--brand);background:var(--soft)}
+.q-num{font-size:11px;font-weight:700;color:var(--brand);min-width:18px;padding-top:1px}
+.q-content{flex:1}
+.q-text{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:4px;line-height:1.5}
+.q-hint{font-size:11px;color:var(--muted);font-style:italic}
+
+/* ── FIELDS ─────────────────────────────────── */
+.field{margin-bottom:14px}
+.field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+input[type=text],input[type=number],textarea{
+  width:100%;border:1px solid var(--border);border-radius:7px;
+  padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
+  color:var(--ink);background:#fff;outline:none;transition:border-color .15s;
+  font-weight:400;
+}
+input[type=text]:focus,input[type=number]:focus,textarea:focus{border-color:var(--brand);background:var(--soft)}
+input::placeholder,textarea::placeholder{color:#c5c5c5;font-style:italic}
+textarea{resize:vertical;line-height:1.65}
+.field-row{display:grid;gap:12px}
+.field-row.col2{grid-template-columns:1fr 1fr}
+.field-row.col3{grid-template-columns:1fr 1fr 1fr}
+
+/* ── RATING ─────────────────────────────────── */
+.rating-row{display:flex;align-items:center;gap:8px;margin-top:4px}
+.rating-label{font-size:11px;color:var(--muted);min-width:80px}
+.rating-btns{display:flex;gap:5px}
+.r-btn{width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:#fff;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;cursor:pointer;color:var(--ink);transition:all .12s;display:flex;align-items:center;justify-content:center}
+.r-btn:hover{border-color:var(--brand);color:var(--brand);background:var(--soft)}
+.r-btn.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.r-desc{font-size:11px;color:var(--muted);margin-left:6px}
+
+/* ── QUOTE CARD ─────────────────────────────── */
+.quote-card{border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:10px;position:relative;transition:border-color .15s}
+.quote-card:focus-within{border-color:var(--brand)}
+.quote-mark{font-family:'Instrument Serif',serif;font-size:44px;color:var(--border);line-height:.7;margin-bottom:8px;display:block}
+.quote-num{position:absolute;top:16px;right:16px;width:22px;height:22px;border-radius:50%;background:var(--soft);border:1px solid var(--border);font-size:10px;font-weight:600;color:var(--brand);display:flex;align-items:center;justify-content:center}
+.quote-card textarea{border:none;background:transparent;padding:4px 0;font-family:'DM Sans',sans-serif;font-style:italic;font-size:14px;color:var(--ink);min-height:56px}
+.quote-card textarea:focus{background:transparent;border:none}
+.quote-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.quote-meta input{font-size:12px;padding:6px 10px}
+
+/* ── TAGS ──────────────────────────────────── */
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.tag{padding:4px 11px;border-radius:20px;border:1px solid var(--border);font-size:11px;cursor:pointer;transition:all .1s;user-select:none;background:#fff}
+.tag:hover{border-color:var(--brand);color:var(--brand)}
+.tag.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+/* ── DIVIDER ────────────────────────────────── */
+.divider{border:none;border-top:1px solid var(--border);margin:24px 0}
+
+/* ── SUMMARY BOX ────────────────────────────── */
+.summary-box{background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:20px 22px;margin-bottom:20px}
+
+/* ── SCORE BOX ──────────────────────────────── */
+.score-box{display:flex;align-items:center;gap:16px;padding:16px 20px;border:1.5px solid var(--brand);border-radius:10px;margin-top:16px}
+.score-label{font-size:12px;font-weight:600}
+.score-val{font-family:'DM Sans',sans-serif;font-size:32px;font-weight:600;color:var(--brand);margin-left:auto}
+
+/* ── EVIDENCE BAR ────────────────────────────── */
+.evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
+.evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
+
+/* ── PROGRESS ────────────────────────────────── */
+.progress-bar{margin-bottom:24px}
+.progress-header{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px}
+.progress-track{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--brand);border-radius:2px;transition:width .4s}
+
+/* ── PRINT BTN ──────────────────────────────── */
+.print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px;transition:transform .1s}
+.print-btn:hover{transform:translateY(-1px)}
+@media print{.print-btn,.tabs{display:none}.tab-panel{display:block!important}.page{padding:28px 32px}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div class="brand">SheBlooms</div>
+    <div class="doc-stage">Stage 1 · Problem Validation Fit</div>
+    <div class="doc-title">Pain Interviews — 20+ Real People</div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-bar">
+    <div class="progress-header">
+      <span>Interviews completed</span>
+      <span id="progress-label">0 / 20</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  </div>
+
+  <div class="intro">
+    <strong>The Mom Test rule:</strong> Never present your solution. Ask about their life, not your idea.
+    Every question should be about their past, not the hypothetical future.
+    If they know what you're building, the data is contaminated.
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('script',this)">Interview Script</button>
+    <button class="tab" onclick="switchTab('capture',this)">Capture Sheet</button>
+    <button class="tab" onclick="switchTab('log',this)">Interview Log</button>
+  </div>
+
+  <!-- ── TAB 1: SCRIPT ─────────────────────────────── -->
+  <div id="tab-script" class="tab-panel active">
+
+    <div class="section">
+      <div class="script-phase">
+        <div class="phase-label">Opening — 2 min</div>
+        <div class="q-block">
+          <div class="q-num">1.</div>
+          <div class="q-content">
+            <div class="q-text">"Thank you for your time. I'm researching how people like you deal with [topic area]. I'm not selling anything — I just want to learn from your experience."</div>
+          </div>
+        </div>
+        <div class="q-block">
+          <div class="q-num">2.</div>
+          <div class="q-content">
+            <div class="q-text">"Can you tell me about your role and what a typical week looks like for you?"</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="script-phase">
+        <div class="phase-label">Discovery — 15 min</div>
+        <div class="q-block">
+          <div class="q-num">3.</div>
+          <div class="q-content">
+            <div class="q-text">"When was the last time you dealt with [problem area]? Walk me through exactly what happened."</div>
+            <div class="q-hint">Listen for: frequency, context, and who else was involved.</div>
+          </div>
+        </div>
+        <div class="q-block">
+          <div class="q-num">4.</div>
+          <div class="q-content">
+            <div class="q-text">"How did you handle it? What did you try?"</div>
+            <div class="q-hint">Current workarounds = your real competition.</div>
+          </div>
+        </div>
+        <div class="q-block">
+          <div class="q-num">5.</div>
+          <div class="q-content">
+            <div class="q-text">"What was the most frustrating part of that experience?"</div>
+          </div>
+        </div>
+        <div class="q-block">
+          <div class="q-num">6.</div>
+          <div class="q-content">
+            <div class="q-text">"How often does this happen to you?"</div>
+          </div>
+        </div>
+        <div class="q-block">
+          <div class="q-num">7.</div>
+          <div class="q-content">
+            <div class="q-text">"What have you tried to solve it? What worked, what didn't?"</div>
+            <div class="q-hint">If they pay for something now, that's strong signal.</div>
+          </div>
+        </div>
+        <div class="q-block">
+          <div class="q-num">8.</div>
+          <div class="q-content">
+            <div class="q-text">"If you could wave a magic wand and fix one thing about this, what would it be?"</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="script-phase">
+        <div class="phase-label">Closing — 5 min</div>
+        <div class="q-block">
+          <div class="q-num">9.</div>
+          <div class="q-content">
+            <div class="q-text">"On a scale of 1 to 5, how painful is this problem for you right now?"</div>
+            <div class="q-hint">1 = minor annoyance · 5 = major blocker. You need 70%+ scoring 4 or 5 to pass the Stage 1 gate.</div>
+          </div>
+        </div>
+        <div class="q-block">
+          <div class="q-num">10.</div>
+          <div class="q-content">
+            <div class="q-text">"Is there anyone else in your network who deals with this same problem? Could you introduce me?"</div>
+            <div class="q-hint">The best interviews come from referrals — they come pre-validated.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">!</div>
+        <div class="section-title">What to avoid</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="padding:12px 14px;border-radius:8px;border:1px solid var(--red-bd);background:var(--red-bg)">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--red);margin-bottom:7px">Never say</div>
+          <div style="font-size:12px;color:#333;line-height:1.7">
+            "Would you use a product that…"<br>
+            "Do you think this is a good idea?"<br>
+            "Hypothetically, if we built…"<br>
+            "I'm building something to help with…"
+          </div>
+        </div>
+        <div style="padding:12px 14px;border-radius:8px;border:1px solid var(--green-bd);background:var(--green-bg)">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--green);margin-bottom:7px">Instead ask</div>
+          <div style="font-size:12px;color:#333;line-height:1.7">
+            "Tell me about the last time…"<br>
+            "How did you handle it?"<br>
+            "What have you already tried?"<br>
+            "How much did that cost you?"
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── TAB 2: CAPTURE SHEET ──────────────────────── -->
+  <div id="tab-capture" class="tab-panel">
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <div class="section-title">Interviewee information</div>
+      </div>
+      <div class="field-row col3">
+        <div class="field"><label>Full name</label><input type="text" id="cap-name" placeholder="Ana Silva" oninput="updateLog()"></div>
+        <div class="field"><label>Date</label><input type="text" id="cap-date" placeholder="DD / MM / YYYY" oninput="updateLog()"></div>
+        <div class="field"><label>Profile / role</label><input type="text" id="cap-profile" placeholder="e.g. Founder, 3 yrs, SaaS" oninput="updateLog()"></div>
+      </div>
+      <div class="field"><label>How did you find them?</label>
+        <input type="text" id="cap-source" placeholder="e.g. LinkedIn, referral from Ana, community event…">
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <div class="section-title">Pain severity</div>
+      </div>
+      <div class="section-note">Ask Q9 — record the exact number they gave.</div>
+      <div class="rating-row">
+        <span class="rating-label">Score given:</span>
+        <div class="rating-btns" id="severity-btns">
+          <button class="r-btn" onclick="setSeverity(1)">1</button>
+          <button class="r-btn" onclick="setSeverity(2)">2</button>
+          <button class="r-btn" onclick="setSeverity(3)">3</button>
+          <button class="r-btn" onclick="setSeverity(4)">4</button>
+          <button class="r-btn" onclick="setSeverity(5)">5</button>
+        </div>
+        <span class="r-desc" id="severity-desc">—</span>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <div class="section-title">Direct quotes — exact words only</div>
+      </div>
+      <div class="section-note">Do not paraphrase. Write word-for-word. Minimum 3 per interview.</div>
+
+      <div id="quotes-container">
+        <div class="quote-card">
+          <span class="quote-mark">"</span>
+          <div class="quote-num">1</div>
+          <textarea placeholder="Write the exact quote here…" rows="2"></textarea>
+          <div class="quote-meta">
+            <input type="text" placeholder="Speaker name">
+            <input type="text" placeholder="Context (when / what triggered it)">
+          </div>
+          <div class="tag-row">
+            <span class="tag" onclick="toggleTag(this)">pain</span>
+            <span class="tag" onclick="toggleTag(this)">frustration</span>
+            <span class="tag" onclick="toggleTag(this)">workaround</span>
+            <span class="tag" onclick="toggleTag(this)">frequency</span>
+            <span class="tag" onclick="toggleTag(this)">cost</span>
+          </div>
+        </div>
+        <div class="quote-card">
+          <span class="quote-mark">"</span>
+          <div class="quote-num">2</div>
+          <textarea placeholder="Write the exact quote here…" rows="2"></textarea>
+          <div class="quote-meta">
+            <input type="text" placeholder="Speaker name">
+            <input type="text" placeholder="Context">
+          </div>
+          <div class="tag-row">
+            <span class="tag" onclick="toggleTag(this)">pain</span>
+            <span class="tag" onclick="toggleTag(this)">frustration</span>
+            <span class="tag" onclick="toggleTag(this)">workaround</span>
+            <span class="tag" onclick="toggleTag(this)">frequency</span>
+            <span class="tag" onclick="toggleTag(this)">cost</span>
+          </div>
+        </div>
+        <div class="quote-card">
+          <span class="quote-mark">"</span>
+          <div class="quote-num">3</div>
+          <textarea placeholder="Write the exact quote here…" rows="2"></textarea>
+          <div class="quote-meta">
+            <input type="text" placeholder="Speaker name">
+            <input type="text" placeholder="Context">
+          </div>
+          <div class="tag-row">
+            <span class="tag" onclick="toggleTag(this)">pain</span>
+            <span class="tag" onclick="toggleTag(this)">frustration</span>
+            <span class="tag" onclick="toggleTag(this)">workaround</span>
+            <span class="tag" onclick="toggleTag(this)">frequency</span>
+            <span class="tag" onclick="toggleTag(this)">cost</span>
+          </div>
+        </div>
+      </div>
+
+      <button onclick="addQuote()" style="margin-top:8px;border:1px dashed var(--border);background:transparent;padding:7px 16px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;color:var(--muted);width:100%;transition:all .15s" onmouseover="this.style.borderColor='var(--brand)';this.style.color='var(--brand)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">+ Add quote</button>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <div class="section-title">Observations & analysis</div>
+      </div>
+      <div class="field"><label>Key observations (behaviour, not just words)</label>
+        <textarea rows="3" placeholder="Body language, hesitations, moments they leaned forward, workarounds they showed you…"></textarea>
+      </div>
+      <div class="field"><label>Surprises — what you did not expect</label>
+        <textarea rows="2" placeholder="Anything that contradicted your hypothesis or changed your thinking."></textarea>
+      </div>
+      <div class="field"><label>Referrals mentioned</label>
+        <input type="text" placeholder="Name and contact of anyone they suggested — follow up within 24h.">
+      </div>
+    </div>
+
+    <div class="summary-box">
+      <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--brand);margin-bottom:14px">Interview summary</div>
+      <div class="field-row col2">
+        <div class="field"><label>Overall signal</label>
+          <select style="width:100%;border:1px solid var(--border);border-radius:7px;padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:#fff;outline:none">
+            <option value="">Select…</option>
+            <option>🔴 Weak — pain not confirmed</option>
+            <option>🟡 Mixed — some signal, needs more</option>
+            <option>🟢 Strong — clear pain, high severity</option>
+          </select>
+        </div>
+        <div class="field"><label>Would they be a customer?</label>
+          <select style="width:100%;border:1px solid var(--border);border-radius:7px;padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:#fff;outline:none">
+            <option value="">Select…</option>
+            <option>Definitely yes</option>
+            <option>Probably yes</option>
+            <option>Unlikely</option>
+            <option>No</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>One-sentence summary of what you learned</label>
+        <input type="text" placeholder="e.g. Ana spends 6h/week on manual reconciliation and has tried 3 tools that failed — strong pain signal.">
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:8px">
+      <button onclick="saveInterview()" style="background:var(--brand);color:#fff;border:none;padding:10px 22px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer">Save to log →</button>
+    </div>
+
+  </div>
+
+  <!-- ── TAB 3: LOG ────────────────────────────────── -->
+  <div id="tab-log" class="tab-panel">
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--brand);margin-bottom:3px">Interview tracker</div>
+        <div style="font-size:11px;color:var(--muted)">Gate: 20 interviews · 70%+ scoring pain 4–5</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:'DM Sans',sans-serif;font-size:28px;font-weight:600;color:var(--brand)" id="log-count">0</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">completed</div>
+      </div>
+    </div>
+
+    <!-- Stats row -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px" id="stats-row">
+      <div style="background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:14px 16px">
+        <div style="font-family:'DM Sans',sans-serif;font-size:26px;font-weight:600;color:var(--brand)" id="stat-high">0</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:2px">High pain (4–5)</div>
+      </div>
+      <div style="background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:14px 16px">
+        <div style="font-family:'DM Sans',sans-serif;font-size:26px;font-weight:600;color:var(--brand)" id="stat-avg">—</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:2px">Avg severity</div>
+      </div>
+      <div style="background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:14px 16px">
+        <div style="font-family:'DM Sans',sans-serif;font-size:26px;font-weight:600;color:var(--brand)" id="stat-pct">—</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:2px">% high pain</div>
+      </div>
+    </div>
+
+    <!-- Gate indicator -->
+    <div id="gate-box" style="padding:14px 18px;border-radius:10px;border:1.5px solid var(--border);background:var(--soft);margin-bottom:24px;font-size:12px;color:var(--muted)">
+      Complete at least 5 interviews to see your gate status.
+    </div>
+
+    <!-- Log table -->
+    <div id="log-table" style="border:1px solid var(--border);border-radius:10px;overflow:hidden">
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead>
+          <tr style="background:var(--ink);color:#fff">
+            <th style="padding:9px 12px;text-align:left;font-weight:500;font-size:11px">#</th>
+            <th style="padding:9px 12px;text-align:left;font-weight:500;font-size:11px">Name</th>
+            <th style="padding:9px 12px;text-align:left;font-weight:500;font-size:11px">Profile</th>
+            <th style="padding:9px 12px;text-align:center;font-weight:500;font-size:11px">Date</th>
+            <th style="padding:9px 12px;text-align:center;font-weight:500;font-size:11px">Pain</th>
+            <th style="padding:9px 12px;text-align:left;font-weight:500;font-size:11px">Signal</th>
+          </tr>
+        </thead>
+        <tbody id="log-body">
+          <tr>
+            <td colspan="6" style="padding:24px;text-align:center;color:var(--muted);font-style:italic">
+              No interviews saved yet. Fill in the Capture Sheet and click "Save to log".
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:20px">
+      <div class="field"><label>Patterns emerging (update after every 5 interviews)</label>
+        <textarea rows="4" placeholder="What are you hearing repeatedly? What surprises you? What contradicts your hypothesis?&#10;&#10;e.g. 14/18 founders mention they feel alone in the process. 11/18 have tried an accelerator and found it too expensive or too late-stage..."></textarea>
+      </div>
+    </div>
+
+    <div class="evidence">
+      <div class="evidence-icon">✦</div>
+      <div><strong>Evidence required:</strong> 20+ interviews with name, date, and 3+ direct quotes per person. 70%+ scoring pain 4–5. At least 3 emerging patterns documented.</div>
+    </div>
+
+  </div>
+
+</div>
+
+<button class="print-btn" onclick="window.print()">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+  Print / Save PDF
+</button>
+
+<script>
+// ── Tabs ────────────────────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Severity rating ─────────────────────────────────────────
+let currentSeverity = 0;
+const severityLabels = ['','1 — Minor annoyance','2 — Noticeable','3 — Significant','4 — Serious','5 — Major blocker'];
+function setSeverity(n) {
+  currentSeverity = n;
+  document.querySelectorAll('#severity-btns .r-btn').forEach((b, i) => {
+    b.classList.toggle('on', i < n);
+  });
+  document.getElementById('severity-desc').textContent = severityLabels[n];
+}
+
+// ── Tags ────────────────────────────────────────────────────
+function toggleTag(el) { el.classList.toggle('on'); }
+
+// ── Add quote ───────────────────────────────────────────────
+let quoteCount = 3;
+function addQuote() {
+  quoteCount++;
+  const card = document.createElement('div');
+  card.className = 'quote-card';
+  card.innerHTML = `
+    <span class="quote-mark">"</span>
+    <div class="quote-num">${quoteCount}</div>
+    <textarea placeholder="Write the exact quote here…" rows="2"></textarea>
+    <div class="quote-meta">
+      <input type="text" placeholder="Speaker name">
+      <input type="text" placeholder="Context">
+    </div>
+    <div class="tag-row">
+      <span class="tag" onclick="toggleTag(this)">pain</span>
+      <span class="tag" onclick="toggleTag(this)">frustration</span>
+      <span class="tag" onclick="toggleTag(this)">workaround</span>
+      <span class="tag" onclick="toggleTag(this)">frequency</span>
+      <span class="tag" onclick="toggleTag(this)">cost</span>
+    </div>`;
+  document.getElementById('quotes-container').appendChild(card);
+}
+
+// ── Interview log ───────────────────────────────────────────
+let interviews = [];
+
+function saveInterview() {
+  const name = document.getElementById('cap-name').value.trim();
+  const date = document.getElementById('cap-date').value.trim();
+  const profile = document.getElementById('cap-profile').value.trim();
+  if (!name) { alert('Please enter the interviewee name before saving.'); return; }
+
+  const signal = document.querySelector('#tab-capture select')?.value || '';
+  interviews.push({ num: interviews.length + 1, name, date, profile, severity: currentSeverity, signal });
+
+  renderLog();
+  updateProgress();
+
+  // Reset capture sheet
+  document.getElementById('cap-name').value = '';
+  document.getElementById('cap-date').value = '';
+  document.getElementById('cap-profile').value = '';
+  document.getElementById('cap-source').value = '';
+  setSeverity(0);
+  document.querySelectorAll('#quotes-container textarea').forEach(t => t.value = '');
+  document.querySelectorAll('#quotes-container input[type=text]').forEach(i => i.value = '');
+  document.querySelectorAll('.tag.on').forEach(t => t.classList.remove('on'));
+
+  switchTab('log', document.querySelectorAll('.tab')[2]);
+}
+
+function renderLog() {
+  const tbody = document.getElementById('log-body');
+  if (!interviews.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="padding:24px;text-align:center;color:var(--muted);font-style:italic">No interviews saved yet.</td></tr>';
+    return;
+  }
+
+  const signalColor = { '🔴 Weak — pain not confirmed': '#fef2f2', '🟡 Mixed — some signal, needs more': '#fffbeb', '🟢 Strong — clear pain, high severity': '#f0fdf4' };
+
+  tbody.innerHTML = interviews.map((iv, i) => `
+    <tr style="background:${i%2===0?'#fff':'var(--soft)'}">
+      <td style="padding:9px 12px;color:var(--muted)">${iv.num}</td>
+      <td style="padding:9px 12px;font-weight:500">${iv.name}</td>
+      <td style="padding:9px 12px;color:var(--muted)">${iv.profile || '—'}</td>
+      <td style="padding:9px 12px;text-align:center;color:var(--muted)">${iv.date || '—'}</td>
+      <td style="padding:9px 12px;text-align:center">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:${iv.severity>=4?'var(--brand)':iv.severity>=3?'#fbbf24':'#e5e7eb'};color:${iv.severity>=3?'#fff':'#555'};font-size:11px;font-weight:600">${iv.severity||'—'}</span>
+      </td>
+      <td style="padding:9px 12px;font-size:11px">${iv.signal}</td>
+    </tr>`).join('');
+
+  // Stats
+  const n = interviews.length;
+  const sevs = interviews.map(iv => iv.severity).filter(s => s > 0);
+  const high = sevs.filter(s => s >= 4).length;
+  const avg = sevs.length ? (sevs.reduce((a,b)=>a+b,0)/sevs.length).toFixed(1) : '—';
+  const pct = sevs.length ? Math.round(high/sevs.length*100)+'%' : '—';
+
+  document.getElementById('log-count').textContent = n;
+  document.getElementById('stat-high').textContent = high;
+  document.getElementById('stat-avg').textContent = avg;
+  document.getElementById('stat-pct').textContent = pct;
+
+  // Gate
+  const gate = document.getElementById('gate-box');
+  if (n < 5) {
+    gate.style.cssText = 'padding:14px 18px;border-radius:10px;border:1.5px solid var(--border);background:var(--soft);margin-bottom:24px;font-size:12px;color:var(--muted)';
+    gate.textContent = `${n}/20 interviews completed. Keep going — patterns emerge after 5.`;
+  } else {
+    const highPct = sevs.length ? high/sevs.length : 0;
+    const gatePass = n >= 20 && highPct >= 0.7;
+    const gatePart = n >= 20 ? (highPct >= 0.7 ? 'pass' : 'partial') : 'progress';
+    const colors = { pass: ['#f0fdf4','#0f6e56','#bbf7d0'], progress: ['var(--soft)','var(--brand)','var(--border)'], partial: ['#fffbeb','#92400e','#fde68a'] };
+    const [bg, tc, bd] = colors[gatePart];
+    gate.style.cssText = `padding:14px 18px;border-radius:10px;border:1.5px solid ${bd};background:${bg};margin-bottom:24px;font-size:12px;color:${tc}`;
+    gate.innerHTML = gatePart === 'pass'
+      ? `<strong>Stage 1 gate passed ✓</strong> — ${n} interviews · ${Math.round(highPct*100)}% high pain · Ready to move to pattern synthesis.`
+      : `<strong>${n}/20 interviews</strong> · ${Math.round(highPct*100)}% high pain · ${gatePart === 'partial' ? 'Gate: need 70%+ high pain — keep iterating.' : `${20-n} more interviews to reach the gate.`}`;
+  }
+}
+
+function updateProgress() {
+  const n = interviews.length;
+  const pct = Math.min(100, Math.round(n/20*100));
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = `${n} / 20`;
+}
+
+function updateLog() {
+  // live update placeholder — log updates on save
+}
+
+// Init
+renderLog();
+</script>
+</body>
+</html>
