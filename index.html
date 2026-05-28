@@ -96,7 +96,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
     <div class="template-grid">
       <div class="template-card soon"><div class="card-icon">01</div><div class="card-body"><div class="card-task">Task 01</div><div class="card-title">Problem Statement</div><div class="card-desc">One sentence, no solution</div></div><span class="soon-label">Coming soon</span></div>
       <div class="template-card soon"><div class="card-icon">02</div><div class="card-body"><div class="card-task">Task 02</div><div class="card-title">ICP Definition Canvas</div><div class="card-desc">Ideal customer profile</div></div><span class="soon-label">Coming soon</span></div>
-      <div class="template-card" onclick="go('SB_Task03_Pain_Interviews.html',1)"><div class="card-icon">03</div><div class="card-body"><div class="card-task">Task 03</div><div class="card-title">Pain Interviews</div><div class="card-desc">Script, capture sheet & log</div></div><div class="card-arrow">→</div></div>
+      <div class="template-card" onclick="go('SB_Task03_Pain_Interviews.html')"><div class="card-icon">03</div><div class="card-body"><div class="card-task">Task 03</div><div class="card-title">Pain Interviews</div><div class="card-desc">Script, capture sheet & log</div></div><div class="card-arrow">→</div></div>
       <div class="template-card soon"><div class="card-icon">04</div><div class="card-body"><div class="card-task">Task 04</div><div class="card-title">Find the Pattern</div><div class="card-desc">Synthesise interview findings</div></div><span class="soon-label">Coming soon</span></div>
       <div class="template-card soon"><div class="card-icon">05</div><div class="card-body"><div class="card-task">Task 05</div><div class="card-title">Competitive Landscape Map</div><div class="card-desc">Position vs. alternatives</div></div><span class="soon-label">Coming soon</span></div>
       <div class="template-card soon"><div class="card-icon">08</div><div class="card-body"><div class="card-task">Task 08</div><div class="card-title">TAM / SAM / SOM</div><div class="card-desc">Bottom-up market estimate</div></div><span class="soon-label">Coming soon</span></div>
@@ -108,7 +108,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
     <div class="stage-header"><div><div class="stage-num">Stage 2</div><div class="stage-name">Product Market Fit</div><div class="stage-desc">Build something people want to keep using</div></div></div>
     <div class="template-grid">
       <div class="template-card soon"><div class="card-icon">23</div><div class="card-body"><div class="card-task">Task 23 – 24</div><div class="card-title">Usage Tracking + Retention</div><div class="card-desc">Cohort table & Week 2 gate</div></div><span class="soon-label">Coming soon</span></div>
-      <div class="template-card" onclick="go('SB_Task25_Sean_Ellis_Test.html',2)"><div class="card-icon">25</div><div class="card-body"><div class="card-task">Task 25</div><div class="card-title">Sean Ellis Test</div><div class="card-desc">PMF measurement & scoring</div></div><div class="card-arrow">→</div></div>
+      <div class="template-card" onclick="go('SB_Task25_Sean_Ellis_Test.html')"><div class="card-icon">25</div><div class="card-body"><div class="card-task">Task 25</div><div class="card-title">Sean Ellis Test</div><div class="card-desc">PMF measurement & scoring</div></div><div class="card-arrow">→</div></div>
       <div class="template-card soon"><div class="card-icon">26</div><div class="card-body"><div class="card-task">Task 26</div><div class="card-title">Verbatim Quotes Log</div><div class="card-desc">Collect & tag customer quotes</div></div><span class="soon-label">Coming soon</span></div>
     </div>
   </div>
@@ -140,16 +140,15 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
   <div class="modal">
     <button class="modal-close" onclick="hideAuth()">✕</button>
     <div class="modal-brand">SheBlooms</div>
-    <div class="modal-title" id="auth-title">Welcome back</div>
-    <div class="modal-sub" id="auth-sub">Sign in to access your templates.</div>
-    <div class="modal-field" id="name-field" style="display:none">
+    <div class="modal-title" id="auth-title">Sign in to continue</div>
+    <div class="modal-sub" id="auth-sub">Enter your email to access this template. If you don't have an account yet, we'll create one for free.</div>
+    <div class="modal-field">
       <label>Your name</label><input type="text" id="auth-name" placeholder="Ana Silva">
     </div>
     <div class="modal-field">
       <label>Email</label><input type="email" id="auth-email" placeholder="ana@startup.com" onkeydown="if(event.key==='Enter')submitAuth()">
     </div>
     <button class="modal-btn" id="auth-btn" onclick="submitAuth()">Continue →</button>
-    <button class="modal-ghost" id="auth-toggle" onclick="toggleMode()">Don't have an account? Sign up</button>
     <div class="modal-msg" id="auth-msg"></div>
   </div>
 </div>
@@ -158,13 +157,12 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
 const SB_URL='https://fyswympbcriibpewkxnh.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5c3d5bXBiY3JpaWJwZXdreG5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjIwMTcsImV4cCI6MjA5Mjc5ODAxN30.l5gy0L9JU_8g0vIjoFWmUqP7T7zyHOsE0wdmkC2kBo0';
 const TABLE='founder_journey_v2';
-let sb,_email='',_plan='start',_mode='signin';
+let sb,_email='',_plan='start';
 try{sb=supabase.createClient(SB_URL,SB_KEY);}catch(e){}
 
 window.addEventListener('DOMContentLoaded',async()=>{
   _email=localStorage.getItem('_sbe')||'';
   if(_email)await loadPlan();
-  // Show sign in only when not logged in
   document.getElementById('signin-link').style.display=_email?'none':'block';
 });
 
@@ -173,39 +171,35 @@ async function loadPlan(){
   try{const{data}=await sb.from(TABLE).select('plan').eq('email',_email).single();if(data)_plan=data.plan||'start';}catch(e){}
 }
 
-function go(file,stage){
-  if(stage===1){window.location.href=file;return;}
-  if(_plan==='grow'){window.location.href=file;return;}
-  // Grow template — let the template handle the gate
+let _pendingFile=null;
+
+function go(file){
+  if(!_email){_pendingFile=file;showAuth();return;}
   window.location.href=file;
 }
 
-function showAuth(){document.getElementById('auth-overlay').classList.add('show');setTimeout(()=>document.getElementById('auth-email').focus(),100);}
+function showAuth(){document.getElementById('auth-overlay').classList.add('show');setTimeout(()=>document.getElementById('auth-name').focus(),100);}
 function hideAuth(){document.getElementById('auth-overlay').classList.remove('show');document.getElementById('auth-msg').textContent='';}
-function toggleMode(){
-  _mode=_mode==='signin'?'signup':'signin';const s=_mode==='signup';
-  document.getElementById('auth-title').textContent=s?'Create your account':'Welcome back';
-  document.getElementById('auth-sub').textContent=s?'Free access to all Stage 1 templates.':'Sign in to access your templates.';
-  document.getElementById('name-field').style.display=s?'block':'none';
-  document.getElementById('auth-toggle').textContent=s?'Already have an account? Sign in':"Don't have an account? Sign up";
-  document.getElementById('auth-msg').textContent='';
-}
+
 async function submitAuth(){
-  const email=document.getElementById('auth-email').value.trim().toLowerCase();
   const name=document.getElementById('auth-name').value.trim();
-  const btn=document.getElementById('auth-btn');const msg=document.getElementById('auth-msg');
+  const email=document.getElementById('auth-email').value.trim().toLowerCase();
+  const btn=document.getElementById('auth-btn');
+  const msg=document.getElementById('auth-msg');
+  if(!name){msg.textContent='Please enter your name.';return;}
   if(!email||!email.includes('@')){msg.textContent='Please enter a valid email.';return;}
   btn.disabled=true;btn.textContent='...';msg.textContent='';
   try{
-    const{data:ex}=await sb.from(TABLE).select('email,plan,name').eq('email',email).single();
+    const{data:ex}=await sb.from(TABLE).select('email,plan').eq('email',email).single();
     if(ex){_email=ex.email;_plan=ex.plan||'start';}
     else{
-      if(_mode==='signin'){msg.textContent="No account found. Sign up instead?";btn.disabled=false;btn.textContent='Continue →';return;}
-      await sb.from(TABLE).insert({email,name:name||email.split('@')[0],plan:'start'});
+      await sb.from(TABLE).insert({email,name,plan:'start'});
       _email=email;_plan='start';
     }
     localStorage.setItem('_sbe',_email);
-    hideAuth();document.getElementById('signin-link').style.display='none';
+    hideAuth();
+    document.getElementById('signin-link').style.display='none';
+    if(_pendingFile){window.location.href=_pendingFile;}
   }catch(e){msg.textContent='Something went wrong. Please try again.';}
   btn.disabled=false;btn.textContent='Continue →';
 }
