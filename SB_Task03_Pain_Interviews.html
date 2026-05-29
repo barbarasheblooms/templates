@@ -635,6 +635,58 @@ function updateLog() {
 
 // Init
 renderLog();
+
+// ── Auth gate ─────────────────────────────────
+const SB_URL='https://fyswympbcriibpewkxnh.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5c3d5bXBiY3JpaWJwZXdreG5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjIwMTcsImV4cCI6MjA5Mjc5ODAxN30.l5gy0L9JU_8g0vIjoFWmUqP7T7zyHOsE0wdmkC2kBo0';
+const TABLE='founder_journey_v2';
+let sb2;try{sb2=supabase.createClient(SB_URL,SB_KEY);}catch(e){}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  const email=localStorage.getItem('_sbe')||'';
+  if(!email)showLoginModal();
+});
+
+function showLoginModal(){
+  const overlay=document.createElement('div');
+  overlay.id='auth-overlay';
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(10,10,8,.45);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px';
+  overlay.innerHTML=`
+    <div style="background:#fff;border-radius:18px;padding:32px;max-width:400px;width:100%;box-shadow:0 24px 80px rgba(0,0,0,.15);position:relative">
+      <div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--brand);margin-bottom:20px">SheBlooms</div>
+      <div style="font-size:17px;font-weight:600;color:var(--ink);margin-bottom:6px">Sign in to use this template</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:24px;line-height:1.6">Enter your email to access this template and save your progress.</div>
+      <div style="margin-bottom:12px">
+        <label style="display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px">Your name</label>
+        <input id="m-name" type="text" placeholder="Ana Silva" style="width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none">
+      </div>
+      <div style="margin-bottom:16px">
+        <label style="display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px">Email</label>
+        <input id="m-email" type="email" placeholder="ana@startup.com" style="width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none" onkeydown="if(event.key==='Enter')submitLogin()">
+      </div>
+      <button onclick="submitLogin()" id="m-btn" style="width:100%;padding:12px;background:var(--brand);color:#fff;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Continue →</button>
+      <div id="m-msg" style="font-size:11px;color:var(--muted);text-align:center;margin-top:6px"></div>
+    </div>`;
+  document.body.appendChild(overlay);
+  setTimeout(()=>document.getElementById('m-name').focus(),100);
+}
+
+async function submitLogin(){
+  const name=document.getElementById('m-name').value.trim();
+  const email=document.getElementById('m-email').value.trim().toLowerCase();
+  const btn=document.getElementById('m-btn');
+  const msg=document.getElementById('m-msg');
+  if(!name){msg.textContent='Please enter your name.';return;}
+  if(!email||!email.includes('@')){msg.textContent='Please enter a valid email.';return;}
+  btn.disabled=true;btn.textContent='...';
+  try{
+    const{data:ex}=await sb2.from(TABLE).select('email,plan').eq('email',email).single();
+    if(!ex)await sb2.from(TABLE).insert({email,name,plan:'start'});
+    localStorage.setItem('_sbe',email);
+    document.getElementById('auth-overlay').remove();
+  }catch(e){msg.textContent='Something went wrong. Please try again.';}
+  btn.disabled=false;btn.textContent='Continue →';
+}
 </script>
 </body>
 </html>
