@@ -90,6 +90,20 @@ hr{border:none;border-top:1px solid var(--border);margin:24px 0}
 /* EVIDENCE */
 .evidence{background:var(--soft);border-radius:8px;padding:12px 16px;font-size:11px;color:#444;line-height:1.6}
 .evidence strong{color:var(--ink)}
+
+@media (max-width: 640px) {
+  .page{padding:32px 20px 60px}
+  .brand{font-size:22px}
+  .icp-name-row{flex-wrap:wrap;gap:10px}
+  .icp-meta{width:100%;justify-content:flex-start}
+  .canvas{grid-template-columns:1fr}
+  .cell.full{grid-column:span 1}
+  .bottom-row{grid-template-columns:1fr}
+  .conf-btns{flex-direction:column}
+  .conf-btn{text-align:left}
+  div[style*="grid-template-columns:1fr 1fr"]{display:flex!important;flex-direction:column!important;gap:8px!important}
+  .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+}
 </style>
 </head>
 <body>
