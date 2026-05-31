@@ -95,7 +95,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
     <div class="stage-header"><div><div class="stage-num">Stage 1</div><div class="stage-name">Problem Validation Fit</div><div class="stage-desc">Validate the problem before building anything</div></div></div>
     <div class="template-grid">
       <div class="template-card soon"><div class="card-icon">01</div><div class="card-body"><div class="card-task">Task 01</div><div class="card-title">Problem Statement</div><div class="card-desc">One sentence, no solution</div></div><span class="soon-label">Coming soon</span></div>
-      <div class="template-card soon"><div class="card-icon">02</div><div class="card-body"><div class="card-task">Task 02</div><div class="card-title">ICP Definition Canvas</div><div class="card-desc">Ideal customer profile</div></div><span class="soon-label">Coming soon</span></div>
+      <div class="template-card" onclick="go('SB_Task02_ICP_Canvas.html')"><div class="card-icon">02</div><div class="card-body"><div class="card-task">Task 02</div><div class="card-title">ICP Definition Canvas</div><div class="card-desc">Ideal customer profile</div></div><div class="card-arrow">→</div></div>
       <div class="template-card" onclick="go('SB_Task03_Pain_Interviews.html')"><div class="card-icon">03</div><div class="card-body"><div class="card-task">Task 03</div><div class="card-title">Pain Interviews</div><div class="card-desc">Script, capture sheet & log</div></div><div class="card-arrow">→</div></div>
       <div class="template-card soon"><div class="card-icon">04</div><div class="card-body"><div class="card-task">Task 04</div><div class="card-title">Find the Pattern</div><div class="card-desc">Synthesise interview findings</div></div><span class="soon-label">Coming soon</span></div>
       <div class="template-card soon"><div class="card-icon">05</div><div class="card-body"><div class="card-task">Task 05</div><div class="card-title">Competitive Landscape Map</div><div class="card-desc">Position vs. alternatives</div></div><span class="soon-label">Coming soon</span></div>
@@ -164,6 +164,14 @@ window.addEventListener('DOMContentLoaded',async()=>{
   _email=localStorage.getItem('_sbe')||'';
   if(_email)await loadPlan();
   document.getElementById('signin-link').style.display=_email?'none':'block';
+
+  // Check for ?open= parameter from article links
+  const params=new URLSearchParams(location.search);
+  const openFile=params.get('open');
+  if(openFile){
+    if(!_email){_pendingFile=openFile;showAuth();}
+    else{window.location.href=openFile;}
+  }
 });
 
 async function loadPlan(){
