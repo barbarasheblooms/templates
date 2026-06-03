@@ -706,7 +706,7 @@ async function submitLogin(){
   if(!email||!email.includes('@')){msg.textContent='Please enter a valid email.';return;}
   btn.disabled=true;btn.textContent='...';
   try{
-    const{data:ex}=await sb2.from(TABLE).select('email,plan').eq('email',email).single();
+    const{data:ex}=await sb2.from(TABLE).select('email,plan').eq('email',email).maybeSingle();
     if(!ex)await sb2.from(TABLE).insert({email,name,plan:'start'});
     localStorage.setItem('_sbe',email);
     document.getElementById('auth-overlay').remove();
