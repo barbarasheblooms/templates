@@ -190,7 +190,7 @@ window.addEventListener('DOMContentLoaded',async()=>{
 
 async function loadPlan(){
   if(!sb||!_email)return;
-  try{const{data}=await sb.from(TABLE).select('plan').eq('email',_email).single();if(data)_plan=data.plan||'start';}catch(e){}
+  try{const{data}=await sb.from(TABLE).select('plan').eq('email',_email).maybeSingle();if(data)_plan=data.plan||'start';}catch(e){}
 }
 
 let _pendingFile=null;
@@ -212,7 +212,7 @@ async function submitAuth(){
   if(!email||!email.includes('@')){msg.textContent='Please enter a valid email.';return;}
   btn.disabled=true;btn.textContent='...';msg.textContent='';
   try{
-    const{data:ex}=await sb.from(TABLE).select('email,plan').eq('email',email).single();
+    const{data:ex}=await sb.from(TABLE).select('email,plan').eq('email',email).maybeSingle();
     if(ex){_email=ex.email;_plan=ex.plan||'start';}
     else{
       await sb.from(TABLE).insert({email,name,plan:'start'});
