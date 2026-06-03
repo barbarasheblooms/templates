@@ -248,7 +248,7 @@ let sb;try{sb=supabase.createClient(SB_URL,SB_KEY);}catch(e){}
 
 async function getPlan(email){
   if(!sb||!email)return 'start';
-  try{const{data}=await sb.from(TABLE).select('plan').eq('email',email).single();return data?.plan||'start';}
+  try{const{data}=await sb.from(TABLE).select('plan').eq('email',email).maybeSingle();return data?.plan||'start';}
   catch(e){return 'start';}
 }
 
@@ -286,7 +286,7 @@ async function submitLogin(){
   if(!email||!email.includes('@')){msg.textContent='Please enter a valid email.';return;}
   btn.disabled=true;btn.textContent='...';
   try{
-    const{data:ex}=await sb.from(TABLE).select('email,plan').eq('email',email).single();
+    const{data:ex}=await sb.from(TABLE).select('email,plan').eq('email',email).maybeSingle();
     if(!ex)await sb.from(TABLE).insert({email,name,plan:'start'});
     localStorage.setItem('_sbe',email);
     document.getElementById('auth-overlay').remove();
