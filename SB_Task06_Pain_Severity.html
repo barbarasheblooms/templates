@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pain Severity Calculator · SheBlooms Stage 1 · Task 06</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;
+  --border:#D8D9E5;--muted:#888;
+  --green:#0f6e56;--green-bg:#f0fdf4;--green-bd:#bbf7d0;
+  --amber:#d97706;--amber-bg:#fffbeb;--amber-bd:#fde68a;
+  --red:#dc2626;--red-bg:#fef2f2;--red-bd:#fecaca;
+}
+body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
+.page{max-width:780px;margin:0 auto;padding:52px 44px 80px}
+
+/* HEADER */
+.doc-header{text-align:center;margin-bottom:40px;padding-bottom:28px;border-bottom:1.5px solid var(--ink)}
+.brand{font-family:'Instrument Serif',serif;font-style:normal;font-size:28px;color:var(--brand);letter-spacing:-.01em;margin-bottom:10px}
+.doc-stage{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--brand);margin-bottom:4px}
+.doc-title{font-size:18px;font-weight:500;color:var(--ink)}
+
+/* INTRO */
+.intro{background:var(--soft);border-left:3px solid var(--brand);padding:12px 16px;margin-bottom:28px;font-size:12px;color:#444;line-height:1.7;border-radius:0 6px 6px 0}
+.intro strong{color:var(--ink)}
+
+/* GATE BOX */
+.gate-box{display:flex;align-items:center;gap:20px;padding:18px 22px;border:1.5px solid var(--brand);border-radius:12px;margin-bottom:28px}
+.gate-num{font-family:'Instrument Serif',serif;font-size:48px;color:var(--brand);line-height:1;flex-shrink:0}
+.gate-meta{}
+.gate-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:3px}
+.gate-desc{font-size:13px;color:var(--ink);line-height:1.5}
+
+/* SECTION */
+.section-title{font-size:14px;font-weight:600;color:var(--brand);margin-bottom:4px}
+.section-note{font-size:11px;color:var(--muted);margin-bottom:16px;line-height:1.5}
+
+/* DIMENSION GUIDE */
+.dim-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:28px}
+.dim-card{padding:14px 16px;background:var(--soft);border-radius:10px;border:1px solid var(--border)}
+.dim-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--brand);margin-bottom:6px}
+.dim-desc{font-size:11px;color:var(--ink);margin-bottom:8px;line-height:1.5}
+.dim-scale{display:flex;flex-direction:column;gap:3px}
+.dim-score{display:flex;gap:6px;font-size:10px;color:var(--muted);align-items:flex-start}
+.dim-score-num{font-weight:700;color:var(--ink);min-width:12px}
+
+/* ADD FORM */
+.add-form{background:var(--soft);border-radius:12px;padding:20px 22px;margin-bottom:24px;border:1px solid var(--border)}
+.add-form-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:16px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+input[type=text]{width:100%;border:1px solid var(--border);border-radius:7px;padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:#fff;outline:none;transition:border-color .15s}
+input[type=text]:focus{border-color:var(--brand);background:#fff}
+input::placeholder{color:#ccc;font-style:italic}
+
+/* SCORE INPUTS */
+.scores-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.score-field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px}
+.score-btns{display:flex;gap:4px}
+.score-btn{width:32px;height:32px;border-radius:7px;border:1px solid var(--border);background:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;color:var(--ink);transition:all .12s;display:flex;align-items:center;justify-content:center}
+.score-btn:hover{border-color:var(--brand);color:var(--brand)}
+.score-btn.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+.add-btn{width:100%;padding:11px;background:var(--brand);color:#fff;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s}
+.add-btn:hover{background:#4a65f0}
+.add-btn:disabled{background:var(--border);cursor:default}
+
+/* RESULTS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+.stat-card{background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.stat-num{font-family:'Instrument Serif',serif;font-size:28px;color:var(--brand);line-height:1}
+.stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:3px}
+.stat-card.pass{background:var(--green-bg);border-color:var(--green-bd)}
+.stat-card.pass .stat-num{color:var(--green)}
+.stat-card.warn{background:var(--amber-bg);border-color:var(--amber-bd)}
+.stat-card.warn .stat-num{color:var(--amber)}
+.stat-card.fail{background:var(--red-bg);border-color:var(--red-bd)}
+.stat-card.fail .stat-num{color:var(--red)}
+
+/* GATE STATUS */
+.gate-status{padding:14px 18px;border-radius:10px;margin-bottom:24px;font-size:13px;font-weight:500;display:none}
+.gate-status.pass{background:var(--green-bg);border:1.5px solid var(--green-bd);color:var(--green)}
+.gate-status.warn{background:var(--amber-bg);border:1.5px solid var(--amber-bd);color:var(--amber)}
+.gate-status.fail{background:var(--red-bg);border:1.5px solid var(--red-bd);color:var(--red)}
+
+/* TABLE */
+.table-wrap{border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:24px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead tr{background:var(--ink)}
+thead th{padding:10px 12px;text-align:left;font-weight:500;font-size:11px;color:#fff}
+thead th:not(:first-child){text-align:center}
+tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--soft)}
+tbody tr.high td:first-child{border-left:3px solid var(--green)}
+tbody tr.medium td:first-child{border-left:3px solid var(--amber)}
+tbody tr.low td:first-child{border-left:3px solid var(--red)}
+td{padding:9px 12px;color:var(--ink)}
+td:not(:first-child){text-align:center}
+.badge{display:inline-flex;align-items:center;justify-content:center;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600}
+.badge.high{background:var(--green-bg);color:var(--green)}
+.badge.medium{background:var(--amber-bg);color:var(--amber)}
+.badge.low{background:var(--red-bg);color:var(--red)}
+.score-total{font-weight:700;font-size:13px}
+.delete-btn{background:none;border:none;cursor:pointer;color:#ccc;font-size:14px;padding:2px 6px;border-radius:4px;transition:color .1s}
+.delete-btn:hover{color:var(--red)}
+
+.empty-state{padding:40px 24px;text-align:center;color:var(--muted);font-size:12px}
+
+/* DIVIDER */
+hr{border:none;border-top:1px solid var(--border);margin:24px 0}
+
+/* EVIDENCE */
+.evidence{background:var(--soft);border-radius:8px;padding:12px 16px;font-size:11px;color:#444;line-height:1.6}
+.evidence strong{color:var(--ink)}
+
+/* PRINT */
+.print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px}
+@media print{.print-btn,.add-form,.delete-btn{display:none}}
+
+@media (max-width:640px){
+  .page{padding:32px 20px 60px}
+  .brand{font-size:22px}
+  .dim-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .scores-row{grid-template-columns:1fr}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .gate-box{flex-direction:column;text-align:center}
+  .table-wrap{overflow-x:auto}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="doc-header">
+    <div class="brand">SheBlooms</div>
+    <div class="doc-stage">Stage 1 · Problem Validation Fit · Task 06 — Pain Severity</div>
+    <div class="doc-title">Pain Severity Calculator</div>
+  </div>
+
+  <div class="intro">
+    <strong>Pain severity is not a feeling — it's a measurement.</strong>
+    Score each interviewee across three dimensions: frequency, impact, and urgency.
+    A score of 10+/15 with impact ≥4 counts as high severity.
+    You need 70%+ of your ICP interviews to reach this threshold to pass the Stage 1 gate.
+  </div>
+
+  <div class="gate-box">
+    <div class="gate-num">70%</div>
+    <div class="gate-meta">
+      <div class="gate-label">Stage 1 gate threshold</div>
+      <div class="gate-desc">At least 70% of your ICP interviews must score 10+/15 with impact ≥4 to pass. Below 70% means the problem may not be urgent enough — or your ICP is too broad.</div>
+    </div>
+  </div>
+
+  <!-- DIMENSION GUIDE -->
+  <div class="section-title">How to score each dimension</div>
+  <div class="section-note">Ask these questions during the interview. Score 1–5 for each.</div>
+  <div class="dim-grid">
+    <div class="dim-card">
+      <div class="dim-name">Frequency</div>
+      <div class="dim-desc">How often does this problem happen?</div>
+      <div class="dim-scale">
+        <div class="dim-score"><span class="dim-score-num">1</span>Rarely / can't remember when</div>
+        <div class="dim-score"><span class="dim-score-num">2</span>A few times a year</div>
+        <div class="dim-score"><span class="dim-score-num">3</span>Monthly</div>
+        <div class="dim-score"><span class="dim-score-num">4</span>Weekly</div>
+        <div class="dim-score"><span class="dim-score-num">5</span>Daily / every time they do X</div>
+      </div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-name">Impact ⚠</div>
+      <div class="dim-desc">How much does it cost? (time, money, opportunity)</div>
+      <div class="dim-scale">
+        <div class="dim-score"><span class="dim-score-num">1</span>Minor annoyance, no cost</div>
+        <div class="dim-score"><span class="dim-score-num">2</span>Small cost, easy to ignore</div>
+        <div class="dim-score"><span class="dim-score-num">3</span>Noticeable cost, some workaround</div>
+        <div class="dim-score"><span class="dim-score-num">4</span>Serious cost — named hours or €</div>
+        <div class="dim-score"><span class="dim-score-num">5</span>Major blocker — lost clients / revenue</div>
+      </div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-name">Urgency</div>
+      <div class="dim-desc">How motivated are they to fix it now?</div>
+      <div class="dim-scale">
+        <div class="dim-score"><span class="dim-score-num">1</span>"I'd try it someday"</div>
+        <div class="dim-score"><span class="dim-score-num">2</span>Passive interest</div>
+        <div class="dim-score"><span class="dim-score-num">3</span>Would try a free solution</div>
+        <div class="dim-score"><span class="dim-score-num">4</span>Actively looking for a solution</div>
+        <div class="dim-score"><span class="dim-score-num">5</span>"When can I use it?" / offered to pay</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD INTERVIEW -->
+  <div class="add-form">
+    <div class="add-form-title">Add interview</div>
+    <div class="form-row">
+      <div class="field"><label>Interviewee name</label><input type="text" id="f-name" placeholder="Ana Silva"></div>
+      <div class="field"><label>Profile / role</label><input type="text" id="f-profile" placeholder="e.g. Pre-revenue founder, B2B, Lisbon"></div>
+    </div>
+    <div class="scores-row">
+      <div class="score-field">
+        <label>Frequency (1–5)</label>
+        <div class="score-btns" id="freq-btns">
+          <button class="score-btn" onclick="setScore('freq',1)">1</button>
+          <button class="score-btn" onclick="setScore('freq',2)">2</button>
+          <button class="score-btn" onclick="setScore('freq',3)">3</button>
+          <button class="score-btn" onclick="setScore('freq',4)">4</button>
+          <button class="score-btn" onclick="setScore('freq',5)">5</button>
+        </div>
+      </div>
+      <div class="score-field">
+        <label>Impact (1–5) ⚠</label>
+        <div class="score-btns" id="impact-btns">
+          <button class="score-btn" onclick="setScore('impact',1)">1</button>
+          <button class="score-btn" onclick="setScore('impact',2)">2</button>
+          <button class="score-btn" onclick="setScore('impact',3)">3</button>
+          <button class="score-btn" onclick="setScore('impact',4)">4</button>
+          <button class="score-btn" onclick="setScore('impact',5)">5</button>
+        </div>
+      </div>
+      <div class="score-field">
+        <label>Urgency (1–5)</label>
+        <div class="score-btns" id="urgency-btns">
+          <button class="score-btn" onclick="setScore('urgency',1)">1</button>
+          <button class="score-btn" onclick="setScore('urgency',2)">2</button>
+          <button class="score-btn" onclick="setScore('urgency',3)">3</button>
+          <button class="score-btn" onclick="setScore('urgency',4)">4</button>
+          <button class="score-btn" onclick="setScore('urgency',5)">5</button>
+        </div>
+      </div>
+    </div>
+    <button class="add-btn" id="add-btn" onclick="addInterview()">Add to tracker →</button>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row" id="stats-row">
+    <div class="stat-card">
+      <div class="stat-num" id="stat-total">0</div>
+      <div class="stat-label">Total interviews</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-high">0</div>
+      <div class="stat-label">High severity</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-avg">—</div>
+      <div class="stat-label">Avg total score</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-pct">—</div>
+      <div class="stat-label">% high severity</div>
+    </div>
+  </div>
+
+  <!-- GATE STATUS -->
+  <div class="gate-status" id="gate-status"></div>
+
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:40%">Interviewee</th>
+          <th>Freq</th>
+          <th>Impact</th>
+          <th>Urgency</th>
+          <th>Total</th>
+          <th>Severity</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <tr><td colspan="7" class="empty-state">No interviews added yet. Use the form above to start tracking.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <div class="evidence">
+    <strong>✦ Evidence required:</strong> 20+ interviews with individual scores documented.
+    70%+ must score 10+/15 with impact ≥4. If below threshold, note which ICP segments score highest and refine accordingly.
+  </div>
+
+</div>
+
+<button class="print-btn" onclick="trackEvent('completed','SB_Task06_Pain_Severity');window.print()">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+  Save as PDF
+</button>
+
+<script>
+// ── State ─────────────────────────────────────
+let scores = { freq: 0, impact: 0, urgency: 0 };
+let interviews = [];
+
+// ── Score buttons ─────────────────────────────
+function setScore(dim, val) {
+  scores[dim] = val;
+  document.querySelectorAll(`#${dim}-btns .score-btn`).forEach((b, i) => {
+    b.classList.toggle('on', i < val);
+  });
+}
+
+// ── Add interview ─────────────────────────────
+function addInterview() {
+  const name    = document.getElementById('f-name').value.trim();
+  const profile = document.getElementById('f-profile').value.trim();
+  if (!name) { alert('Please enter the interviewee name.'); return; }
+  if (!scores.freq || !scores.impact || !scores.urgency) {
+    alert('Please score all three dimensions before adding.'); return;
+  }
+
+  const total   = scores.freq + scores.impact + scores.urgency;
+  const isHigh  = total >= 10 && scores.impact >= 4;
+  const level   = isHigh ? 'high' : total >= 7 ? 'medium' : 'low';
+
+  interviews.push({
+    id: Date.now(),
+    name, profile,
+    freq: scores.freq,
+    impact: scores.impact,
+    urgency: scores.urgency,
+    total, level
+  });
+
+  // Reset form
+  scores = { freq: 0, impact: 0, urgency: 0 };
+  ['freq','impact','urgency'].forEach(dim => {
+    document.querySelectorAll(`#${dim}-btns .score-btn`).forEach(b => b.classList.remove('on'));
+  });
+  document.getElementById('f-name').value = '';
+  document.getElementById('f-profile').value = '';
+
+  render();
+}
+
+// ── Delete ────────────────────────────────────
+function deleteInterview(id) {
+  interviews = interviews.filter(i => i.id !== id);
+  render();
+}
+
+// ── Render ────────────────────────────────────
+function render() {
+  renderTable();
+  renderStats();
+}
+
+function renderTable() {
+  const tbody = document.getElementById('table-body');
+  if (!interviews.length) {
+    tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No interviews added yet. Use the form above to start tracking.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = interviews.map(iv => `
+    <tr class="${iv.level}">
+      <td>
+        <div style="font-weight:500">${iv.name}</div>
+        ${iv.profile ? `<div style="font-size:11px;color:var(--muted)">${iv.profile}</div>` : ''}
+      </td>
+      <td>${iv.freq}</td>
+      <td>${iv.impact}</td>
+      <td>${iv.urgency}</td>
+      <td><span class="score-total">${iv.total}<span style="font-size:10px;font-weight:400;color:var(--muted)">/15</span></span></td>
+      <td><span class="badge ${iv.level}">${iv.level === 'high' ? 'High ✓' : iv.level === 'medium' ? 'Medium' : 'Low'}</span></td>
+      <td><button class="delete-btn" onclick="deleteInterview(${iv.id})">✕</button></td>
+    </tr>
+  `).join('');
+}
+
+function renderStats() {
+  const n       = interviews.length;
+  const high    = interviews.filter(i => i.level === 'high').length;
+  const avg     = n ? (interviews.reduce((s, i) => s + i.total, 0) / n).toFixed(1) : '—';
+  const pct     = n ? Math.round(high / n * 100) : null;
+
+  document.getElementById('stat-total').textContent = n;
+  document.getElementById('stat-high').textContent  = high;
+  document.getElementById('stat-avg').textContent   = avg;
+  document.getElementById('stat-pct').textContent   = pct !== null ? pct + '%' : '—';
+
+  // Colour stat cards
+  const pctCard = document.getElementById('stats-row').children[3];
+  pctCard.className = 'stat-card';
+  if (pct !== null && n >= 5) {
+    if (pct >= 70) pctCard.classList.add('pass');
+    else if (pct >= 50) pctCard.classList.add('warn');
+    else pctCard.classList.add('fail');
+  }
+
+  // Gate status
+  const gs = document.getElementById('gate-status');
+  if (n < 5) { gs.style.display = 'none'; return; }
+
+  gs.style.display = 'block';
+  gs.className = 'gate-status';
+  if (pct >= 70) {
+    gs.className += ' pass';
+    gs.innerHTML = `<strong>Stage 1 gate passed ✓</strong> — ${pct}% high severity across ${n} interviews. You're ready to move to solution exploration.`;
+  } else if (pct >= 50) {
+    gs.className += ' warn';
+    gs.innerHTML = `<strong>${pct}% high severity</strong> — Getting closer. Look at the high-scorers: what profile do they share? Narrow your ICP to focus on them. Need ${Math.ceil(n * 0.7) - high} more high-severity interviews to reach 70%.`;
+  } else {
+    gs.className += ' fail';
+    gs.innerHTML = `<strong>${pct}% high severity</strong> — Below threshold. The problem may not be urgent enough for this ICP. Review which segment scores highest and refine your interview target.`;
+  }
+}
+
+// ── Tracking ──────────────────────────────────
+const SB_URL  = 'https://fyswympbcriibpewkxnh.supabase.co';
+const SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5c3d5bXBiY3JpaWJwZXdreG5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjIwMTcsImV4cCI6MjA5Mjc5ODAxN30.l5gy0L9JU_8g0vIjoFWmUqP7T7zyHOsE0wdmkC2kBo0';
+const TABLE   = 'founder_journey_v2';
+let sb; try { sb = supabase.createClient(SB_URL, SB_KEY); } catch(e) {}
+
+async function trackEvent(event, templateName) {
+  const email = localStorage.getItem('_sbe') || '';
+  if (!email || !sb) return;
+  try { await sb.from('template_events').insert({ email, template: templateName, event }); } catch(e) {}
+}
+
+// ── Auth gate ─────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const email = localStorage.getItem('_sbe') || '';
+  if (!email) showLoginModal();
+  else trackEvent('opened', 'SB_Task06_Pain_Severity');
+});
+
+function showLoginModal() {
+  const overlay = document.createElement('div');
+  overlay.id = 'auth-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(10,10,8,.45);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px';
+  overlay.innerHTML = `
+    <div style="background:#fff;border-radius:18px;padding:32px;max-width:400px;width:100%;box-shadow:0 24px 80px rgba(0,0,0,.15)">
+      <div style="font-family:'Instrument Serif',serif;font-size:22px;color:#5B75FE;margin-bottom:20px">SheBlooms</div>
+      <div style="font-size:17px;font-weight:600;color:#0A0A08;margin-bottom:6px">Sign in to use this template</div>
+      <div style="font-size:12px;color:#888;margin-bottom:24px;line-height:1.6">Enter your email to access this template and save your progress.</div>
+      <div style="margin-bottom:12px">
+        <label style="display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:5px">Your name</label>
+        <input id="m-name" type="text" placeholder="Ana Silva" style="width:100%;border:1px solid #D8D9E5;border-radius:8px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none">
+      </div>
+      <div style="margin-bottom:16px">
+        <label style="display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:5px">Email</label>
+        <input id="m-email" type="email" placeholder="ana@startup.com" style="width:100%;border:1px solid #D8D9E5;border-radius:8px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none" onkeydown="if(event.key==='Enter')submitLogin()">
+      </div>
+      <button onclick="submitLogin()" id="m-btn" style="width:100%;padding:12px;background:#5B75FE;color:#fff;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Continue →</button>
+      <div id="m-msg" style="font-size:11px;color:#888;text-align:center;margin-top:6px"></div>
+    </div>`;
+  document.body.appendChild(overlay);
+  setTimeout(() => document.getElementById('m-name').focus(), 100);
+}
+
+async function submitLogin() {
+  const name  = document.getElementById('m-name').value.trim();
+  const email = document.getElementById('m-email').value.trim().toLowerCase();
+  const btn   = document.getElementById('m-btn');
+  const msg   = document.getElementById('m-msg');
+  if (!name)  { msg.textContent = 'Please enter your name.'; return; }
+  if (!email || !email.includes('@')) { msg.textContent = 'Please enter a valid email.'; return; }
+  btn.disabled = true; btn.textContent = '...';
+  try {
+    const { data: ex } = await sb.from(TABLE).select('email,plan').eq('email', email).single();
+    if (!ex) await sb.from(TABLE).insert({ email, name, plan: 'start' });
+    localStorage.setItem('_sbe', email);
+    document.getElementById('auth-overlay').remove();
+    trackEvent('opened', 'SB_Task06_Pain_Severity');
+  } catch(e) { msg.textContent = 'Something went wrong. Please try again.'; }
+  btn.disabled = false; btn.textContent = 'Continue →';
+}
+</script>
+</body>
+</html>
