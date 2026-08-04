@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Problem to Solution Canvas · SheBlooms</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+}
+body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
+.page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
+
+.doc-header{text-align:center;margin-bottom:40px;padding-bottom:28px;border-bottom:1.5px solid var(--ink)}
+.brand{font-family:'Instrument Serif',serif;font-style:normal;font-size:28px;color:var(--brand);letter-spacing:-.01em;margin-bottom:10px}
+.doc-title{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:500;color:var(--ink);line-height:1.3}
+.doc-sub{font-size:12px;color:var(--muted);margin-top:6px}
+
+.intro{background:var(--soft);border-left:3px solid var(--brand);padding:12px 16px;margin-bottom:32px;font-size:12px;color:#444;line-height:1.7;border-radius:0 6px 6px 0}
+.intro strong{color:var(--ink);font-weight:600}
+
+.section{margin-bottom:28px}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.section-num{width:22px;height:22px;border-radius:50%;background:var(--brand);color:#fff;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.section-title{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--brand)}
+.section-note{font-size:11px;color:var(--muted);margin-left:32px;margin-top:-8px;margin-bottom:12px;line-height:1.5}
+
+.field{margin-bottom:14px}
+.field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+input[type=text],textarea{
+  width:100%;border:1px solid var(--border);border-radius:7px;
+  padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
+  color:var(--ink);background:#fff;outline:none;transition:border-color .15s;font-weight:400;
+}
+input:focus,textarea:focus{border-color:var(--brand);background:var(--soft)}
+input::placeholder,textarea::placeholder{color:#c5c5c5;font-style:italic}
+textarea{resize:vertical;line-height:1.65}
+.field-row{display:grid;gap:12px}
+.field-row.col3{grid-template-columns:1fr 1fr 1fr}
+
+.divider{border:none;border-top:1px solid var(--border);margin:24px 0}
+
+.hmw-row{display:grid;grid-template-columns:1fr 32px;gap:8px;margin-bottom:8px}
+.rm-remove{width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.rm-remove:hover{border-color:#dc2626;color:#dc2626}
+.add-row-btn{margin-top:4px;border:1px dashed var(--border);background:transparent;padding:8px 16px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;color:var(--muted);width:100%;transition:all .15s}
+.add-row-btn:hover{border-color:var(--brand);color:var(--brand)}
+
+.result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0}
+.result-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
+.result-line{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.7;color:#fff}
+.result-line strong{color:var(--brand)}
+.result-sub{font-size:12px;color:#bbb;margin-top:14px;padding-top:14px;border-top:1px solid #333;line-height:1.7}
+.result-sub strong{color:#fff}
+
+.evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
+.evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
+
+.print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px;transition:transform .1s}
+.print-btn:hover{transform:translateY(-1px)}
+@media print{.print-btn{display:none}.page{padding:28px 32px}.rm-remove,.add-row-btn{display:none}}
+
+@media (max-width: 640px) {
+  .page{padding:32px 20px 60px}
+  .brand{font-size:22px}
+  .doc-title{font-size:15px}
+  .field-row.col3{grid-template-columns:1fr}
+  .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="doc-header">
+  <div class="brand">SheBlooms</div>
+  <div class="doc-title">Problem to Solution Canvas</div>
+  <div class="doc-sub">Turn a validated problem interview insight into a testable solution hypothesis</div>
+</div>
+
+<div class="intro">
+  <strong>Before you start:</strong> a validated problem tells you what's worth solving, not what to build. This canvas walks you from your interview insight, through How Might We questions, to two or three real solution concepts, and the smallest way to test one before you build it.
+</div>
+
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div class="section-title">Your validated insight</div>
+  </div>
+  <div class="section-note">Pull this straight from your problem interview notes, not from memory.</div>
+
+  <div class="field"><label>Who has this problem</label>
+    <input type="text" id="p-who" placeholder="e.g. solo founders raising their first round">
+  </div>
+  <div class="field"><label>What gets in their way today</label>
+    <textarea rows="2" id="p-obstacle" placeholder="e.g. they can't tell in advance which investors actually fit their stage and sector, so they cold-email 200 VCs at a 2% response rate"></textarea>
+  </div>
+  <div class="field"><label>What they're actually trying to achieve</label>
+    <input type="text" id="p-outcome" placeholder="e.g. reach the right investor without wasting hundreds of cold emails">
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div class="section-title">Reframe as How Might We questions</div>
+  </div>
+  <div class="section-note">Write 3 to 5 variants. Keep each one open enough to allow more than one answer.</div>
+  <div id="hmw-rows">
+    <div class="hmw-row"><input type="text" placeholder="How might we help [who] know, before they reach out, which investors actually fit?"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
+    <div class="hmw-row"><input type="text" placeholder="How might we shortcut the path from problem to the right investor?"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
+  </div>
+  <button class="add-row-btn" onclick="addRow('hmw-rows','How might we ...')">+ Add How Might We question</button>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div class="section-title">Solution concepts</div>
+  </div>
+  <div class="section-note">List 2 to 3 genuinely different concepts before picking a favorite.</div>
+  <div id="concept-rows">
+    <div class="hmw-row"><input type="text" placeholder="Concept 1: e.g. a readiness-matching questionnaire that scores fit against investor criteria"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
+    <div class="hmw-row"><input type="text" placeholder="Concept 2: e.g. a curated warm-intro marketplace"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
+  </div>
+  <button class="add-row-btn" onclick="addRow('concept-rows','Concept: ...')">+ Add solution concept</button>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div class="section-title">Smallest test before you build</div>
+  </div>
+  <div class="field"><label>Which concept, and the cheapest way to test it</label>
+    <textarea rows="3" id="p-test" placeholder="e.g. Concept 1: a manual, concierge version, we score 15 founders by hand against 10 investor profiles and see if they'd pay for the match."></textarea>
+  </div>
+</div>
+
+<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Compile my problem-to-solution map →</button>
+
+<div class="result-box" id="result-box" style="display:none">
+  <div class="result-title">Your problem-to-solution map</div>
+  <div class="result-line" id="r-line">Fill in the fields above and click Compile.</div>
+  <div class="result-sub" id="r-details"></div>
+</div>
+
+<div class="evidence">
+  <div class="evidence-icon">✦</div>
+  <div><strong>What this canvas needs to include:</strong> a specific, validated insight (not a feature idea); one or more How Might We questions; two or three real solution concepts, not just your favorite; and the smallest, cheapest way to test the one you pick before building it.</div>
+</div>
+
+</div>
+
+<button class="print-btn" onclick="window.print()">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+  Print / Save PDF
+</button>
+
+<script>
+function addRow(containerId, placeholder){
+  const row = document.createElement('div');
+  row.className = 'hmw-row';
+  row.innerHTML = `<input type="text" placeholder="${placeholder}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
+  document.getElementById(containerId).appendChild(row);
+}
+
+function val(id){ return document.getElementById(id).value.trim(); }
+
+function compile(){
+  const who = val('p-who') || '[who has this problem]';
+  const obstacle = val('p-obstacle') || '[what gets in their way]';
+  const outcome = val('p-outcome') || '[what they are trying to achieve]';
+  const test = val('p-test');
+
+  const hmwItems = [];
+  document.querySelectorAll('#hmw-rows .hmw-row input').forEach(i => { if (i.value.trim()) hmwItems.push(i.value.trim()); });
+
+  const conceptItems = [];
+  document.querySelectorAll('#concept-rows .hmw-row input').forEach(i => { if (i.value.trim()) conceptItems.push(i.value.trim()); });
+
+  const line = `For ${who}, the obstacle is ${obstacle.toLowerCase()}, and what they want is ${outcome}.`;
+  document.getElementById('r-line').innerHTML = line;
+
+  let details = '';
+  if (hmwItems.length) details += `<div><strong>How Might We questions:</strong> ${hmwItems.join(' &nbsp;·&nbsp; ')}</div>`;
+  if (conceptItems.length) details += `<div style="margin-top:8px"><strong>Solution concepts:</strong> ${conceptItems.join(' &nbsp;·&nbsp; ')}</div>`;
+  if (test) details += `<div style="margin-top:8px"><strong>Smallest test:</strong> ${test}</div>`;
+  document.getElementById('r-details').innerHTML = details;
+
+  document.getElementById('result-box').style.display = 'block';
+  document.getElementById('result-box').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+(function(){
+  const SB_URL='https://fyswympbcriibpewkxnh.supabase.co';
+  const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5c3d5bXBiY3JpaWJwZXdreG5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjIwMTcsImV4cCI6MjA5Mjc5ODAxN30.l5gy0L9JU_8g0vIjoFWmUqP7T7zyHOsE0wdmkC2kBo0';
+  fetch(SB_URL+'/rest/v1/template_events',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'},
+    body:JSON.stringify({email:'anonymous',template:'SB_Solution_PreSeed_ProblemToSolutionCanvas',event:'opened'})
+  }).catch(()=>{});
+})();
+</script>
+</body>
+</html>
