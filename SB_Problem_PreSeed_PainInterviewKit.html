@@ -122,7 +122,7 @@ textarea{resize:vertical;line-height:1.65}
   <div class="doc-header">
     <div class="brand">SheBlooms</div>
     <div class="doc-title">Pain Interview Kit: script, capture sheet & log</div>
-    <div class="doc-sub">Run and score 20+ problem interviews against the Stage 1 gate</div>
+    <div class="doc-sub">Run and score 20+ problem interviews to build your evidence base</div>
   </div>
 
   <div class="progress-bar">
@@ -213,7 +213,7 @@ textarea{resize:vertical;line-height:1.65}
           <div class="q-num">9.</div>
           <div class="q-content">
             <div class="q-text">"On a scale of 1 to 5, how painful is this problem for you right now?"</div>
-            <div class="q-hint">1 = minor annoyance, 5 = major blocker. You need 70%+ scoring 4 or 5 to pass the Stage 1 gate.</div>
+            <div class="q-hint">1 = minor annoyance, 5 = major blocker.</div>
           </div>
         </div>
         <div class="q-block">
@@ -411,7 +411,7 @@ textarea{resize:vertical;line-height:1.65}
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
       <div>
         <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--brand);margin-bottom:3px">Interview tracker</div>
-        <div style="font-size:11px;color:var(--muted)">Gate: 20 interviews · 70%+ scoring pain 4–5</div>
+        <div style="font-size:11px;color:var(--muted)">Target: 20 interviews · track how many score high pain (4–5)</div>
       </div>
       <div style="text-align:right">
         <div style="font-family:'DM Sans',sans-serif;font-size:28px;font-weight:600;color:var(--brand)" id="log-count">0</div>
@@ -435,7 +435,7 @@ textarea{resize:vertical;line-height:1.65}
     </div>
 
     <div id="gate-box" style="padding:14px 18px;border-radius:10px;border:1.5px solid var(--border);background:var(--soft);margin-bottom:24px;font-size:12px;color:var(--muted)">
-      Complete at least 5 interviews to see your gate status.
+      Complete at least 5 interviews to see your pattern summary.
     </div>
 
     <div id="log-table" style="border:1px solid var(--border);border-radius:10px;overflow:hidden">
@@ -468,7 +468,7 @@ textarea{resize:vertical;line-height:1.65}
 
     <div class="evidence">
       <div class="evidence-icon">✦</div>
-      <div><strong>Evidence required:</strong> 20+ interviews with name, date, and 3+ direct quotes per person. 70%+ scoring pain 4–5. At least 3 emerging patterns documented.</div>
+      <div><strong>Evidence to bring to your Problem slide:</strong> 20+ interviews with name, date, and 3+ direct quotes per person, the share of interviews scoring high pain (4–5), and at least 3 emerging patterns documented.</div>
     </div>
 
   </div>
@@ -585,13 +585,10 @@ function renderLog() {
     gate.textContent = `${n}/20 interviews completed. Keep going, patterns emerge after 5.`;
   } else {
     const highPct = sevs.length ? high/sevs.length : 0;
-    const gatePart = n >= 20 ? (highPct >= 0.7 ? 'pass' : 'partial') : 'progress';
-    const colors = { pass: ['#f0fdf4','#0f6e56','#bbf7d0'], progress: ['var(--soft)','var(--brand)','var(--border)'], partial: ['#fffbeb','#92400e','#fde68a'] };
-    const [bg, tc, bd] = colors[gatePart];
-    gate.style.cssText = `padding:14px 18px;border-radius:10px;border:1.5px solid ${bd};background:${bg};margin-bottom:24px;font-size:12px;color:${tc}`;
-    gate.innerHTML = gatePart === 'pass'
-      ? `<strong>Stage 1 gate passed ✓</strong> ${n} interviews · ${Math.round(highPct*100)}% high pain · Ready to move to pattern synthesis.`
-      : `<strong>${n}/20 interviews</strong> · ${Math.round(highPct*100)}% high pain · ${gatePart === 'partial' ? 'Gate: need 70%+ high pain, keep iterating.' : `${20-n} more interviews to reach the gate.`}`;
+    gate.style.cssText = 'padding:14px 18px;border-radius:10px;border:1.5px solid var(--border);background:var(--soft);margin-bottom:24px;font-size:12px;color:var(--muted)';
+    gate.innerHTML = n >= 20
+      ? `<strong>${n}/20 interviews logged.</strong> ${Math.round(highPct*100)}% scoring high pain (4–5). Time to review your patterns and write the slide.`
+      : `<strong>${n}/20 interviews</strong> · ${Math.round(highPct*100)}% scoring high pain (4–5) · ${20-n} more to go.`;
   }
 }
 
