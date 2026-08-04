@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PMF & Scale Defensibility Worksheet · SheBlooms</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+}
+body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
+.page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
+
+.doc-header{text-align:center;margin-bottom:40px;padding-bottom:28px;border-bottom:1.5px solid var(--ink)}
+.brand{font-family:'Instrument Serif',serif;font-style:normal;font-size:28px;color:var(--brand);letter-spacing:-.01em;margin-bottom:10px}
+.doc-title{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:500;color:var(--ink);line-height:1.3}
+.doc-sub{font-size:12px;color:var(--muted);margin-top:6px}
+
+.intro{background:var(--soft);border-left:3px solid var(--brand);padding:12px 16px;margin-bottom:32px;font-size:12px;color:#444;line-height:1.7;border-radius:0 6px 6px 0}
+.intro strong{color:var(--ink);font-weight:600}
+
+.section{margin-bottom:28px}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.section-num{width:22px;height:22px;border-radius:50%;background:var(--brand);color:#fff;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.section-title{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--brand)}
+.section-note{font-size:11px;color:var(--muted);margin-left:32px;margin-top:-8px;margin-bottom:12px;line-height:1.5}
+
+.field{margin-bottom:14px}
+.field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+input[type=text],input[type=number],textarea{
+  width:100%;border:1px solid var(--border);border-radius:7px;
+  padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
+  color:var(--ink);background:#fff;outline:none;transition:border-color .15s;font-weight:400;
+}
+input:focus,textarea:focus{border-color:var(--brand);background:var(--soft)}
+input::placeholder,textarea::placeholder{color:#c5c5c5;font-style:italic}
+textarea{resize:vertical;line-height:1.65}
+.field-row{display:grid;gap:12px}
+.field-row.col2{grid-template-columns:1fr 1fr}
+.field-row.col3{grid-template-columns:1fr 1fr 1fr}
+.field-suffix{position:relative}
+.field-suffix input{padding-right:44px}
+.field-suffix .suf{position:absolute;right:12px;top:32px;font-size:11px;color:var(--muted)}
+
+.divider{border:none;border-top:1px solid var(--border);margin:24px 0}
+
+.trend-btns{display:flex;gap:8px;margin-bottom:4px}
+.trend-btn{flex:1;padding:11px 10px;border-radius:8px;border:1px solid var(--border);background:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;color:var(--ink);text-align:center;transition:all .12s}
+.trend-btn:hover{border-color:var(--brand);color:var(--brand)}
+.trend-btn.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+.feat-row{display:grid;grid-template-columns:1fr 32px;gap:8px;margin-bottom:8px}
+.rm-remove{width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.rm-remove:hover{border-color:#dc2626;color:#dc2626}
+.add-row-btn{margin-top:4px;border:1px dashed var(--border);background:transparent;padding:8px 16px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;color:var(--muted);width:100%;transition:all .15s}
+.add-row-btn:hover{border-color:var(--brand);color:var(--brand)}
+
+.result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0}
+.result-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
+.result-line{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.7;color:#fff}
+.result-line strong{color:var(--brand)}
+.result-sub{font-size:12px;color:#bbb;margin-top:14px;padding-top:14px;border-top:1px solid #333;line-height:1.7}
+.result-sub strong{color:#fff}
+
+.evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
+.evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
+
+.print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px;transition:transform .1s}
+.print-btn:hover{transform:translateY(-1px)}
+@media print{.print-btn{display:none}.page{padding:28px 32px}.rm-remove,.add-row-btn{display:none}}
+
+@media (max-width: 640px) {
+  .page{padding:32px 20px 60px}
+  .brand{font-size:22px}
+  .doc-title{font-size:15px}
+  .field-row.col2,.field-row.col3{grid-template-columns:1fr}
+  .trend-btns{flex-direction:column}
+  .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="doc-header">
+    <div class="brand">SheBlooms</div>
+    <div class="doc-title">PMF & Scale Defensibility Worksheet</div>
+    <div class="doc-sub">Prove product-market fit and defensibility hold up at Series A</div>
+  </div>
+
+  <div class="intro">
+    <strong>Before you start:</strong> at Series A, nobody is asking whether the product works. This worksheet helps you assemble evidence that fit is real and durable, that your edge strengthens rather than weakens as you scale, and that the experience holds up under real production load.
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">Product-market fit evidence</div>
+    </div>
+    <div class="field-row col3">
+      <div class="field field-suffix"><label>Best cohort retention</label><input type="number" id="p-retention" placeholder="85" step="1"><span class="suf">%</span></div>
+      <div class="field field-suffix"><label>Referral / organic share</label><input type="number" id="p-organic" placeholder="30" step="1"><span class="suf">%</span></div>
+      <div class="field"><label>Usage depth trend</label><input type="text" id="p-usage" placeholder="e.g. +22% seats/account YoY"></div>
+    </div>
+    <div class="field"><label>Notes on cohort data (what's improving, and since when)</label>
+      <textarea rows="2" id="p-cohortnotes" placeholder="e.g. Retention has improved across every quarterly cohort for the last 4 quarters."></textarea>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title">Defensibility at scale</div>
+    </div>
+    <div class="field"><label>Defensibility mechanism</label>
+      <input type="text" id="p-moat" placeholder="e.g. proprietary matching data, network effects, switching costs">
+    </div>
+    <div class="section-note" style="margin-left:0">Is this mechanism strengthening or weakening as you scale?</div>
+    <div class="trend-btns" id="trend-btns">
+      <button class="trend-btn" onclick="setTrend('Strengthening',this)">Strengthening</button>
+      <button class="trend-btn" onclick="setTrend('Flat',this)">Flat</button>
+      <button class="trend-btn" onclick="setTrend('Weakening',this)">Weakening</button>
+    </div>
+    <div class="field" style="margin-top:12px"><label>Evidence of the trend</label>
+      <textarea rows="2" id="p-trendevidence" placeholder="e.g. Match accuracy has improved every quarter as the training data set grows with each new customer."></textarea>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">Roadmap to sustain the advantage</div>
+    </div>
+    <div class="section-note">Items that widen the moat, next 12-24 months.</div>
+    <div id="roadmap-rows">
+      <div class="feat-row"><input type="text" placeholder="e.g. Q1-Q2: expand data partnerships to deepen matching accuracy"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
+      <div class="feat-row"><input type="text" placeholder="e.g. Q3-Q4: launch enterprise tier with deeper integration lock-in"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
+    </div>
+    <button class="add-row-btn" onclick="addRow('roadmap-rows','e.g. ...')">+ Add roadmap item</button>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title">UX proof at scale</div>
+    </div>
+    <div class="field-row col3">
+      <div class="field field-suffix"><label>Uptime</label><input type="number" id="p-uptime" placeholder="99.9" step="0.1"><span class="suf">%</span></div>
+      <div class="field"><label>Support ratio trend</label><input type="text" id="p-support" placeholder="e.g. tickets/customer down 18% YoY"></div>
+      <div class="field field-suffix"><label>NPS / CSAT</label><input type="number" id="p-nps" placeholder="62"><span class="suf">score</span></div>
+    </div>
+  </div>
+
+  <button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Compile my PMF & defensibility summary →</button>
+
+  <div class="result-box" id="result-box" style="display:none">
+    <div class="result-title">Your PMF & defensibility summary</div>
+    <div class="result-line" id="r-line">Fill in the fields above and click Compile.</div>
+    <div class="result-sub" id="r-details"></div>
+  </div>
+
+  <div class="evidence">
+    <div class="evidence-icon">✦</div>
+    <div><strong>What this slide needs to include:</strong> PMF evidence across multiple cohorts, a named defensibility mechanism with a clear strengthening trend, a roadmap that widens the moat, and proof the product holds up under real production load.</div>
+  </div>
+
+</div>
+
+<button class="print-btn" onclick="window.print()">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+  Print / Save PDF
+</button>
+
+<script>
+let currentTrend = '';
+function setTrend(trend, btn){
+  currentTrend = trend;
+  document.querySelectorAll('#trend-btns .trend-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+function addRow(containerId, placeholder){
+  const row = document.createElement('div');
+  row.className = 'feat-row';
+  row.innerHTML = `<input type="text" placeholder="${placeholder}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
+  document.getElementById(containerId).appendChild(row);
+}
+
+function val(id){ return document.getElementById(id).value.trim(); }
+
+function compile(){
+  const retention = val('p-retention');
+  const organic = val('p-organic');
+  const usage = val('p-usage');
+  const cohortNotes = val('p-cohortnotes');
+  const moat = val('p-moat') || '[defensibility mechanism]';
+  const trendEvidence = val('p-trendevidence');
+  const uptime = val('p-uptime');
+  const support = val('p-support');
+  const nps = val('p-nps');
+
+  const roadmapItems = [];
+  document.querySelectorAll('#roadmap-rows .feat-row input').forEach(i => { if (i.value.trim()) roadmapItems.push(i.value.trim()); });
+
+  let line = `Our defensibility is ${moat}, and it is ${(currentTrend || 'trending').toLowerCase()} as we scale.`;
+  document.getElementById('r-line').innerHTML = line;
+
+  let details = '';
+  let pmf = [];
+  if (retention) pmf.push(`${retention}% best-cohort retention`);
+  if (organic) pmf.push(`${organic}% organic/referral share`);
+  if (usage) pmf.push(usage);
+  if (pmf.length) details += `<div><strong>PMF evidence:</strong> ${pmf.join(' · ')}</div>`;
+  if (cohortNotes) details += `<div style="margin-top:8px"><strong>Cohort notes:</strong> ${cohortNotes}</div>`;
+  if (trendEvidence) details += `<div style="margin-top:8px"><strong>Defensibility trend evidence:</strong> ${trendEvidence}</div>`;
+  if (roadmapItems.length) details += `<div style="margin-top:8px"><strong>Roadmap to sustain:</strong> ${roadmapItems.join(' · ')}</div>`;
+  let ux = [];
+  if (uptime) ux.push(`${uptime}% uptime`);
+  if (support) ux.push(support);
+  if (nps) ux.push(`NPS/CSAT ${nps}`);
+  if (ux.length) details += `<div style="margin-top:8px"><strong>UX at scale:</strong> ${ux.join(' · ')}</div>`;
+  document.getElementById('r-details').innerHTML = details;
+
+  document.getElementById('result-box').style.display = 'block';
+  document.getElementById('result-box').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+(function(){
+  const SB_URL='https://fyswympbcriibpewkxnh.supabase.co';
+  const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5c3d5bXBiY3JpaWJwZXdreG5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjIwMTcsImV4cCI6MjA5Mjc5ODAxN30.l5gy0L9JU_8g0vIjoFWmUqP7T7zyHOsE0wdmkC2kBo0';
+  fetch(SB_URL+'/rest/v1/template_events',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'},
+    body:JSON.stringify({email:'anonymous',template:'SB_Solution_SeriesA_PMFScaleWorksheet',event:'opened'})
+  }).catch(()=>{});
+})();
+</script>
+</body>
+</html>
