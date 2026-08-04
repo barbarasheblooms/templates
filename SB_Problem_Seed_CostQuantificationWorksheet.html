@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Problem Cost Quantification Worksheet · SheBlooms</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+}
+body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
+.page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
+
+.doc-header{text-align:center;margin-bottom:40px;padding-bottom:28px;border-bottom:1.5px solid var(--ink)}
+.brand{font-family:'Instrument Serif',serif;font-style:normal;font-size:28px;color:var(--brand);letter-spacing:-.01em;margin-bottom:10px}
+.doc-title{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:500;color:var(--ink);line-height:1.3}
+.doc-sub{font-size:12px;color:var(--muted);margin-top:6px}
+
+.intro{background:var(--soft);border-left:3px solid var(--brand);padding:12px 16px;margin-bottom:32px;font-size:12px;color:#444;line-height:1.7;border-radius:0 6px 6px 0}
+.intro strong{color:var(--ink);font-weight:600}
+
+.section{margin-bottom:28px}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.section-num{width:22px;height:22px;border-radius:50%;background:var(--brand);color:#fff;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.section-title{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--brand)}
+.section-note{font-size:11px;color:var(--muted);margin-left:32px;margin-top:-8px;margin-bottom:12px;line-height:1.5}
+
+.field{margin-bottom:14px}
+.field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+input[type=text],input[type=number],textarea{
+  width:100%;border:1px solid var(--border);border-radius:7px;
+  padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
+  color:var(--ink);background:#fff;outline:none;transition:border-color .15s;font-weight:400;
+}
+input:focus,textarea:focus{border-color:var(--brand);background:var(--soft)}
+input::placeholder,textarea::placeholder{color:#c5c5c5;font-style:italic}
+textarea{resize:vertical;line-height:1.65}
+.field-row{display:grid;gap:12px}
+.field-row.col2{grid-template-columns:1fr 1fr}
+.field-row.col3{grid-template-columns:1fr 1fr 1fr}
+.field-suffix{position:relative}
+.field-suffix input{padding-right:56px}
+.field-suffix .suf{position:absolute;right:12px;top:32px;font-size:11px;color:var(--muted)}
+
+.divider{border:none;border-top:1px solid var(--border);margin:24px 0}
+
+.result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0}
+.result-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px}
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:18px}
+.result-item{}
+.result-num{font-family:'DM Sans',sans-serif;font-size:26px;font-weight:600;color:var(--brand);line-height:1.1}
+.result-label{font-size:10px;color:#aaa;margin-top:4px;line-height:1.4}
+.result-line{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.6;color:#fff;padding-top:16px;border-top:1px solid #333}
+.result-line strong{color:var(--brand)}
+
+.evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
+.evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
+
+.print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px;transition:transform .1s}
+.print-btn:hover{transform:translateY(-1px)}
+@media print{.print-btn{display:none}.page{padding:28px 32px}}
+
+@media (max-width: 640px) {
+  .page{padding:32px 20px 60px}
+  .brand{font-size:22px}
+  .doc-title{font-size:15px}
+  .field-row.col2,.field-row.col3{grid-template-columns:1fr}
+  .result-grid{grid-template-columns:1fr}
+  .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="doc-header">
+    <div class="brand">SheBlooms</div>
+    <div class="doc-title">Problem Cost Quantification Worksheet</div>
+    <div class="doc-sub">Turn customer data into the number investors want to see at Seed</div>
+  </div>
+
+  <div class="intro">
+    <strong>Before you start:</strong> this worksheet turns qualitative pain into a number. You need three inputs: what the problem cost a customer before your product, how many customers in your base share that profile, and how much of that cost your product actually removes today. Pull the first from onboarding conversations, the second from your customer list, and the third from real usage data, not from assumption.
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">Cost per customer, before your product</div>
+    </div>
+    <div class="section-note">Ask new customers what they were doing before, and roughly how much time or money it cost them. Average across at least 10 responses.</div>
+
+    <div class="field-row col3">
+      <div class="field field-suffix"><label>Time spent per occurrence</label><input type="number" id="hours" placeholder="4.8" step="0.1"><span class="suf">hours</span></div>
+      <div class="field field-suffix"><label>Occurrences per month</label><input type="number" id="freq" placeholder="3.2" step="0.1"><span class="suf">/ month</span></div>
+      <div class="field field-suffix"><label>Value of that time</label><input type="number" id="rate" placeholder="85" step="1"><span class="suf">€ / hour</span></div>
+    </div>
+    <div class="field"><label>Or: direct cost per occurrence (skip if using time above)</label>
+      <input type="number" id="directcost" placeholder="e.g. 60 (subscription paid to a workaround tool, per month)">
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title">Your paying customer base</div>
+    </div>
+    <div class="section-note">How many of your current paying customers share this same profile and this same problem?</div>
+
+    <div class="field-row col2">
+      <div class="field"><label>Paying customers with this profile</label><input type="number" id="custcount" placeholder="80"></div>
+      <div class="field"><label>Source of this baseline</label><input type="text" id="source" placeholder="e.g. onboarding survey, N=68 of 80"></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">Delta your product actually closes</div>
+    </div>
+    <div class="section-note">Pull this from real usage data: time or cost after adoption, compared to the baseline above.</div>
+
+    <div class="field-row col2">
+      <div class="field field-suffix"><label>Time spent per occurrence, after</label><input type="number" id="hoursafter" placeholder="1.4" step="0.1"><span class="suf">hours</span></div>
+      <div class="field"><label>Source of this data</label><input type="text" id="sourceafter" placeholder="e.g. in-product time tracking, last 90 days"></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title">Supporting evidence</div>
+    </div>
+    <div class="field"><label>Direct quotes or churn feedback confirming the cost</label>
+      <textarea rows="3" placeholder="e.g. &quot;If I could get that time back, I'd take on two more clients&quot;, quote from onboarding call, March 2027."></textarea>
+    </div>
+    <div class="field"><label>Trend: is this cost growing or shrinking over time?</label>
+      <textarea rows="2" placeholder="e.g. Average proposals per customer per month rose from 2.1 to 3.2 over the last 3 quarters."></textarea>
+    </div>
+  </div>
+
+  <button onclick="calculate()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Calculate →</button>
+
+  <div class="result-box" id="result-box" style="display:none">
+    <div class="result-title">Your quantified problem</div>
+    <div class="result-grid">
+      <div class="result-item">
+        <div class="result-num" id="r-percustomer">–</div>
+        <div class="result-label">Cost per customer / month</div>
+      </div>
+      <div class="result-item">
+        <div class="result-num" id="r-aggregate">–</div>
+        <div class="result-label">Aggregate cost across base / month</div>
+      </div>
+      <div class="result-item">
+        <div class="result-num" id="r-delta">–</div>
+        <div class="result-label">% reduction delivered</div>
+      </div>
+    </div>
+    <div class="result-line" id="r-line">Fill in the fields above and click Calculate.</div>
+  </div>
+
+  <div class="evidence">
+    <div class="evidence-icon">✦</div>
+    <div><strong>Evidence required for the Seed problem slide:</strong> cost per customer sourced from real customer data (not assumption), aggregate cost across at least 10 customers, and a delta figure backed by in-product usage data. Include the trend, not just the snapshot.</div>
+  </div>
+
+</div>
+
+<button class="print-btn" onclick="window.print()">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+  Print / Save PDF
+</button>
+
+<script>
+function fmtEUR(n){
+  return '€' + n.toLocaleString('en-US', {maximumFractionDigits:0});
+}
+
+function calculate(){
+  const hours = parseFloat(document.getElementById('hours').value) || 0;
+  const freq = parseFloat(document.getElementById('freq').value) || 0;
+  const rate = parseFloat(document.getElementById('rate').value) || 0;
+  const directCost = parseFloat(document.getElementById('directcost').value) || 0;
+  const custCount = parseFloat(document.getElementById('custcount').value) || 0;
+  const hoursAfter = parseFloat(document.getElementById('hoursafter').value) || 0;
+
+  let perCustomerMonth = 0;
+  if (hours && rate) {
+    perCustomerMonth = hours * rate * (freq || 1);
+  }
+  if (directCost) {
+    perCustomerMonth += directCost;
+  }
+
+  const aggregate = perCustomerMonth * custCount;
+
+  let deltaPct = 0;
+  if (hours > 0 && hoursAfter >= 0) {
+    deltaPct = Math.max(0, Math.round((1 - (hoursAfter / hours)) * 100));
+  }
+
+  document.getElementById('r-percustomer').textContent = perCustomerMonth ? fmtEUR(perCustomerMonth) : '–';
+  document.getElementById('r-aggregate').textContent = aggregate ? fmtEUR(aggregate) : '–';
+  document.getElementById('r-delta').textContent = deltaPct ? deltaPct + '%' : '–';
+
+  const recovered = aggregate * (deltaPct/100);
+
+  let line = 'Fill in the fields above and click Calculate.';
+  if (perCustomerMonth && custCount) {
+    line = `Our <strong>${custCount}</strong> customers collectively lose <strong>${fmtEUR(aggregate)}/month</strong> to this problem`;
+    if (deltaPct) {
+      line += `. Our product recovers <strong>${deltaPct}%</strong> of that, roughly <strong>${fmtEUR(recovered)}/month</strong> in value delivered across the base.`;
+    } else {
+      line += '.';
+    }
+  }
+  document.getElementById('r-line').innerHTML = line;
+  document.getElementById('result-box').style.display = 'block';
+  document.getElementById('result-box').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+(function(){
+  const SB_URL='https://fyswympbcriibpewkxnh.supabase.co';
+  const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5c3d5bXBiY3JpaWJwZXdreG5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjIwMTcsImV4cCI6MjA5Mjc5ODAxN30.l5gy0L9JU_8g0vIjoFWmUqP7T7zyHOsE0wdmkC2kBo0';
+  fetch(SB_URL+'/rest/v1/template_events',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'},
+    body:JSON.stringify({email:'anonymous',template:'SB_Problem_Seed_CostQuantificationWorksheet',event:'opened'})
+  }).catch(()=>{});
+})();
+</script>
+</body>
+</html>

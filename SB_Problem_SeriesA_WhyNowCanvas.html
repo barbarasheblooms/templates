@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Now: Timing Argument Canvas · SheBlooms</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+}
+body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
+.page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
+
+.doc-header{text-align:center;margin-bottom:40px;padding-bottom:28px;border-bottom:1.5px solid var(--ink)}
+.brand{font-family:'Instrument Serif',serif;font-style:normal;font-size:28px;color:var(--brand);letter-spacing:-.01em;margin-bottom:10px}
+.doc-title{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:500;color:var(--ink);line-height:1.3}
+.doc-sub{font-size:12px;color:var(--muted);margin-top:6px}
+
+.intro{background:var(--soft);border-left:3px solid var(--brand);padding:12px 16px;margin-bottom:32px;font-size:12px;color:#444;line-height:1.7;border-radius:0 6px 6px 0}
+.intro strong{color:var(--ink);font-weight:600}
+
+.section{margin-bottom:28px}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.section-num{width:22px;height:22px;border-radius:50%;background:var(--brand);color:#fff;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.section-title{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--brand)}
+.section-note{font-size:11px;color:var(--muted);margin-left:32px;margin-top:-8px;margin-bottom:12px;line-height:1.5}
+
+.force-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.force-tab{flex:1;min-width:150px;padding:14px 16px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:all .15s;background:#fff}
+.force-tab:hover{border-color:var(--brand)}
+.force-tab.on{border-color:var(--brand);background:var(--soft)}
+.force-tab-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.force-tab-desc{font-size:11px;color:var(--muted);line-height:1.5}
+
+.field{margin-bottom:14px}
+.field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+input[type=text],input[type=number],textarea{
+  width:100%;border:1px solid var(--border);border-radius:7px;
+  padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
+  color:var(--ink);background:#fff;outline:none;transition:border-color .15s;font-weight:400;
+}
+input:focus,textarea:focus{border-color:var(--brand);background:var(--soft)}
+input::placeholder,textarea::placeholder{color:#c5c5c5;font-style:italic}
+textarea{resize:vertical;line-height:1.65}
+.field-row{display:grid;gap:12px}
+.field-row.col2{grid-template-columns:1fr 1fr}
+.field-row.col3{grid-template-columns:1fr 1fr 1fr}
+
+.divider{border:none;border-top:1px solid var(--border);margin:24px 0}
+
+.result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0}
+.result-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
+.result-line{font-family:'DM Serif Display',serif;font-size:17px;line-height:1.65;color:#fff}
+.result-line strong{color:var(--brand)}
+.result-line .ph{color:#666;font-style:italic}
+
+.evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
+.evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
+
+.print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px;transition:transform .1s}
+.print-btn:hover{transform:translateY(-1px)}
+@media print{.print-btn{display:none}.page{padding:28px 32px}}
+
+@media (max-width: 640px) {
+  .page{padding:32px 20px 60px}
+  .brand{font-size:22px}
+  .doc-title{font-size:15px}
+  .force-tabs{flex-direction:column}
+  .field-row.col2,.field-row.col3{grid-template-columns:1fr}
+  .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="doc-header">
+    <div class="brand">SheBlooms</div>
+    <div class="doc-title">Why Now: Timing Argument Canvas</div>
+    <div class="doc-sub">Structure the evidence that the window for this problem is still open</div>
+  </div>
+
+  <div class="intro">
+    <strong>Before you start:</strong> pick the force that best explains why this is the moment to fund this company, then back it with a date, a source, and a trend. A timing argument without a number reads as an opinion. This canvas is built to force the number.
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">Which force opens your window?</div>
+    </div>
+    <div class="section-note">Choose the one that applies most directly. If more than one applies, fill in the strongest and note the others below.</div>
+
+    <div class="force-tabs" id="force-tabs">
+      <div class="force-tab" data-force="regulatory" onclick="selectForce(this)">
+        <div class="force-tab-title">Regulatory / structural shift</div>
+        <div class="force-tab-desc">A law, standard, or requirement changed, creating a new obligation or removing a barrier.</div>
+      </div>
+      <div class="force-tab" data-force="behaviour" onclick="selectForce(this)">
+        <div class="force-tab-title">Behaviour change</div>
+        <div class="force-tab-desc">How people work, buy, or decide has shifted, making your solution newly relevant.</div>
+      </div>
+      <div class="force-tab" data-force="technology" onclick="selectForce(this)">
+        <div class="force-tab-title">New technology / infrastructure</div>
+        <div class="force-tab-desc">A new capability makes a previously uneconomical solution viable for the first time.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title">The specific change, with a date and a source</div>
+    </div>
+    <div class="field-row col2">
+      <div class="field"><label>What changed, specifically</label><input type="text" id="change" placeholder="e.g. New disclosure rule effective Q3 2027"></div>
+      <div class="field"><label>Date it took effect / became visible</label><input type="text" id="date" placeholder="e.g. Q3 2027"></div>
+    </div>
+    <div class="field"><label>Source</label>
+      <input type="text" id="cite" placeholder="e.g. national freelance census 2026, or internal funnel data">
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">Trend: is the problem growing?</div>
+    </div>
+    <div class="section-note">Use the same metric you already quantified at Seed (cost, frequency, or volume) and show its trajectory.</div>
+    <div class="field-row col3">
+      <div class="field"><label>Metric</label><input type="text" id="metric" placeholder="e.g. % of new customers who are solo consultants"></div>
+      <div class="field"><label>Value, earlier period</label><input type="text" id="valbefore" placeholder="e.g. 40%"></div>
+      <div class="field"><label>Value, latest period</label><input type="text" id="valafter" placeholder="e.g. 68%"></div>
+    </div>
+    <div class="field"><label>Timeframe</label>
+      <input type="text" id="timeframe" placeholder="e.g. last 4 quarters">
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title">Why the window stays open</div>
+    </div>
+    <div class="field"><label>What structurally prevents incumbents from closing this window quickly</label>
+      <textarea rows="3" placeholder="e.g. Enterprise CRM tools remain priced and built for teams of 10+, structurally underserving solo operators whose cost structure depends on seat-based pricing."></textarea>
+    </div>
+    <div class="field"><label>Fading tailwinds or risks to flag honestly</label>
+      <textarea rows="2" placeholder="e.g. If interest rates fall, some of the urgency behind cost-cutting tools may soften."></textarea>
+    </div>
+  </div>
+
+  <button onclick="generate()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Build my "why now" statement →</button>
+
+  <div class="result-box" id="result-box" style="display:none">
+    <div class="result-title">Your why now statement</div>
+    <div class="result-line" id="r-line"></div>
+  </div>
+
+  <div class="evidence">
+    <div class="evidence-icon">✦</div>
+    <div><strong>Evidence required for the Series A problem slide:</strong> a named force (regulatory, behavioural, or technological), a dated and sourced description of the change, a trend showing the problem is growing, and an honest note on what could close the window.</div>
+  </div>
+
+</div>
+
+<button class="print-btn" onclick="window.print()">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+  Print / Save PDF
+</button>
+
+<script>
+let selectedForce = '';
+const forceLabels = {
+  regulatory: 'a regulatory or structural shift',
+  behaviour: 'a behaviour change',
+  technology: 'a new technology or infrastructure shift'
+};
+
+function selectForce(el){
+  document.querySelectorAll('.force-tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  selectedForce = el.dataset.force;
+}
+
+function generate(){
+  const change = document.getElementById('change').value.trim();
+  const date = document.getElementById('date').value.trim();
+  const cite = document.getElementById('cite').value.trim();
+  const metric = document.getElementById('metric').value.trim();
+  const valbefore = document.getElementById('valbefore').value.trim();
+  const valafter = document.getElementById('valafter').value.trim();
+  const timeframe = document.getElementById('timeframe').value.trim();
+
+  const forceText = selectedForce ? forceLabels[selectedForce] : '<span class="ph">[choose a force above]</span>';
+  const changeText = change ? `<strong>${change}</strong>` : '<span class="ph">[what changed]</span>';
+  const dateText = date ? date : '<span class="ph">[date]</span>';
+  const citeText = cite ? ` (source: ${cite})` : '';
+  const trendText = (metric && valbefore && valafter)
+    ? `Evidence it's still open: <strong>${metric}</strong> moved from <strong>${valbefore}</strong> to <strong>${valafter}</strong>${timeframe ? ' over ' + timeframe : ''}.`
+    : '<span class="ph">[add a trend to show the problem is still growing]</span>';
+
+  const line = `This window opened around <strong>${dateText}</strong>, because of ${forceText}: ${changeText}${citeText}. ${trendText}`;
+
+  document.getElementById('r-line').innerHTML = line;
+  document.getElementById('result-box').style.display = 'block';
+  document.getElementById('result-box').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+(function(){
+  const SB_URL='https://fyswympbcriibpewkxnh.supabase.co';
+  const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5c3d5bXBiY3JpaWJwZXdreG5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjIwMTcsImV4cCI6MjA5Mjc5ODAxN30.l5gy0L9JU_8g0vIjoFWmUqP7T7zyHOsE0wdmkC2kBo0';
+  fetch(SB_URL+'/rest/v1/template_events',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'},
+    body:JSON.stringify({email:'anonymous',template:'SB_Problem_SeriesA_WhyNowCanvas',event:'opened'})
+  }).catch(()=>{});
+})();
+</script>
+</body>
+</html>
