@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PMF Survey Calculator · SheBlooms</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+  --green:#0f6e56;--green-bg:#f0fdf4;--green-bd:#bbf7d0;
+  --amber:#d97706;--amber-bg:#fffbeb;--amber-bd:#fde68a;
+  --red:#dc2626;--red-bg:#fef2f2;--red-bd:#fecaca;
+}
+body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
+.page{max-width:780px;margin:0 auto;padding:52px 44px 80px}
+
+.doc-header{text-align:center;margin-bottom:40px;padding-bottom:28px;border-bottom:1.5px solid var(--ink)}
+.brand{font-family:'Instrument Serif',serif;font-style:normal;font-size:28px;color:var(--brand);letter-spacing:-.01em;margin-bottom:10px}
+.doc-title{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:500;color:var(--ink);line-height:1.3}
+.doc-sub{font-size:12px;color:var(--muted);margin-top:6px}
+
+.intro{background:var(--soft);border-left:3px solid var(--brand);padding:12px 16px;margin-bottom:32px;font-size:12px;color:#444;line-height:1.7;border-radius:0 6px 6px 0}
+.intro strong{color:var(--ink);font-weight:600}
+
+.section{margin-bottom:28px}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.section-num{width:22px;height:22px;border-radius:50%;background:var(--brand);color:#fff;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.section-title{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--brand)}
+.section-note{font-size:11px;color:var(--muted);margin-left:32px;margin-top:-8px;margin-bottom:12px;line-height:1.5}
+
+.field{margin-bottom:14px}
+.field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+input[type=text],input[type=number],textarea,select{
+  width:100%;border:1px solid var(--border);border-radius:7px;
+  padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
+  color:var(--ink);background:#fff;outline:none;transition:border-color .15s;font-weight:400;
+}
+input:focus,textarea:focus,select:focus{border-color:var(--brand);background:var(--soft)}
+input::placeholder,textarea::placeholder{color:#c5c5c5;font-style:italic}
+textarea{resize:vertical;line-height:1.65}
+.field-row{display:grid;gap:12px}
+.field-row.col2{grid-template-columns:1fr 1fr}
+
+.divider{border:none;border-top:1px solid var(--border);margin:24px 0}
+
+.question-box{background:#EEF0FF;border-radius:10px;padding:16px 20px;font-size:14px;font-weight:500;color:var(--brand);line-height:1.5;margin-bottom:14px}
+.question-box em{font-style:italic}
+.answer-legend{font-size:12px;color:var(--muted);line-height:1.7}
+.answer-legend strong{color:var(--ink)}
+
+.option-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.opt-card{padding:14px 16px;border:1px solid var(--border);border-radius:10px}
+.opt-label{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.opt-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px}
+.opt-a .opt-badge{background:var(--green-bg);color:var(--green)}
+.opt-b .opt-badge{background:var(--amber-bg);color:var(--amber)}
+.opt-c .opt-badge{background:var(--red-bg);color:var(--red)}
+.opt-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0;display:none;align-items:center;gap:20px}
+.result-num{font-family:'Instrument Serif',serif;font-size:42px;color:var(--brand);line-height:1;flex-shrink:0}
+.result-meta{flex:1}
+.result-label{font-size:11px;color:#aaa;margin-bottom:3px;text-transform:uppercase;letter-spacing:.08em}
+.result-status{font-size:14px;font-weight:600}
+.result-status.pass{color:#7ee0c3}
+.result-status.warn{color:#fbbf74}
+.result-status.fail{color:#f28b8b}
+
+.evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
+.evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
+
+.print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px;transition:transform .1s}
+.print-btn:hover{transform:translateY(-1px)}
+@media print{.print-btn{display:none}.page{padding:28px 32px}}
+
+@media (max-width: 640px) {
+  .page{padding:32px 20px 60px}
+  .brand{font-size:22px}
+  .doc-title{font-size:15px}
+  .field-row.col2{grid-template-columns:1fr}
+  .opt-row{grid-template-columns:1fr}
+  .result-box{flex-direction:column;gap:10px;text-align:center}
+  .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="doc-header">
+  <div class="brand">SheBlooms</div>
+  <div class="doc-title">PMF Survey Calculator</div>
+  <div class="doc-sub">The Sean Ellis Test: measure product-market fit the way top VCs check it</div>
+</div>
+
+<div class="intro">
+  <strong>Before you start:</strong> the Sean Ellis Test is the most widely used PMF measurement framework. Send one question to 40+ active users. If 40% or more answer "very disappointed", you have crossed from useful to essential. Below 40%, keep iterating on the core value prop.
+</div>
+
+<div class="section">
+  <div class="section-header"><div class="section-num">1</div><div class="section-title">The question</div></div>
+  <div class="question-box">"How would you feel if you could no longer use <em>[product name]</em>?"</div>
+  <div class="answer-legend">
+    <strong>A</strong> Very disappointed &nbsp;·&nbsp; <strong>B</strong> Somewhat disappointed &nbsp;·&nbsp; <strong>C</strong> Would not mind
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="section-header"><div class="section-num">2</div><div class="section-title">Survey setup</div></div>
+  <div class="field-row col2">
+    <div class="field"><label>Survey tool</label><input type="text" placeholder="e.g. Typeform, Google Forms, WhatsApp"></div>
+    <div class="field"><label>Date sent</label><input type="text" placeholder="DD / MM / YYYY"></div>
+  </div>
+  <div class="field-row col2">
+    <div class="field"><label>Total users surveyed</label><input type="number" id="surveyed" placeholder="e.g. 55"></div>
+    <div class="field"><label>Total responses received</label><input type="number" id="responded" placeholder="Minimum: 40"></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="section-header"><div class="section-num">3</div><div class="section-title">Results breakdown</div></div>
+  <div class="option-grid">
+    <div class="opt-card opt-a">
+      <div class="opt-label"><span class="opt-badge">A</span>Very disappointed</div>
+      <div class="opt-row">
+        <div class="field"><label>Count</label><input type="number" id="va" placeholder="e.g. 22" oninput="calc()"></div>
+        <div class="field"><label>%</label><input type="text" id="pa" placeholder="auto" readonly style="background:var(--soft)"></div>
+      </div>
+    </div>
+    <div class="opt-card opt-b">
+      <div class="opt-label"><span class="opt-badge">B</span>Somewhat disappointed</div>
+      <div class="opt-row">
+        <div class="field"><label>Count</label><input type="number" id="vb" placeholder="e.g. 14" oninput="calc()"></div>
+        <div class="field"><label>%</label><input type="text" id="pb" placeholder="auto" readonly style="background:var(--soft)"></div>
+      </div>
+    </div>
+    <div class="opt-card opt-c">
+      <div class="opt-label"><span class="opt-badge">C</span>Would not mind</div>
+      <div class="opt-row">
+        <div class="field"><label>Count</label><input type="number" id="vc" placeholder="e.g. 9" oninput="calc()"></div>
+        <div class="field"><label>%</label><input type="text" id="pc" placeholder="auto" readonly style="background:var(--soft)"></div>
+      </div>
+    </div>
+  </div>
+  <div class="result-box" id="result-box">
+    <div class="result-num" id="result-pct">0%</div>
+    <div class="result-meta">
+      <div class="result-label">"Very disappointed" score</div>
+      <div class="result-status" id="result-status"></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="section-header"><div class="section-num">4</div><div class="section-title">Qualitative analysis</div></div>
+  <div class="field"><label>Top answers to "What is the primary benefit?"</label><textarea rows="3" placeholder="Copy verbatim. These exact words belong in your pitch and marketing copy."></textarea></div>
+  <div class="field"><label>Top answers to "What would you use instead?"</label><textarea rows="2" placeholder="This reveals your real competition, it may surprise you."></textarea></div>
+  <div class="field"><label>Your interpretation: what do the results tell you?</label><textarea rows="3" placeholder="If above 40%: what drove it? Who are the 'very disappointed' users? If below: what needs to change?"></textarea></div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="section-header"><div class="section-num">5</div><div class="section-title">Next steps</div></div>
+  <div class="field-row col2">
+    <div class="field"><label>Result</label>
+      <select>
+        <option value="">Select outcome…</option>
+        <option>≥ 40%, PMF reached, moving to Series A prep</option>
+        <option>30-39%, close, segment the "very disappointed" group</option>
+        <option>&lt; 30%, iterate on core value prop and retest</option>
+      </select>
+    </div>
+    <div class="field"><label>Next retest date</label><input type="text" placeholder="DD / MM / YYYY"></div>
+  </div>
+  <div class="field"><label>One action you'll take based on these results</label><input type="text" placeholder="e.g. Double down on the segment that's 'very disappointed'"></div>
+</div>
+
+<div class="evidence">
+  <div class="evidence-icon">✦</div>
+  <div><strong>What this needs to include:</strong> responses from 40+ active users, with the "very disappointed" percentage, the top verbatim answers, and a stated next step based on the result.</div>
+</div>
+
+</div>
+
+<button class="print-btn" onclick="window.print()">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+  Print / Save PDF
+</button>
+
+<script>
+function calc(){
+  const a=+document.getElementById('va').value||0;
+  const b=+document.getElementById('vb').value||0;
+  const c=+document.getElementById('vc').value||0;
+  const total=a+b+c;
+  if(!total)return;
+  document.getElementById('pa').value=Math.round(a/total*100)+'%';
+  document.getElementById('pb').value=Math.round(b/total*100)+'%';
+  document.getElementById('pc').value=Math.round(c/total*100)+'%';
+  const pct=Math.round(a/total*100);
+  const box=document.getElementById('result-box');
+  const st=document.getElementById('result-status');
+  box.style.display='flex';
+  document.getElementById('result-pct').textContent=pct+'%';
+  if(pct>=50){st.textContent='Strong PMF signal ✓';st.className='result-status pass';}
+  else if(pct>=40){st.textContent='PMF threshold reached ✓';st.className='result-status pass';}
+  else if(pct>=30){st.textContent='Getting close, segment your best users';st.className='result-status warn';}
+  else{st.textContent='Below threshold, keep iterating';st.className='result-status fail';}
+}
+
+(function(){
+  const SB_URL='https://fyswympbcriibpewkxnh.supabase.co';
+  const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5c3d5bXBiY3JpaWJwZXdreG5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjIwMTcsImV4cCI6MjA5Mjc5ODAxN30.l5gy0L9JU_8g0vIjoFWmUqP7T7zyHOsE0wdmkC2kBo0';
+  fetch(SB_URL+'/rest/v1/template_events',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'},
+    body:JSON.stringify({email:'anonymous',template:'SB_Traction_Seed_PMFSurveyCalculator',event:'opened'})
+  }).catch(()=>{});
+})();
+</script>
+</body>
+</html>

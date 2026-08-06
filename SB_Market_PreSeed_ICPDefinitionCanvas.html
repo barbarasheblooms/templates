@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ICP Definition Canvas · SheBlooms</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+  --green:#0f6e56;--green-bg:#f0fdf4;--green-bd:#bbf7d0;
+  --red:#991b1b;--red-bg:#fef2f2;--red-bd:#fecaca;
+}
+body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
+.page{max-width:780px;margin:0 auto;padding:52px 44px 80px}
+
+.doc-header{text-align:center;margin-bottom:40px;padding-bottom:28px;border-bottom:1.5px solid var(--ink)}
+.brand{font-family:'Instrument Serif',serif;font-style:normal;font-size:28px;color:var(--brand);letter-spacing:-.01em;margin-bottom:10px}
+.doc-title{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:500;color:var(--ink);line-height:1.3}
+.doc-sub{font-size:12px;color:var(--muted);margin-top:6px}
+
+.intro{background:var(--soft);border-left:3px solid var(--brand);padding:12px 16px;margin-bottom:32px;font-size:12px;color:#444;line-height:1.7;border-radius:0 6px 6px 0}
+.intro strong{color:var(--ink);font-weight:600}
+
+.section{margin-bottom:28px}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.section-num{width:22px;height:22px;border-radius:50%;background:var(--brand);color:#fff;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.section-title{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--brand)}
+.section-note{font-size:11px;color:var(--muted);margin-left:32px;margin-top:-8px;margin-bottom:12px;line-height:1.5}
+
+.field{margin-bottom:14px}
+.field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+input[type=text]{width:100%;border:1px solid var(--border);border-radius:7px;padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:#fff;outline:none;transition:border-color .15s}
+input[type=text]:focus{border-color:var(--brand);background:var(--soft)}
+input::placeholder{color:#c5c5c5;font-style:italic}
+
+.divider{border:none;border-top:1px solid var(--border);margin:24px 0}
+
+/* ICP NAME ROW */
+.icp-name-row{display:flex;align-items:center;gap:16px;margin-bottom:28px;padding:16px 20px;background:var(--soft);border-radius:12px;border:1px solid var(--border)}
+.icp-name-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);white-space:nowrap}
+.icp-name-input{flex:1;border:none;border-bottom:1.5px solid var(--border);background:transparent;font-family:'Instrument Serif',serif;font-size:20px;color:var(--ink);outline:none;padding:2px 0;transition:border-color .15s}
+.icp-name-input:focus{border-bottom-color:var(--brand)}
+.icp-name-input::placeholder{color:#ccc}
+.icp-meta{display:flex;gap:12px;flex-shrink:0}
+.icp-meta-field{display:flex;flex-direction:column;gap:3px}
+.icp-meta-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.icp-meta-input{border:none;border-bottom:1px solid var(--border);background:transparent;font-family:'DM Sans',sans-serif;font-size:11px;color:var(--ink);outline:none;width:80px;transition:border-color .15s}
+.icp-meta-input:focus{border-bottom-color:var(--brand)}
+
+/* CANVAS GRID */
+.canvas{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:24px}
+.cell{background:#fff;padding:18px 20px}
+.cell.accent{background:var(--soft)}
+.cell.full{grid-column:span 2}
+.cell-num{font-size:10px;font-weight:700;color:var(--brand);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px}
+.cell-title{font-size:14px;font-weight:600;color:var(--brand);margin-bottom:4px}
+.cell-prompt{font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.5}
+.cell textarea{width:100%;border:none;background:var(--soft);border-radius:6px;padding:8px 10px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink);resize:vertical;outline:none;line-height:1.6;min-height:80px;transition:background .15s}
+.cell textarea:focus{background:#EEF0FF}
+.cell textarea::placeholder{color:#ccc;font-style:italic}
+
+/* SIGNAL TAGS */
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.tag{padding:5px 11px;border-radius:20px;border:1px solid var(--border);font-size:11px;cursor:pointer;transition:all .12s;user-select:none;background:#fff;color:var(--ink)}
+.tag:hover{border-color:var(--brand);color:var(--brand)}
+.tag.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.tag-note{font-size:11px;color:var(--muted);margin-bottom:8px;line-height:1.5}
+
+/* BOTTOM PANELS */
+.bottom-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.panel{border-radius:12px;padding:18px 20px;border:1px solid var(--border)}
+.panel.green{background:var(--green-bg);border-color:var(--green-bd)}
+.panel.red{background:var(--red-bg);border-color:var(--red-bd)}
+.panel-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.panel.green .panel-title{color:var(--green)}
+.panel.red .panel-title{color:var(--red)}
+.panel textarea{width:100%;border:none;border-radius:6px;padding:8px 10px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink);resize:vertical;outline:none;line-height:1.6;min-height:90px}
+.panel.green textarea{background:#fff}
+.panel.red textarea{background:#fff8f8}
+
+/* CONFIDENCE + TEST */
+.confidence{padding:18px 20px;border:1.5px solid var(--brand);border-radius:12px;margin-bottom:24px}
+.conf-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.conf-note{font-size:11px;color:var(--muted);margin-bottom:12px}
+.conf-btns{display:flex;gap:6px;flex-wrap:wrap}
+.conf-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:#fff;font-size:11px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s;color:var(--ink)}
+.conf-btn:hover{border-color:var(--brand);color:var(--brand)}
+.conf-btn.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+.test-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start;margin-bottom:10px}
+.test-q{font-size:12px;font-weight:500;padding-top:4px}
+.test-btns{display:flex;gap:6px}
+
+.evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
+.evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
+
+.print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px;transition:transform .1s}
+.print-btn:hover{transform:translateY(-1px)}
+@media print{.print-btn{display:none}.page{padding:28px 32px}textarea{background:#fafafa!important}}
+
+@media (max-width: 640px) {
+  .page{padding:32px 20px 60px}
+  .brand{font-size:22px}
+  .doc-title{font-size:15px}
+  .icp-name-row{flex-wrap:wrap;gap:10px}
+  .icp-meta{width:100%;justify-content:flex-start}
+  .canvas{grid-template-columns:1fr}
+  .cell.full{grid-column:span 1}
+  .bottom-row{grid-template-columns:1fr}
+  .conf-btns{flex-direction:column}
+  .conf-btn{text-align:left}
+  .test-row{grid-template-columns:1fr}
+  .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="doc-header">
+  <div class="brand">SheBlooms</div>
+  <div class="doc-title">ICP Definition Canvas</div>
+  <div class="doc-sub">Define who has the problem specifically enough to find, interview and size a market from</div>
+</div>
+
+<div class="intro">
+  <strong>Before you start:</strong> your ICP is not a marketing concept, it's what the rest of the Market slide is built on. "Female founders" is a target market. "First-time female founders, pre-revenue, B2B, raising in the next 12 months" is an ICP specific enough that you could find 50 matching people on LinkedIn in under an hour.
+</div>
+
+<div class="icp-name-row">
+  <span class="icp-name-label">ICP name</span>
+  <input class="icp-name-input" type="text" id="icp-name" placeholder="e.g. The Overwhelmed First-Time Founder">
+  <div class="icp-meta">
+    <div class="icp-meta-field">
+      <span class="icp-meta-label">Version</span>
+      <input class="icp-meta-input" type="text" placeholder="v1">
+    </div>
+    <div class="icp-meta-field">
+      <span class="icp-meta-label">Date</span>
+      <input class="icp-meta-input" type="text" placeholder="Aug 2026" style="width:90px">
+    </div>
+  </div>
+</div>
+
+<div class="canvas">
+
+  <div class="cell">
+    <div class="cell-num">01</div>
+    <div class="cell-title">Who they are</div>
+    <div class="cell-prompt">Role, industry, company size, geography. Be specific.</div>
+    <textarea placeholder="e.g. Female founders of B2B SaaS startups, pre-revenue, based in Southern Europe, working solo or with 1 co-founder…"></textarea>
+  </div>
+
+  <div class="cell accent">
+    <div class="cell-num">02</div>
+    <div class="cell-title">Their core pain</div>
+    <div class="cell-prompt">In their own words. Use verbatim quotes from interviews wherever possible.</div>
+    <textarea placeholder="e.g. &quot;I don't know if I'm building something people actually want. I keep second-guessing myself every week.&quot;"></textarea>
+  </div>
+
+  <div class="cell">
+    <div class="cell-num">03</div>
+    <div class="cell-title">When it happens</div>
+    <div class="cell-prompt">The specific context or trigger. When does the pain become acute?</div>
+    <textarea placeholder="e.g. Right after deciding to go full-time on their startup, when they start reaching out to potential customers for the first time…"></textarea>
+  </div>
+
+  <div class="cell">
+    <div class="cell-num">04</div>
+    <div class="cell-title">Current solution</div>
+    <div class="cell-prompt">What do they do today? Who are they paying? What workarounds have they built?</div>
+    <textarea placeholder="e.g. Watching YouTube tutorials, joining random Slack groups, asking their network…"></textarea>
+  </div>
+
+  <div class="cell accent full">
+    <div class="cell-num">05</div>
+    <div class="cell-title">Why the current solution fails them</div>
+    <div class="cell-prompt">This is your competitive differentiation. What gap do existing solutions leave?</div>
+    <textarea placeholder="e.g. Existing programmes are too long/expensive, not designed for their stage, lack peer accountability…" style="min-height:70px"></textarea>
+  </div>
+
+  <div class="cell">
+    <div class="cell-num">06</div>
+    <div class="cell-title">Buying trigger</div>
+    <div class="cell-prompt">What specific event makes them look for a solution right now?</div>
+    <textarea placeholder="e.g. Just quit their job. Just got their first rejection from a VC. Just hit 6 months without revenue…"></textarea>
+  </div>
+
+  <div class="cell accent">
+    <div class="cell-num">07</div>
+    <div class="cell-title">What success looks like</div>
+    <div class="cell-prompt">What does their life look like after the problem is solved?</div>
+    <textarea placeholder="e.g. Confident that they're building something real. First 10 paying customers…"></textarea>
+  </div>
+
+  <div class="cell full">
+    <div class="cell-num">08</div>
+    <div class="cell-title">Where to find them</div>
+    <div class="cell-prompt">Online communities, events, newsletters, LinkedIn groups. Be specific enough to build a list.</div>
+    <textarea placeholder="e.g. Startup Portugal community, Female Founders LinkedIn groups, local accelerator demo days…" style="min-height:60px"></textarea>
+  </div>
+
+</div>
+
+<div class="bottom-row">
+  <div class="panel green">
+    <div class="panel-title">Inorganic demand signals observed</div>
+    <div class="tag-note">Check all that apply.</div>
+    <div class="tag-row">
+      <span class="tag" onclick="this.classList.toggle('on')">Asked to be notified</span>
+      <span class="tag" onclick="this.classList.toggle('on')">Joined a waitlist</span>
+      <span class="tag" onclick="this.classList.toggle('on')">Agreed to pilot</span>
+      <span class="tag" onclick="this.classList.toggle('on')">Referred someone else</span>
+      <span class="tag" onclick="this.classList.toggle('on')">Offered to pay</span>
+      <span class="tag" onclick="this.classList.toggle('on')">Pre-ordered</span>
+      <span class="tag" onclick="this.classList.toggle('on')">Shared content unprompted</span>
+    </div>
+  </div>
+  <div class="panel red">
+    <div class="panel-title">Assumptions still to validate</div>
+    <textarea placeholder="What are you not yet sure about? What could invalidate this ICP?" style="min-height:120px;background:#fff8f8"></textarea>
+  </div>
+</div>
+
+<div class="confidence">
+  <div class="conf-title">ICP confidence level</div>
+  <div class="conf-note">Based on interviews completed so far</div>
+  <div class="conf-btns">
+    <button class="conf-btn" onclick="setConf(this)">Hypothesis only</button>
+    <button class="conf-btn" onclick="setConf(this)">Some signal (5–9 interviews)</button>
+    <button class="conf-btn" onclick="setConf(this)">Validated (10–19 interviews)</button>
+    <button class="conf-btn" onclick="setConf(this)">Confirmed (20+ interviews)</button>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="section-header"><div class="section-num">✓</div><div class="section-title">The ICP definition test</div></div>
+  <div class="section-note">Answer these four questions before committing to this ICP and moving on to sizing your market.</div>
+
+  <div class="test-row">
+    <div class="test-q">1. Can I find them on LinkedIn in under an hour?</div>
+    <div class="test-btns"><button class="conf-btn" onclick="setTest(this)">Yes ✓</button><button class="conf-btn" onclick="setTest(this)">No, too vague</button></div>
+  </div>
+  <div class="test-row">
+    <div class="test-q">2. Do they demonstrably have the problem from interviews?</div>
+    <div class="test-btns"><button class="conf-btn" onclick="setTest(this)">Yes ✓</button><button class="conf-btn" onclick="setTest(this)">Not yet</button></div>
+  </div>
+  <div class="test-row">
+    <div class="test-q">3. Do they have the ability and motivation to pay?</div>
+    <div class="test-btns"><button class="conf-btn" onclick="setTest(this)">Yes ✓</button><button class="conf-btn" onclick="setTest(this)">Unclear</button></div>
+  </div>
+  <div class="test-row">
+    <div class="test-q">4. Are there enough matching people in your region to build a SOM from?</div>
+    <div class="test-btns"><button class="conf-btn" onclick="setTest(this)">Yes ✓</button><button class="conf-btn" onclick="setTest(this)">Too narrow</button></div>
+  </div>
+</div>
+
+<div class="evidence">
+  <div class="evidence-icon">✦</div>
+  <div><strong>What this needs to include:</strong> an ICP specific enough to find, interview and count, backed by at least a few completed interviews, with demand signals and open assumptions documented.</div>
+</div>
+
+</div>
+
+<button class="print-btn" onclick="window.print()">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+  Print / Save PDF
+</button>
+
+<script>
+function setConf(btn){
+  btn.parentElement.querySelectorAll('.conf-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+function setTest(btn){
+  btn.parentElement.querySelectorAll('.conf-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+(function(){
+  const SB_URL='https://fyswympbcriibpewkxnh.supabase.co';
+  const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5c3d5bXBiY3JpaWJwZXdreG5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjIwMTcsImV4cCI6MjA5Mjc5ODAxN30.l5gy0L9JU_8g0vIjoFWmUqP7T7zyHOsE0wdmkC2kBo0';
+  fetch(SB_URL+'/rest/v1/template_events',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'},
+    body:JSON.stringify({email:'anonymous',template:'SB_Market_PreSeed_ICPDefinitionCanvas',event:'opened'})
+  }).catch(()=>{});
+})();
+</script>
+</body>
+</html>
