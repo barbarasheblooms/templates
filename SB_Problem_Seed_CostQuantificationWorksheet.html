@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Problem Cost Quantification Worksheet · SheBlooms</title>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<title>Cost of the Problem Calculator · SheBlooms</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;
+  --amber:#b45309;--amber-bg:#fffbeb;--amber-border:#fde68a;
+  --green:#166534;--green-bg:#f0fdf4;--green-border:#bbf7d0;
 }
 body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
 .page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
@@ -29,6 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
 
 .field{margin-bottom:14px}
 .field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.field-help{font-size:10.5px;color:#999;margin-top:4px;line-height:1.5}
 input[type=text],input[type=number],textarea{
   width:100%;border:1px solid var(--border);border-radius:7px;
   padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
@@ -41,19 +45,48 @@ textarea{resize:vertical;line-height:1.65}
 .field-row.col2{grid-template-columns:1fr 1fr}
 .field-row.col3{grid-template-columns:1fr 1fr 1fr}
 .field-suffix{position:relative}
-.field-suffix input{padding-right:56px}
+.field-suffix input{padding-right:44px}
 .field-suffix .suf{position:absolute;right:12px;top:32px;font-size:11px;color:var(--muted)}
 
 .divider{border:none;border-top:1px solid var(--border);margin:24px 0}
 
-.result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0}
-.result-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px}
-.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:18px}
-.result-item{}
-.result-num{font-family:'DM Sans',sans-serif;font-size:26px;font-weight:600;color:var(--brand);line-height:1.1}
-.result-label{font-size:10px;color:#aaa;margin-top:4px;line-height:1.4}
-.result-line{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.6;color:#fff;padding-top:16px;border-top:1px solid #333}
-.result-line strong{color:var(--brand)}
+.formula-box{background:var(--ink);color:#fff;border-radius:10px;padding:14px 18px;margin:10px 0 18px;font-family:'DM Serif Display',serif;font-size:14px;line-height:1.6}
+.formula-box .fvar{color:#a5b4ff}
+
+.metric-card{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.metric-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.metric-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.metric-value{font-family:'DM Serif Display',serif;font-size:30px;color:var(--ink);line-height:1}
+.metric-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:2px}
+.metric-badge.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.metric-badge.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.metric-badge.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.metric-read{font-size:12.5px;color:#333;line-height:1.65;padding-top:10px;border-top:1px solid var(--border)}
+.metric-formula{font-size:10.5px;color:var(--muted);margin-top:8px;font-family:'DM Serif Display',serif;font-style:italic}
+
+.bench-scale{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:10px 0 6px}
+.bench-scale div{height:100%}
+.bench-labels{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);margin-bottom:12px}
+.bench-marker{position:relative;height:0}
+.bench-dot{position:absolute;top:-13px;width:2px;height:12px;background:var(--ink)}
+
+.narrative-box{background:var(--soft);border-radius:10px;padding:18px 20px;margin:18px 0;border:1px solid var(--border)}
+.narrative-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.narrative-text{font-size:13px;line-height:1.7;color:var(--ink)}
+.narrative-text strong{color:var(--brand)}
+
+.path-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;margin-top:12px;font-size:12px;color:#78350f;line-height:1.7}
+.path-box.ok{background:var(--soft);border-color:var(--border);color:#333}
+.path-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#b45309;margin-bottom:7px}
+.path-box.ok .path-title{color:var(--brand)}
+.path-box strong{color:#7c2d12}
+.path-box.ok strong{color:var(--ink)}
+.path-levers{margin:6px 0 6px 0;padding-left:0;list-style:none}
+.path-levers li{margin-bottom:4px;padding-left:14px;position:relative}
+.path-levers li::before{content:'→';position:absolute;left:0;color:#b45309}
+.path-box.ok .path-levers li::before{color:var(--brand)}
+.path-note{font-size:11px;color:#92400e;margin-top:6px;font-style:italic}
+.path-box.ok .path-note{color:var(--muted)}
 
 .evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
 .evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
@@ -67,111 +100,98 @@ textarea{resize:vertical;line-height:1.65}
   .brand{font-size:22px}
   .doc-title{font-size:15px}
   .field-row.col2,.field-row.col3{grid-template-columns:1fr}
-  .result-grid{grid-template-columns:1fr}
   .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+  .metric-top{flex-direction:column}
 }
 </style>
 </head>
 <body>
 <div class="page">
 
-  <div class="doc-header">
-    <div class="brand">SheBlooms</div>
-    <div class="doc-title">Problem Cost Quantification Worksheet</div>
-    <div class="doc-sub">Turn customer data into the number investors want to see at Seed</div>
-  </div>
+<div class="doc-header">
+  <div class="brand">SheBlooms</div>
+  <div class="doc-title">Cost of the Problem Calculator</div>
+  <div class="doc-sub">Turn your customers' baseline pain into a euro number, the way Seed investors expect</div>
+</div>
 
-  <div class="intro">
-    <strong>Before you start:</strong> this worksheet turns qualitative pain into a number. You need three inputs: what the problem cost a customer before your product, how many customers in your base share that profile, and how much of that cost your product actually removes today. Pull the first from onboarding conversations, the second from your customer list, and the third from real usage data, not from assumption.
-  </div>
+<div class="intro">
+  <strong>Before you start:</strong> "this problem is really painful" is not evidence, a euro figure is. At Seed, investors expect you to have quantified what the problem actually costs your customers before your product existed, and how much of that cost you demonstrably remove. This tool turns your customers' baseline time and money into an aggregate monthly cost, and separates that from the (smaller, more credible) amount you've actually proven you recover.
+</div>
 
-  <div class="section">
-    <div class="section-header">
-      <div class="section-num">1</div>
-      <div class="section-title">Cost per customer, before your product</div>
+<div class="section">
+  <div class="section-header"><div class="section-num">1</div><div class="section-title">The baseline, before your product</div></div>
+  <div class="field-row col2">
+    <div class="field field-suffix">
+      <label>Baseline time spent, per instance</label><input type="number" id="p-hours" placeholder="2.5" step="0.1"><span class="suf">hours</span>
+      <div class="field-help"><strong>What it is:</strong> how long the task or pain point took before your product, each time it happened. <strong>How to calculate:</strong> use customer-reported baselines from onboarding calls or discovery interviews, or clock an average from your own usage data from before customers switched to your product.</div>
     </div>
-    <div class="section-note">Ask new customers what they were doing before, and roughly how much time or money it cost them. Average across at least 10 responses.</div>
-
-    <div class="field-row col3">
-      <div class="field field-suffix"><label>Time spent per occurrence</label><input type="number" id="hours" placeholder="4.8" step="0.1"><span class="suf">hours</span></div>
-      <div class="field field-suffix"><label>Occurrences per month</label><input type="number" id="freq" placeholder="3.2" step="0.1"><span class="suf">/ month</span></div>
-      <div class="field field-suffix"><label>Value of that time</label><input type="number" id="rate" placeholder="85" step="1"><span class="suf">€ / hour</span></div>
-    </div>
-    <div class="field"><label>Or: direct cost per occurrence (skip if using time above)</label>
-      <input type="number" id="directcost" placeholder="e.g. 60 (subscription paid to a workaround tool, per month)">
+    <div class="field field-suffix">
+      <label>Billing / opportunity rate</label><input type="number" id="p-rate" placeholder="60" step="1"><span class="suf">€/hr</span>
+      <div class="field-help"><strong>What it is:</strong> what that time is worth to your customer, their billing rate or a reasonable estimate of the value of their time. <strong>How to calculate:</strong> use their actual hourly billing rate if they bill by the hour, or their fully-loaded hourly cost if they're an employee (annual salary ÷ roughly 2,000 working hours).</div>
     </div>
   </div>
-
-  <hr class="divider">
-
-  <div class="section">
-    <div class="section-header">
-      <div class="section-num">2</div>
-      <div class="section-title">Your paying customer base</div>
+  <div class="field-row col2">
+    <div class="field field-suffix">
+      <label>Frequency per month</label><input type="number" id="p-freq" placeholder="8" step="1"><span class="suf">/mo</span>
+      <div class="field-help"><strong>What it is:</strong> how many times per month this problem happens, per customer. <strong>How to calculate:</strong> ask customers directly how often they hit this, or count instances in your own usage logs over a typical month.</div>
     </div>
-    <div class="section-note">How many of your current paying customers share this same profile and this same problem?</div>
-
-    <div class="field-row col2">
-      <div class="field"><label>Paying customers with this profile</label><input type="number" id="custcount" placeholder="80"></div>
-      <div class="field"><label>Source of this baseline</label><input type="text" id="source" placeholder="e.g. onboarding survey, N=68 of 80"></div>
+    <div class="field field-suffix">
+      <label>Total paying customers experiencing this</label><input type="number" id="p-customers" placeholder="40"><span class="suf">customers</span>
+      <div class="field-help"><strong>What it is:</strong> how many of your paying customers actually deal with this specific problem. <strong>How to calculate:</strong> count active paying accounts where this problem applies, don't use your full customer base if only a subset experiences it.</div>
     </div>
   </div>
+</div>
 
-  <hr class="divider">
+<hr class="divider">
 
-  <div class="section">
-    <div class="section-header">
-      <div class="section-num">3</div>
-      <div class="section-title">Delta your product actually closes</div>
-    </div>
-    <div class="section-note">Pull this from real usage data: time or cost after adoption, compared to the baseline above.</div>
-
-    <div class="field-row col2">
-      <div class="field field-suffix"><label>Time spent per occurrence, after</label><input type="number" id="hoursafter" placeholder="1.4" step="0.1"><span class="suf">hours</span></div>
-      <div class="field"><label>Source of this data</label><input type="text" id="sourceafter" placeholder="e.g. in-product time tracking, last 90 days"></div>
-    </div>
+<div class="section">
+  <div class="section-header"><div class="section-num">2</div><div class="section-title">What your product removes</div></div>
+  <div class="field field-suffix">
+    <label>% of that cost your product removes</label><input type="number" id="p-reduction" placeholder="70" step="1"><span class="suf">%</span>
+    <div class="field-help"><strong>What it is:</strong> the share of the baseline time or cost your product actually eliminates, measured from usage data. <strong>How to calculate:</strong> (baseline time − time spent using your product) ÷ baseline time × 100, measured across a sample of real customers, not assumed. Leave blank or enter 0 if you haven't measured this yet.</div>
   </div>
+</div>
 
-  <hr class="divider">
+<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Calculate the cost of this problem →</button>
 
-  <div class="section">
-    <div class="section-header">
-      <div class="section-num">4</div>
-      <div class="section-title">Supporting evidence</div>
-    </div>
-    <div class="field"><label>Direct quotes or churn feedback confirming the cost</label>
-      <textarea rows="3" placeholder="e.g. &quot;If I could get that time back, I'd take on two more clients&quot;, quote from onboarding call, March 2027."></textarea>
-    </div>
-    <div class="field"><label>Trend: is this cost growing or shrinking over time?</label>
-      <textarea rows="2" placeholder="e.g. Average proposals per customer per month rose from 2.1 to 3.2 over the last 3 quarters."></textarea>
-    </div>
-  </div>
+<div id="results" style="display:none">
 
-  <button onclick="calculate()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Calculate →</button>
-
-  <div class="result-box" id="result-box" style="display:none">
-    <div class="result-title">Your quantified problem</div>
-    <div class="result-grid">
-      <div class="result-item">
-        <div class="result-num" id="r-percustomer">–</div>
-        <div class="result-label">Cost per customer / month</div>
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">Total cost of the problem, per month</div>
+        <div class="metric-value" id="m-aggregate">-</div>
       </div>
-      <div class="result-item">
-        <div class="result-num" id="r-aggregate">–</div>
-        <div class="result-label">Aggregate cost across base / month</div>
-      </div>
-      <div class="result-item">
-        <div class="result-num" id="r-delta">–</div>
-        <div class="result-label">% reduction delivered</div>
-      </div>
+      <div class="metric-badge amber">Your problem-cost number</div>
     </div>
-    <div class="result-line" id="r-line">Fill in the fields above and click Calculate.</div>
+    <div class="metric-read" id="r-aggregate"></div>
+    <div class="metric-formula">Aggregate cost = hours × rate × frequency × customers</div>
   </div>
 
-  <div class="evidence">
-    <div class="evidence-icon">✦</div>
-    <div><strong>Evidence required for the Seed problem slide:</strong> cost per customer sourced from real customer data (not assumption), aggregate cost across at least 10 customers, and a delta figure backed by in-product usage data. Include the trend, not just the snapshot.</div>
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">Value your product recovers, per month</div>
+        <div class="metric-value" id="m-recovered">-</div>
+      </div>
+      <div class="metric-badge amber" id="b-recovered-badge">-</div>
+    </div>
+    <div class="metric-read" id="r-recovered"></div>
+    <div class="path-box" id="path-recovered" style="display:none"></div>
+    <div class="metric-formula">Recovered value = aggregate cost × % reduction</div>
   </div>
+
+  <div class="narrative-box">
+    <div class="narrative-title">What to put on your slide</div>
+    <div class="narrative-text" id="r-narrative"></div>
+  </div>
+
+</div>
+
+<div class="evidence">
+  <div class="evidence-icon">✦</div>
+  <div><strong>What this needs to include:</strong> a baseline time and rate sourced from real customer data, a customer count limited to those who actually experience this problem, and a % reduction measured from before/after usage data, not an assumed number.</div>
+</div>
 
 </div>
 
@@ -181,51 +201,87 @@ textarea{resize:vertical;line-height:1.65}
 </button>
 
 <script>
-function fmtEUR(n){
-  return '€' + n.toLocaleString('en-US', {maximumFractionDigits:0});
+function num(id){ const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; }
+function fmtEUR(n){ return '€' + n.toLocaleString('en-US', {maximumFractionDigits: 0}); }
+function fmt1(n){ return (Math.round(n*10)/10).toString(); }
+
+function setBadge(el, level, text){
+  el.className = 'metric-badge ' + level;
+  el.textContent = text;
 }
 
-function calculate(){
-  const hours = parseFloat(document.getElementById('hours').value) || 0;
-  const freq = parseFloat(document.getElementById('freq').value) || 0;
-  const rate = parseFloat(document.getElementById('rate').value) || 0;
-  const directCost = parseFloat(document.getElementById('directcost').value) || 0;
-  const custCount = parseFloat(document.getElementById('custcount').value) || 0;
-  const hoursAfter = parseFloat(document.getElementById('hoursafter').value) || 0;
+function showPath(id, ok, title, html, note){
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.className = 'path-box' + (ok ? ' ok' : '');
+  el.innerHTML = `<div class="path-title">${title}</div>${html}` + (note ? `<div class="path-note">${note}</div>` : '');
+}
 
-  let perCustomerMonth = 0;
-  if (hours && rate) {
-    perCustomerMonth = hours * rate * (freq || 1);
+function compile(){
+  const hours = num('p-hours');
+  const rate = num('p-rate');
+  const freq = num('p-freq');
+  const customers = num('p-customers');
+  const reduction = num('p-reduction');
+
+  document.getElementById('results').style.display = 'block';
+
+  const aggEl = document.getElementById('m-aggregate');
+  const aggRead = document.getElementById('r-aggregate');
+  let perCustomerMonthlyCost = null;
+  let aggregateMonthlyCost = null;
+
+  if (hours !== null && rate !== null && freq !== null && customers !== null) {
+    perCustomerMonthlyCost = hours * rate * freq;
+    aggregateMonthlyCost = perCustomerMonthlyCost * customers;
+    aggEl.textContent = fmtEUR(aggregateMonthlyCost);
+    aggRead.innerHTML = `At €${rate}/hour, ${fmt1(hours)} hours per instance, and ${fmt1(freq)} instances per month, this problem costs each affected customer roughly <strong>${fmtEUR(perCustomerMonthlyCost)}/month</strong>. Across <strong>${customers.toLocaleString('en-US')}</strong> customers who experience it, that's an aggregate cost of <strong>${fmtEUR(aggregateMonthlyCost)}/month</strong>. This is a sizing number, not a health check, there's no pass/fail benchmark here, it's simply the euro size of the problem you're solving.`;
+  } else {
+    aggEl.textContent = '-';
+    aggRead.textContent = 'Enter baseline hours, rate, frequency, and customer count above to calculate this.';
   }
-  if (directCost) {
-    perCustomerMonth += directCost;
-  }
 
-  const aggregate = perCustomerMonth * custCount;
+  const recEl = document.getElementById('m-recovered');
+  const recBadge = document.getElementById('b-recovered-badge');
+  const recRead = document.getElementById('r-recovered');
+  let recoveredValue = null;
 
-  let deltaPct = 0;
-  if (hours > 0 && hoursAfter >= 0) {
-    deltaPct = Math.max(0, Math.round((1 - (hoursAfter / hours)) * 100));
-  }
+  if (aggregateMonthlyCost !== null) {
+    const reductionPct = reduction !== null ? reduction : 0;
+    recoveredValue = aggregateMonthlyCost * (reductionPct/100);
+    recEl.textContent = fmtEUR(recoveredValue);
 
-  document.getElementById('r-percustomer').textContent = perCustomerMonth ? fmtEUR(perCustomerMonth) : '–';
-  document.getElementById('r-aggregate').textContent = aggregate ? fmtEUR(aggregate) : '–';
-  document.getElementById('r-delta').textContent = deltaPct ? deltaPct + '%' : '–';
-
-  const recovered = aggregate * (deltaPct/100);
-
-  let line = 'Fill in the fields above and click Calculate.';
-  if (perCustomerMonth && custCount) {
-    line = `Our <strong>${custCount}</strong> customers collectively lose <strong>${fmtEUR(aggregate)}/month</strong> to this problem`;
-    if (deltaPct) {
-      line += `. Our product recovers <strong>${deltaPct}%</strong> of that, roughly <strong>${fmtEUR(recovered)}/month</strong> in value delivered across the base.`;
+    if (reductionPct > 0) {
+      setBadge(recBadge, 'green', 'Measured recovery');
+      recRead.innerHTML = `Removing <strong>${fmt1(reductionPct)}%</strong> of the aggregate cost means your product recovers roughly <strong>${fmtEUR(recoveredValue)}/month</strong> of value across your customer base.`;
+      showPath('path-recovered', true, 'Why this works for investors',
+        `<div>Because this is measured from before/after usage data rather than assumed, this recovered-value number is proof, not a pitch. Keep citing the sample size behind your ${fmt1(reductionPct)}% figure, the bigger the sample, the harder this is to dismiss.</div>`);
     } else {
-      line += '.';
+      setBadge(recBadge, 'amber', 'Not yet measured');
+      recRead.innerHTML = `With no measured % reduction entered, this shows as <strong>${fmtEUR(recoveredValue)}/month</strong>, which is not a meaningful proof point yet.`;
+      showPath('path-recovered', false, 'What investors want to see, and how to get there',
+        `<div>Without a measured % reduction from usage data, this number is a ceiling, not a proof point.</div>
+        <ul class="path-levers">
+          <li>Measure actual before/after time spent for a sample of real customers using your product</li>
+          <li>Recompute the % reduction from that data, then re-run this calculator with the real number</li>
+        </ul>`,
+        'Even a modest, measured reduction from a small sample is more convincing to investors than a large, assumed one.');
     }
+  } else {
+    recEl.textContent = '-';
+    setBadge(recBadge, 'amber', 'Fill in the fields above');
+    recRead.textContent = 'Enter the fields above to calculate this.';
+    document.getElementById('path-recovered').style.display = 'none';
   }
-  document.getElementById('r-line').innerHTML = line;
-  document.getElementById('result-box').style.display = 'block';
-  document.getElementById('result-box').scrollIntoView({behavior:'smooth', block:'center'});
+
+  let narrative = '';
+  if (aggregateMonthlyCost !== null) {
+    narrative += `Our <strong>${customers.toLocaleString('en-US')}</strong> customers reporting this problem cost roughly <strong>${fmtEUR(aggregateMonthlyCost)}/month</strong> in aggregate`;
+    narrative += recoveredValue !== null ? `, and our product recovers about <strong>${fmtEUR(recoveredValue)}/month</strong> of that.` : '.';
+  }
+  document.getElementById('r-narrative').innerHTML = narrative || 'Fill in the fields above to generate your slide-ready summary.';
+
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 (function(){

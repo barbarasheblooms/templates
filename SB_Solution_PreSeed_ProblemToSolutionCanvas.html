@@ -29,6 +29,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
 
 .field{margin-bottom:14px}
 .field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.field-help{font-size:10.5px;color:#999;margin-top:4px;line-height:1.5}
 input[type=text],textarea{
   width:100%;border:1px solid var(--border);border-radius:7px;
   padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
@@ -93,12 +94,15 @@ textarea{resize:vertical;line-height:1.65}
 
   <div class="field"><label>Who has this problem</label>
     <input type="text" id="p-who" placeholder="e.g. solo founders raising their first round">
+    <div class="field-help"><strong>What it is:</strong> the specific segment you interviewed, not a broad market label. <strong>How to calculate:</strong> name the group the way your interview participants actually described themselves, pulled from your problem interview notes, not a generic persona.</div>
   </div>
   <div class="field"><label>What gets in their way today</label>
     <textarea rows="2" id="p-obstacle" placeholder="e.g. they can't tell in advance which investors actually fit their stage and sector, so they cold-email 200 VCs at a 2% response rate"></textarea>
+    <div class="field-help"><strong>What it is:</strong> the concrete obstacle blocking the outcome they want, ideally with a number attached. <strong>How to calculate:</strong> pull the exact quote or behavior from your interview transcripts, not a paraphrase, and include any number they mentioned (time lost, cost, failure rate).</div>
   </div>
   <div class="field"><label>What they're actually trying to achieve</label>
     <input type="text" id="p-outcome" placeholder="e.g. reach the right investor without wasting hundreds of cold emails">
+    <div class="field-help"><strong>What it is:</strong> the underlying goal behind the obstacle, in their words. <strong>How to calculate:</strong> ask "what were they actually trying to get done when this obstacle showed up," and answer using language from the interview, not your own framing of the solution.</div>
   </div>
 </div>
 
@@ -114,6 +118,7 @@ textarea{resize:vertical;line-height:1.65}
     <div class="hmw-row"><input type="text" placeholder="How might we help [who] know, before they reach out, which investors actually fit?"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
     <div class="hmw-row"><input type="text" placeholder="How might we shortcut the path from problem to the right investor?"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
   </div>
+  <div class="field-help"><strong>What it is:</strong> an open reframing of the obstacle above, broad enough to allow multiple different solutions. <strong>How to calculate:</strong> take the obstacle from Section 1 and rewrite it starting with "How might we", removing any hint of a specific solution so you don't anchor on one answer too early.</div>
   <button class="add-row-btn" onclick="addRow('hmw-rows','How might we ...')">+ Add How Might We question</button>
 </div>
 
@@ -129,6 +134,7 @@ textarea{resize:vertical;line-height:1.65}
     <div class="hmw-row"><input type="text" placeholder="Concept 1: e.g. a readiness-matching questionnaire that scores fit against investor criteria"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
     <div class="hmw-row"><input type="text" placeholder="Concept 2: e.g. a curated warm-intro marketplace"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
   </div>
+  <div class="field-help"><strong>What it is:</strong> a distinct way to answer one of your How Might We questions, not a feature variant of the same idea. <strong>How to calculate:</strong> for each concept, name the core mechanism in one sentence; if two concepts share the same mechanism, they're one concept, not two.</div>
   <button class="add-row-btn" onclick="addRow('concept-rows','Concept: ...')">+ Add solution concept</button>
 </div>
 
@@ -141,6 +147,7 @@ textarea{resize:vertical;line-height:1.65}
   </div>
   <div class="field"><label>Which concept, and the cheapest way to test it</label>
     <textarea rows="3" id="p-test" placeholder="e.g. Concept 1: a manual, concierge version, we score 15 founders by hand against 10 investor profiles and see if they'd pay for the match."></textarea>
+    <div class="field-help"><strong>What it is:</strong> the cheapest, fastest version of the chosen concept that still produces a real yes/no signal from real people. <strong>How to calculate:</strong> name a version you could run this week without writing production code (manual/concierge, a landing page, a mockup with a paid signup), and state what result would count as a pass versus a fail.</div>
   </div>
 </div>
 

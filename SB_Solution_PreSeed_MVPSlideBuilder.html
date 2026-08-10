@@ -9,6 +9,9 @@
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;
+  --amber:#b45309;--amber-bg:#fffbeb;--amber-border:#fde68a;
+  --green:#166534;--green-bg:#f0fdf4;--green-border:#bbf7d0;
 }
 body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
 .page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
@@ -29,6 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
 
 .field{margin-bottom:14px}
 .field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.field-help{font-size:10.5px;color:#999;margin-top:4px;line-height:1.5}
 input[type=text],input[type=number],textarea,select{
   width:100%;border:1px solid var(--border);border-radius:7px;
   padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
@@ -55,6 +59,39 @@ textarea{resize:vertical;line-height:1.65}
 .add-row-btn{margin-top:4px;border:1px dashed var(--border);background:transparent;padding:8px 16px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;color:var(--muted);width:100%;transition:all .15s}
 .add-row-btn:hover{border-color:var(--brand);color:var(--brand)}
 
+.metric-card{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.metric-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.metric-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.metric-value{font-family:'DM Serif Display',serif;font-size:30px;color:var(--ink);line-height:1}
+.metric-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:2px}
+.metric-badge.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.metric-badge.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.metric-badge.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.metric-read{font-size:12.5px;color:#333;line-height:1.65;padding-top:10px;border-top:1px solid var(--border)}
+.metric-formula{font-size:10.5px;color:var(--muted);margin-top:8px;font-family:'DM Serif Display',serif;font-style:italic}
+
+.bench-scale{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:10px 0 6px}
+.bench-scale div{height:100%}
+.bench-labels{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);margin-bottom:12px}
+
+.narrative-box{background:var(--soft);border-radius:10px;padding:18px 20px;margin:18px 0;border:1px solid var(--border)}
+.narrative-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.narrative-text{font-size:13px;line-height:1.7;color:var(--ink)}
+.narrative-text strong{color:var(--brand)}
+
+.path-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;margin-top:12px;font-size:12px;color:#78350f;line-height:1.7}
+.path-box.ok{background:var(--soft);border-color:var(--border);color:#333}
+.path-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#b45309;margin-bottom:7px}
+.path-box.ok .path-title{color:var(--brand)}
+.path-box strong{color:#7c2d12}
+.path-box.ok strong{color:var(--ink)}
+.path-levers{margin:6px 0 6px 0;padding-left:0;list-style:none}
+.path-levers li{margin-bottom:4px;padding-left:14px;position:relative}
+.path-levers li::before{content:'→';position:absolute;left:0;color:#b45309}
+.path-box.ok .path-levers li::before{color:var(--brand)}
+.path-note{font-size:11px;color:#92400e;margin-top:6px;font-style:italic}
+.path-box.ok .path-note{color:var(--muted)}
+
 .result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0}
 .result-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
 .result-line{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.7;color:#fff}
@@ -77,6 +114,7 @@ textarea{resize:vertical;line-height:1.65}
   .stage-btns{flex-direction:column}
   .roadmap-row{grid-template-columns:1fr}
   .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+  .metric-top{flex-direction:column}
 }
 </style>
 </head>
@@ -90,7 +128,7 @@ textarea{resize:vertical;line-height:1.65}
   </div>
 
   <div class="intro">
-    <strong>Before you start:</strong> you don't need a finished product to build a strong solution slide, you need to be specific about what you have, honest about the stage it's at, and clear about what happens next. This tool assembles those pieces into a draft you can adapt directly.
+    <strong>Before you start:</strong> you don't need a finished product to build a strong solution slide, you need to be specific about what you have, honest about the stage it's at, and clear about what happens next. This tool assembles those pieces into a draft you can adapt directly, and scores your roadmap for how specific it actually is.
   </div>
 
   <div class="section">
@@ -101,18 +139,32 @@ textarea{resize:vertical;line-height:1.65}
     <div class="section-note">Fill in the blanks. This mirrors the structure investors expect to see on this slide.</div>
 
     <div class="field-row col2">
-      <div class="field"><label>Product name</label><input type="text" id="s-name" placeholder="SheBlooms"></div>
-      <div class="field"><label>Category</label><input type="text" id="s-category" placeholder="e.g. investor-matching platform"></div>
+      <div class="field">
+        <label>Product name</label><input type="text" id="s-name" placeholder="SheBlooms">
+        <div class="field-help"><strong>What it is:</strong> the name your MVP or product goes by right now. <strong>How to calculate:</strong> use your actual current product name, even if it's a working title, don't invent a polished name you haven't committed to.</div>
+      </div>
+      <div class="field">
+        <label>Category</label><input type="text" id="s-category" placeholder="e.g. investor-matching platform">
+        <div class="field-help"><strong>What it is:</strong> the one-line market category a stranger would file you under. <strong>How to calculate:</strong> name the category the way an investor would write it on a deal sheet, not an aspirational label like "AI-powered everything platform".</div>
+      </div>
     </div>
     <div class="field"><label>Core action (what it does)</label>
       <input type="text" id="s-action" placeholder="e.g. maps each founder's readiness gaps to the investors most likely to fund her">
+      <div class="field-help"><strong>What it is:</strong> the single concrete action your product performs. <strong>How to calculate:</strong> describe the actual mechanism your MVP does today (or will do at launch), not the long-term vision.</div>
     </div>
     <div class="field-row col2">
-      <div class="field"><label>Persona (who it's for)</label><input type="text" id="s-persona" placeholder="e.g. solo female founders raising their first round"></div>
-      <div class="field"><label>Outcome they get</label><input type="text" id="s-outcome" placeholder="e.g. reach the right investor in weeks, not months"></div>
+      <div class="field">
+        <label>Persona (who it's for)</label><input type="text" id="s-persona" placeholder="e.g. solo female founders raising their first round">
+        <div class="field-help"><strong>What it is:</strong> the specific person this is built for. <strong>How to calculate:</strong> name the narrowest group you're actually building for right now, pulled from your problem validation, not "everyone who could use this eventually".</div>
+      </div>
+      <div class="field">
+        <label>Outcome they get</label><input type="text" id="s-outcome" placeholder="e.g. reach the right investor in weeks, not months">
+        <div class="field-help"><strong>What it is:</strong> the concrete result that persona gets. <strong>How to calculate:</strong> state the outcome as a measurable change (time saved, money saved, risk avoided), not a vague benefit.</div>
+      </div>
     </div>
     <div class="field"><label>Pain they avoid</label>
       <input type="text" id="s-pain" placeholder="e.g. burning relationships on premature, untargeted outreach">
+      <div class="field-help"><strong>What it is:</strong> the specific cost or frustration they avoid by using your product. <strong>How to calculate:</strong> name the actual painful workaround they use today that this replaces, pulled from your interviews.</div>
     </div>
   </div>
 
@@ -130,8 +182,10 @@ textarea{resize:vertical;line-height:1.65}
       <button class="stage-btn" onclick="setStage('Prototype',this)">Prototype</button>
       <button class="stage-btn" onclick="setStage('MVP',this)">MVP</button>
     </div>
+    <div class="field-help"><strong>What it is:</strong> where your build actually is today, not where you wish it were. <strong>How to calculate:</strong> pick "Idea" if nothing is built yet, "Prototype" if it's clickable but not functional end-to-end, "MVP" if a real user could complete the core action today.</div>
     <div class="field" style="margin-top:12px"><label>What you can show today (screenshot, demo link, or a one-line description of the clickable flow)</label>
       <input type="text" id="s-demo" placeholder="e.g. clickable Figma prototype covering signup through first match">
+      <div class="field-help"><strong>What it is:</strong> proof that something exists beyond a slide. <strong>How to calculate:</strong> link, name, or describe exactly what a viewer can click through today, don't describe planned features as if they already exist.</div>
     </div>
   </div>
 
@@ -143,6 +197,7 @@ textarea{resize:vertical;line-height:1.65}
       <div class="section-title">Roadmap: next 6 months</div>
     </div>
     <div class="section-note">Dated, specific milestones carry real weight when the product itself is still early.</div>
+    <div class="field-help" style="margin-bottom:10px"><strong>What it is:</strong> a milestone with both a specific date and a concrete, named outcome. <strong>How to calculate:</strong> for the date field, enter an actual month (e.g. "Month 2"), not "soon" or "Q?". For the outcome field, name a concrete deliverable (e.g. "waitlist live with 50 signups"), not a vague plan like "make progress". Below, this is scored automatically.</div>
 
     <div id="roadmap-rows">
       <div class="roadmap-row">
@@ -173,15 +228,39 @@ textarea{resize:vertical;line-height:1.65}
     </div>
     <div class="field"><label>How this solution connects to the problem you validated</label>
       <textarea rows="2" id="s-link" placeholder="e.g. Founders told us access, not business quality, was the bottleneck. This product removes that bottleneck directly by matching on readiness, not just sector."></textarea>
+      <div class="field-help"><strong>What it is:</strong> the causal chain from your validated problem to this specific solution. <strong>How to calculate:</strong> reference the specific interview finding (quote or stat) this feature addresses, not a generic problem statement.</div>
     </div>
   </div>
 
   <button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Compile my slide draft →</button>
 
-  <div class="result-box" id="result-box" style="display:none">
-    <div class="result-title">Your solution slide draft</div>
-    <div class="result-line" id="r-oneliner">Fill in the fields above and click Compile.</div>
-    <div class="result-sub" id="r-details"></div>
+  <div id="results" style="display:none">
+
+    <div class="metric-card">
+      <div class="metric-top">
+        <div>
+          <div class="metric-name">Roadmap specificity score</div>
+          <div class="metric-value" id="m-roadmap">-</div>
+        </div>
+        <div class="metric-badge" id="b-roadmap-badge">-</div>
+      </div>
+      <div class="bench-scale">
+        <div style="width:50%;background:var(--red-bg);border:1px solid var(--red-border)"></div>
+        <div style="width:30%;background:var(--amber-bg);border:1px solid var(--amber-border)"></div>
+        <div style="width:20%;background:var(--green-bg);border:1px solid var(--green-border)"></div>
+      </div>
+      <div class="bench-labels"><span>&lt;50%: too vague</span><span>50-80%: getting specific</span><span>&gt;80%: investor-ready</span></div>
+      <div class="metric-read" id="r-roadmap"></div>
+      <div class="path-box" id="path-roadmap" style="display:none"></div>
+      <div class="metric-formula">Score = 2 points per milestone with both a date and a concrete outcome, 1 point for only one, 0 for neither</div>
+    </div>
+
+    <div class="result-box" id="result-box">
+      <div class="result-title">Your solution slide draft</div>
+      <div class="result-line" id="r-oneliner">Fill in the fields above and click Compile.</div>
+      <div class="result-sub" id="r-details"></div>
+    </div>
+
   </div>
 
   <div class="evidence">
@@ -216,6 +295,40 @@ function addRoadmapRow() {
 
 function val(id){ return document.getElementById(id).value.trim(); }
 
+function setBadge(el, level, text){
+  el.className = 'metric-badge ' + level;
+  el.textContent = text;
+}
+
+function showPath(id, ok, title, html, note){
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.className = 'path-box' + (ok ? ' ok' : '');
+  el.innerHTML = `<div class="path-title">${title}</div>${html}` + (note ? `<div class="path-note">${note}</div>` : '');
+}
+
+function scoreRoadmap(){
+  const rows = document.querySelectorAll('#roadmap-rows .roadmap-row');
+  let score = 0, max = 0;
+  const issues = [];
+  rows.forEach((row, i) => {
+    const inputs = row.querySelectorAll('input');
+    const when = inputs[0].value.trim();
+    const what = inputs[1].value.trim();
+    max += 2;
+    const label = when || `Milestone ${i+1}`;
+    if (when && what) {
+      score += 2;
+    } else if (when || what) {
+      score += 1;
+      issues.push(`${label} is missing ${when ? 'a concrete named outcome' : 'a specific date'}`);
+    } else {
+      issues.push(`Milestone ${i+1} (empty row) is missing both a date and an outcome`);
+    }
+  });
+  return { score, max, issues };
+}
+
 function compile(){
   const name = val('s-name') || '[Product name]';
   const category = val('s-category') || '[category]';
@@ -226,6 +339,41 @@ function compile(){
   const demo = val('s-demo');
   const link = val('s-link');
 
+  document.getElementById('results').style.display = 'block';
+
+  // --- Roadmap specificity score ---
+  const { score, max, issues } = scoreRoadmap();
+  const pct = max > 0 ? (score / max) * 100 : 0;
+  document.getElementById('m-roadmap').textContent = max > 0 ? `${score} / ${max} (${Math.round(pct)}%)` : '-';
+  const badge = document.getElementById('b-roadmap-badge');
+  const read = document.getElementById('r-roadmap');
+
+  if (max === 0) {
+    setBadge(badge, 'amber', 'Add at least one milestone');
+    read.textContent = 'Add at least one roadmap milestone above to calculate this.';
+    document.getElementById('path-roadmap').style.display = 'none';
+  } else if (pct < 50) {
+    setBadge(badge, 'red', 'Too vague to be credible');
+    read.innerHTML = `Your roadmap scores <strong>${score} out of ${max} possible points (${Math.round(pct)}%)</strong>, based on whether each milestone has both a specific date and a named outcome. This is a presence check, a proxy for specificity, not a judgment of whether the milestone itself is realistic. Below 50%, most milestones are missing one or both pieces, which reads as a placeholder roadmap rather than a plan.`;
+    showPath('path-roadmap', false, 'What investors want to see, and how to get there',
+      `<div>Investors want <strong>over 80%</strong> here, meaning almost every milestone names both a date and a concrete outcome. Specifically:</div>
+      <ul class="path-levers">${issues.map(i => `<li>${i}</li>`).join('')}</ul>`,
+      'Fixing the two lowest-scoring milestones usually moves this score more than perfecting just one.');
+  } else if (pct <= 80) {
+    setBadge(badge, 'amber', 'Getting specific');
+    read.innerHTML = `Your roadmap scores <strong>${score} out of ${max} possible points (${Math.round(pct)}%)</strong>, based on whether each milestone has both a specific date and a named outcome. This is a presence check, a proxy for specificity. You're partway there, some milestones are fully specified, but at least one still needs a date or a concrete outcome added.`;
+    showPath('path-roadmap', false, 'What investors want to see, and how to get there',
+      `<div>Investors want <strong>over 80%</strong> here. Specifically:</div>
+      <ul class="path-levers">${issues.map(i => `<li>${i}</li>`).join('')}</ul>`,
+      'Fixing the two lowest-scoring milestones usually moves this score more than perfecting just one.');
+  } else {
+    setBadge(badge, 'green', 'Investor-ready specificity');
+    read.innerHTML = `Your roadmap scores <strong>${score} out of ${max} possible points (${Math.round(pct)}%)</strong>, meaning nearly every milestone names both a date and a concrete outcome. This is a presence check, a proxy for specificity, so it's still worth a final read to confirm each outcome is genuinely achievable, not just present.`;
+    showPath('path-roadmap', true, 'Why this works for investors',
+      `<div>Dated, concrete milestones signal you've actually thought through execution, not just direction. Keep restating these exact dates and outcomes each time you update this slide, so slippage (or delivery) is visible.</div>`);
+  }
+
+  // --- Slide draft ---
   const oneliner = `${name} is a ${category} that ${action}, so ${persona} can ${outcome} without ${pain}.`;
   document.getElementById('r-oneliner').innerHTML = oneliner;
 
@@ -239,7 +387,7 @@ function compile(){
 
   let details = '';
   if (currentStage || demo) {
-    details += `<div><strong>Stage:</strong> ${currentStage || '–'}${demo ? ' · ' + demo : ''}</div>`;
+    details += `<div><strong>Stage:</strong> ${currentStage || '-'}${demo ? ' · ' + demo : ''}</div>`;
   }
   if (roadmapItems.length) {
     details += `<div style="margin-top:8px"><strong>Roadmap:</strong> ${roadmapItems.join(' &nbsp;·&nbsp; ')}</div>`;
@@ -249,8 +397,7 @@ function compile(){
   }
   document.getElementById('r-details').innerHTML = details;
 
-  document.getElementById('result-box').style.display = 'block';
-  document.getElementById('result-box').scrollIntoView({behavior:'smooth', block:'center'});
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 (function(){

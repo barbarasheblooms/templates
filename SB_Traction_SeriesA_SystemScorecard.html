@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Traction Systemization Scorecard · SheBlooms</title>
+<title>Growth Predictability Score · SheBlooms</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;
+  --amber:#b45309;--amber-bg:#fffbeb;--amber-border:#fde68a;
+  --green:#166534;--green-bg:#f0fdf4;--green-border:#bbf7d0;
 }
 body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
 .page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
@@ -29,6 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
 
 .field{margin-bottom:14px}
 .field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.field-help{font-size:10.5px;color:#999;margin-top:4px;line-height:1.5}
 input[type=text],input[type=number],textarea{
   width:100%;border:1px solid var(--border);border-radius:7px;
   padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
@@ -51,26 +55,50 @@ textarea{resize:vertical;line-height:1.65}
 .opt-btn:hover{border-color:var(--brand);color:var(--brand)}
 .opt-btn.on{background:var(--brand);color:#fff;border-color:var(--brand)}
 
-.row-2{display:grid;grid-template-columns:1fr 32px;gap:8px;margin-bottom:8px}
-.row-3{display:grid;grid-template-columns:1fr 1fr 32px;gap:8px;margin-bottom:8px}
-.rm-remove{width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
-.rm-remove:hover{border-color:#dc2626;color:#dc2626}
-.add-row-btn{margin-top:4px;border:1px dashed var(--border);background:transparent;padding:8px 16px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;color:var(--muted);width:100%;transition:all .15s}
-.add-row-btn:hover{border-color:var(--brand);color:var(--brand)}
+.formula-box{background:var(--ink);color:#fff;border-radius:10px;padding:14px 18px;margin:10px 0 18px;font-family:'DM Serif Display',serif;font-size:14px;line-height:1.6}
+.formula-box .fvar{color:#a5b4ff}
 
-.result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0}
-.result-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
-.result-line{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.7;color:#fff}
-.result-line strong{color:var(--brand)}
-.result-sub{font-size:12px;color:#bbb;margin-top:14px;padding-top:14px;border-top:1px solid #333;line-height:1.7}
-.result-sub strong{color:#fff}
+.metric-card{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.metric-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.metric-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.metric-value{font-family:'DM Serif Display',serif;font-size:30px;color:var(--ink);line-height:1}
+.metric-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:2px}
+.metric-badge.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.metric-badge.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.metric-badge.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.metric-read{font-size:12.5px;color:#333;line-height:1.65;padding-top:10px;border-top:1px solid var(--border)}
+.metric-formula{font-size:10.5px;color:var(--muted);margin-top:8px;font-family:'DM Serif Display',serif;font-style:italic}
+
+.bench-scale{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:10px 0 6px}
+.bench-scale div{height:100%}
+.bench-labels{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);margin-bottom:12px}
+.bench-marker{position:relative;height:0}
+.bench-dot{position:absolute;top:-13px;width:2px;height:12px;background:var(--ink)}
+
+.narrative-box{background:var(--soft);border-radius:10px;padding:18px 20px;margin:18px 0;border:1px solid var(--border)}
+.narrative-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.narrative-text{font-size:13px;line-height:1.7;color:var(--ink)}
+.narrative-text strong{color:var(--brand)}
+
+.path-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;margin-top:12px;font-size:12px;color:#78350f;line-height:1.7}
+.path-box.ok{background:var(--soft);border-color:var(--border);color:#333}
+.path-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#b45309;margin-bottom:7px}
+.path-box.ok .path-title{color:var(--brand)}
+.path-box strong{color:#7c2d12}
+.path-box.ok strong{color:var(--ink)}
+.path-levers{margin:6px 0 6px 0;padding-left:0;list-style:none}
+.path-levers li{margin-bottom:4px;padding-left:14px;position:relative}
+.path-levers li::before{content:'→';position:absolute;left:0;color:#b45309}
+.path-box.ok .path-levers li::before{color:var(--brand)}
+.path-note{font-size:11px;color:#92400e;margin-top:6px;font-style:italic}
+.path-box.ok .path-note{color:var(--muted)}
 
 .evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
 .evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
 
 .print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px;transition:transform .1s}
 .print-btn:hover{transform:translateY(-1px)}
-@media print{.print-btn{display:none}.page{padding:28px 32px}.rm-remove,.add-row-btn{display:none}}
+@media print{.print-btn{display:none}.page{padding:28px 32px}}
 
 @media (max-width: 640px) {
   .page{padding:32px 20px 60px}
@@ -78,8 +106,8 @@ textarea{resize:vertical;line-height:1.65}
   .doc-title{font-size:15px}
   .field-row.col2,.field-row.col3{grid-template-columns:1fr}
   .opt-btns{flex-direction:column}
-  .row-3{grid-template-columns:1fr}
   .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+  .metric-top{flex-direction:column}
 }
 </style>
 </head>
@@ -88,55 +116,70 @@ textarea{resize:vertical;line-height:1.65}
 
 <div class="doc-header">
   <div class="brand">SheBlooms</div>
-  <div class="doc-title">Traction Systemization Scorecard</div>
-  <div class="doc-sub">Prove your growth is a repeatable system, not a lucky spike</div>
+  <div class="doc-title">Growth Predictability Score</div>
+  <div class="doc-sub">Check whether your growth is a repeatable system or a lumpy series of one-off wins</div>
 </div>
 
 <div class="intro">
-  <strong>Before you start:</strong> everything else in the deck supports this one slide at Series A. This scorecard assembles consistent MoM growth, net revenue retention, churn trend and cohort-level unit economics.
+  <strong>Before you start:</strong> by Series A, investors aren't just asking "did you grow", they're asking "will this keep happening without you personally closing every deal". A growth line that jumps around month to month, even if the average is good, reads as luck. This tool calculates the coefficient of variation across your last 4 months, the standard statistical way to measure how predictable a series of numbers actually is.
 </div>
 
-
 <div class="section">
-  <div class="section-header"><div class="section-num">1</div><div class="section-title">Consistent growth</div></div>
-  <div id="growth-rows">
-    <div class="row-2"><input type="text" placeholder="e.g. Month 1: 18%, driven by content"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
-    <div class="row-2"><input type="text" placeholder="e.g. Month 2: 19%, driven by referral"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
-    <div class="row-2"><input type="text" placeholder="e.g. Month 3: 17%, driven by content"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
+  <div class="section-header"><div class="section-num">1</div><div class="section-title">Your last 4 completed months</div></div>
+  <div class="section-note">Use the same unit throughout, either new customers added or revenue added, whichever you track most reliably.</div>
+  <div class="field-row col2">
+    <div class="field">
+      <label>Month 1</label><input type="number" id="b-m1" placeholder="18" step="1">
+      <div class="field-help"><strong>What it is:</strong> new customers (or revenue) added in the oldest of your last 4 completed months. <strong>How to calculate:</strong> pull the actual count from your CRM or billing system for that calendar month, not a rounded estimate.</div>
+    </div>
+    <div class="field">
+      <label>Month 2</label><input type="number" id="b-m2" placeholder="22" step="1">
+      <div class="field-help"><strong>What it is:</strong> new customers (or revenue) added in the second of your last 4 completed months. <strong>How to calculate:</strong> pull the actual count from your CRM or billing system for that calendar month, using the same unit as Month 1.</div>
+    </div>
+    <div class="field">
+      <label>Month 3</label><input type="number" id="b-m3" placeholder="45" step="1">
+      <div class="field-help"><strong>What it is:</strong> new customers (or revenue) added in the third of your last 4 completed months. <strong>How to calculate:</strong> pull the actual count from your CRM or billing system for that calendar month, using the same unit as the others.</div>
+    </div>
+    <div class="field">
+      <label>Month 4</label><input type="number" id="b-m4" placeholder="24" step="1">
+      <div class="field-help"><strong>What it is:</strong> new customers (or revenue) added in the most recent of your last 4 completed months. <strong>How to calculate:</strong> pull the actual count from your CRM or billing system for that calendar month, using the same unit as the others.</div>
+    </div>
   </div>
-  <button class="add-row-btn" onclick="addRow('growth-rows','row-2','Month + growth rate + channel')">+ Add month</button>
 </div>
 
-<hr class="divider">
+<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Calculate my growth predictability →</button>
 
-<div class="section">
-  <div class="section-header"><div class="section-num">2</div><div class="section-title">Retention economics</div></div>
-  <div class="field-row col3">
-    <div class="field field-suffix"><label>Net revenue retention</label><input type="number" id="t2-nrr" placeholder="112"><span class="suf">%</span></div>
-    <div class="field field-suffix"><label>Monthly churn</label><input type="number" id="t2-churn" placeholder="3.8"><span class="suf">%</span></div>
-    <div class="field field-suffix"><label>Churn 2 quarters ago</label><input type="number" id="t2-churn-prev" placeholder="5.1"><span class="suf">%</span></div>
+<div id="results" style="display:none">
+
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">Coefficient of variation</div>
+        <div class="metric-value" id="m-cv">-</div>
+      </div>
+      <div class="metric-badge" id="b-cv-badge">-</div>
+    </div>
+    <div class="bench-scale">
+      <div style="width:35%;background:var(--green-bg);border:1px solid var(--green-border)"></div>
+      <div style="width:30%;background:var(--amber-bg);border:1px solid var(--amber-border)"></div>
+      <div style="width:35%;background:var(--red-bg);border:1px solid var(--red-border)"></div>
+    </div>
+    <div class="bench-labels"><span>&lt; 15%: predictable</span><span>15–30%: some noise</span><span>&gt; 30%: erratic</span></div>
+    <div class="metric-read" id="r-cv"></div>
+    <div class="path-box" id="path-cv" style="display:none"></div>
+    <div class="metric-formula">Coefficient of variation = standard deviation ÷ mean of the last 4 months</div>
   </div>
-</div>
 
-<hr class="divider">
+  <div class="narrative-box">
+    <div class="narrative-title">What to put on your slide</div>
+    <div class="narrative-text" id="r-narrative"></div>
+  </div>
 
-<div class="section">
-  <div class="section-header"><div class="section-num">3</div><div class="section-title">Cohort-level unit economics</div></div>
-  <div class="field"><label>CAC, LTV and payback by cohort</label><textarea rows="2" id="t2-cohorteconomics" placeholder="e.g. LTV/CAC improved from 2.1x to 3.4x across the last 3 acquisition cohorts"></textarea></div>
-</div>
-
-
-<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Compile my traction system summary →</button>
-
-<div class="result-box" id="result-box" style="display:none">
-  <div class="result-title">Your traction system scorecard</div>
-  <div class="result-line" id="r-line">Fill in the fields above and click Compile.</div>
-  <div class="result-sub" id="r-details"></div>
 </div>
 
 <div class="evidence">
   <div class="evidence-icon">✦</div>
-  <div><strong>What this needs to include:</strong> 3+ months of consistent growth from repeatable channels, net revenue retention, an improving churn trend, and cohort-level unit economics.</div>
+  <div><strong>What this needs to include:</strong> 4 real, consecutive, completed months in the same unit throughout. Don't mix customers in one month with revenue in another, and don't substitute a partial current month, since that will artificially distort the variation calculated here.</div>
 </div>
 
 </div>
@@ -147,39 +190,105 @@ textarea{resize:vertical;line-height:1.65}
 </button>
 
 <script>
-function addRow(containerId, cls, placeholder){
-  const row = document.createElement('div');
-  row.className = cls;
-  if(cls==='row-3'){
-    row.innerHTML = `<input type="text" placeholder="${placeholder[0]}"><input type="text" placeholder="${placeholder[1]}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  } else {
-    row.innerHTML = `<input type="text" placeholder="${placeholder}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  }
-  document.getElementById(containerId).appendChild(row);
-}
-function val(id){ const e=document.getElementById(id); return e? e.value.trim() : ''; }
+function num(id){ const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; }
+function fmt1(n){ return (Math.round(n*10)/10).toString(); }
 
+function setBadge(el, level, text){
+  el.className = 'metric-badge ' + level;
+  el.textContent = text;
+}
+
+function showPath(id, ok, title, html, note){
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.className = 'path-box' + (ok ? ' ok' : '');
+  el.innerHTML = `<div class="path-title">${title}</div>${html}` + (note ? `<div class="path-note">${note}</div>` : '');
+}
 
 function compile(){
-  const months = [];
-  document.querySelectorAll('#growth-rows .row-2 input').forEach(i => { if (i.value.trim()) months.push(i.value.trim()); });
-  const nrr = val('t2-nrr');
-  const churn = val('t2-churn');
-  const churnPrev = val('t2-churn-prev');
-  const cohortEcon = val('t2-cohorteconomics');
+  const m1 = num('b-m1');
+  const m2 = num('b-m2');
+  const m3 = num('b-m3');
+  const m4 = num('b-m4');
 
-  const line = `${months.length||0} month(s) of consistent growth. NRR ${nrr||'?'}%, churn ${churn||'?'}%${churnPrev? ', down from '+churnPrev+'%':''}.`;
-  document.getElementById('r-line').innerHTML = line;
+  document.getElementById('results').style.display = 'block';
 
-  let details = '';
-  if (months.length) details += `<div><strong>Growth by month:</strong> ${months.join(' &nbsp;·&nbsp; ')}</div>`;
-  if (cohortEcon) details += `<div style="margin-top:8px"><strong>Cohort-level economics:</strong> ${cohortEcon}</div>`;
-  document.getElementById('r-details').innerHTML = details;
+  const cvEl = document.getElementById('m-cv');
+  const cvBadge = document.getElementById('b-cv-badge');
+  const cvRead = document.getElementById('r-cv');
+  let cv = null;
+  let outlierMonth = null;
+  let outlierValue = null;
+  let mean = null;
 
-  document.getElementById('result-box').style.display = 'block';
-  document.getElementById('result-box').scrollIntoView({behavior:'smooth', block:'center'});
+  if (m1 !== null && m2 !== null && m3 !== null && m4 !== null) {
+    const values = [m1, m2, m3, m4];
+    mean = values.reduce((a, b) => a + b, 0) / 4;
+
+    if (mean !== 0) {
+      const squaredDiffs = values.map(v => Math.pow(v - mean, 2));
+      const variance = squaredDiffs.reduce((a, b) => a + b, 0) / 4;
+      const stdev = Math.sqrt(variance);
+      cv = (stdev / mean) * 100;
+      cvEl.textContent = cv.toFixed(1) + '%';
+
+      let maxDev = -1;
+      values.forEach((v, i) => {
+        const dev = Math.abs(v - mean);
+        if (dev > maxDev) {
+          maxDev = dev;
+          outlierMonth = i + 1;
+          outlierValue = v;
+        }
+      });
+
+      if (cv < 15) {
+        setBadge(cvBadge, 'green', 'Highly predictable, systematic growth');
+        cvRead.innerHTML = `Your last 4 months were <strong>${m1}, ${m2}, ${m3}, ${m4}</strong>, a mean of <strong>${fmt1(mean)}</strong> with a coefficient of variation of <strong>${cv.toFixed(1)}%</strong>. Under 15%, this reads as systematic, repeatable growth rather than a few lucky months.`;
+      } else if (cv <= 30) {
+        setBadge(cvBadge, 'amber', 'Workable, some month-to-month noise');
+        cvRead.innerHTML = `Your last 4 months were <strong>${m1}, ${m2}, ${m3}, ${m4}</strong>, a mean of <strong>${fmt1(mean)}</strong> with a coefficient of variation of <strong>${cv.toFixed(1)}%</strong>. That's workable, but there's real month-to-month noise investors will ask about.`;
+      } else {
+        setBadge(cvBadge, 'red', 'Erratic, lumpy growth');
+        cvRead.innerHTML = `Your last 4 months were <strong>${m1}, ${m2}, ${m3}, ${m4}</strong>, a mean of <strong>${fmt1(mean)}</strong> with a coefficient of variation of <strong>${cv.toFixed(1)}%</strong>. Above 30%, this reads as erratic, lumpy growth rather than a repeatable system, even if the average looks fine.`;
+      }
+
+      if (cv >= 15) {
+        showPath('path-cv', false, 'What investors want to see, and how to get there',
+          `<div>Month ${outlierMonth}'s value of <strong>${outlierValue}</strong> is the outlier driving this. Name whether that month included a one-time deal or event, versus a repeatable channel, that's what investors will ask.</div>
+          <ul class="path-levers">
+            <li>If Month ${outlierMonth} included a one-off deal, an event, or a single large customer, say so directly and show what the other 3 months look like without it.</li>
+            <li>If it reflects a channel or motion you can repeat, name the specific plan to trigger that same result again next quarter.</li>
+          </ul>`,
+          'Investors read one clearly-explained outlier month as more credible than an unexplained spike, so naming the cause is usually more valuable than trying to smooth the number itself.');
+      } else {
+        showPath('path-cv', true, 'Why this works for investors',
+          `<div>A coefficient of variation under 15% tells investors your monthly growth isn't riding on one big deal or event. Keep tracking this each quarter so the pattern holds as the business scales.</div>`);
+      }
+    } else {
+      cvEl.textContent = '-';
+      setBadge(cvBadge, 'amber', 'Mean is zero, cannot calculate');
+      cvRead.textContent = 'The average of your 4 months is zero, so this ratio cannot be calculated. Check your inputs.';
+      document.getElementById('path-cv').style.display = 'none';
+    }
+  } else {
+    cvEl.textContent = '-';
+    setBadge(cvBadge, 'amber', 'Fill in all 4 months');
+    cvRead.textContent = 'Enter all 4 months above to calculate this.';
+    document.getElementById('path-cv').style.display = 'none';
+  }
+
+  let narrative = '';
+  if (cv !== null) {
+    narrative += `Our last 4 months show a coefficient of variation of <strong>${cv.toFixed(1)}%</strong> around a mean of <strong>${fmt1(mean)}</strong>. `;
+  }
+  if (outlierMonth !== null) {
+    narrative += `Month ${outlierMonth} (<strong>${outlierValue}</strong>) is the biggest outlier in that window.`;
+  }
+  document.getElementById('r-narrative').innerHTML = narrative || 'Fill in the fields above to generate your slide-ready summary.';
+
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
 }
-
 
 (function(){
   const SB_URL='https://fyswympbcriibpewkxnh.supabase.co';

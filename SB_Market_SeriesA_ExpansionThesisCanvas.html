@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Market Expansion Thesis Canvas · SheBlooms</title>
+<title>Expanded TAM Calculator · SheBlooms</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;
+  --amber:#b45309;--amber-bg:#fffbeb;--amber-border:#fde68a;
+  --green:#166534;--green-bg:#f0fdf4;--green-border:#bbf7d0;
 }
 body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
 .page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
@@ -29,6 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
 
 .field{margin-bottom:14px}
 .field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.field-help{font-size:10.5px;color:#999;margin-top:4px;line-height:1.5}
 input[type=text],input[type=number],textarea{
   width:100%;border:1px solid var(--border);border-radius:7px;
   padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
@@ -46,40 +50,58 @@ textarea{resize:vertical;line-height:1.65}
 
 .divider{border:none;border-top:1px solid var(--border);margin:24px 0}
 
-.opt-btns{display:flex;gap:8px;margin-bottom:4px;flex-wrap:wrap}
-.opt-btn{flex:1;min-width:100px;padding:11px 10px;border-radius:8px;border:1px solid var(--border);background:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;color:var(--ink);text-align:center;transition:all .12s}
-.opt-btn:hover{border-color:var(--brand);color:var(--brand)}
-.opt-btn.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.formula-box{background:var(--ink);color:#fff;border-radius:10px;padding:14px 18px;margin:10px 0 18px;font-family:'DM Serif Display',serif;font-size:14px;line-height:1.6}
+.formula-box .fvar{color:#a5b4ff}
 
-.row-2{display:grid;grid-template-columns:1fr 32px;gap:8px;margin-bottom:8px}
-.row-3{display:grid;grid-template-columns:1fr 1fr 32px;gap:8px;margin-bottom:8px}
-.rm-remove{width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
-.rm-remove:hover{border-color:#dc2626;color:#dc2626}
-.add-row-btn{margin-top:4px;border:1px dashed var(--border);background:transparent;padding:8px 16px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;color:var(--muted);width:100%;transition:all .15s}
-.add-row-btn:hover{border-color:var(--brand);color:var(--brand)}
+.metric-card{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.metric-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.metric-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.metric-value{font-family:'DM Serif Display',serif;font-size:30px;color:var(--ink);line-height:1}
+.metric-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:2px}
+.metric-badge.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.metric-badge.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.metric-badge.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.metric-read{font-size:12.5px;color:#333;line-height:1.65;padding-top:10px;border-top:1px solid var(--border)}
+.metric-formula{font-size:10.5px;color:var(--muted);margin-top:8px;font-family:'DM Serif Display',serif;font-style:italic}
 
-.result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0}
-.result-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
-.result-line{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.7;color:#fff}
-.result-line strong{color:var(--brand)}
-.result-sub{font-size:12px;color:#bbb;margin-top:14px;padding-top:14px;border-top:1px solid #333;line-height:1.7}
-.result-sub strong{color:#fff}
+.bench-scale{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:10px 0 6px}
+.bench-scale div{height:100%}
+.bench-labels{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);margin-bottom:12px}
+.bench-marker{position:relative;height:0}
+.bench-dot{position:absolute;top:-13px;width:2px;height:12px;background:var(--ink)}
+
+.narrative-box{background:var(--soft);border-radius:10px;padding:18px 20px;margin:18px 0;border:1px solid var(--border)}
+.narrative-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.narrative-text{font-size:13px;line-height:1.7;color:var(--ink)}
+.narrative-text strong{color:var(--brand)}
+
+.path-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;margin-top:12px;font-size:12px;color:#78350f;line-height:1.7}
+.path-box.ok{background:var(--soft);border-color:var(--border);color:#333}
+.path-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#b45309;margin-bottom:7px}
+.path-box.ok .path-title{color:var(--brand)}
+.path-box strong{color:#7c2d12}
+.path-box.ok strong{color:var(--ink)}
+.path-levers{margin:6px 0 6px 0;padding-left:0;list-style:none}
+.path-levers li{margin-bottom:4px;padding-left:14px;position:relative}
+.path-levers li::before{content:'→';position:absolute;left:0;color:#b45309}
+.path-box.ok .path-levers li::before{color:var(--brand)}
+.path-note{font-size:11px;color:#92400e;margin-top:6px;font-style:italic}
+.path-box.ok .path-note{color:var(--muted)}
 
 .evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
 .evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
 
 .print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px;transition:transform .1s}
 .print-btn:hover{transform:translateY(-1px)}
-@media print{.print-btn{display:none}.page{padding:28px 32px}.rm-remove,.add-row-btn{display:none}}
+@media print{.print-btn{display:none}.page{padding:28px 32px}}
 
 @media (max-width: 640px) {
   .page{padding:32px 20px 60px}
   .brand{font-size:22px}
   .doc-title{font-size:15px}
   .field-row.col2,.field-row.col3{grid-template-columns:1fr}
-  .opt-btns{flex-direction:column}
-  .row-3{grid-template-columns:1fr}
   .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+  .metric-top{flex-direction:column}
 }
 </style>
 </head>
@@ -88,56 +110,91 @@ textarea{resize:vertical;line-height:1.65}
 
 <div class="doc-header">
   <div class="brand">SheBlooms</div>
-  <div class="doc-title">Market Expansion Thesis Canvas</div>
-  <div class="doc-sub">Map your path from current position to the market size you are claiming</div>
+  <div class="doc-title">Expanded TAM Calculator</div>
+  <div class="doc-sub">Show exactly how new segments or geographies grow your addressable market</div>
 </div>
 
 <div class="intro">
-  <strong>Before you start:</strong> Series A investors are sizing the round against how big this becomes. This canvas maps your specific expansion vectors, geography, segment, cross-sell, each backed by evidence, plus your view on market structure.
+  <strong>Before you start:</strong> at Series A, "we're also expanding into X" is not an argument, it's a claim. Investors want to see the arithmetic behind it: how big the new segment is, and how much of it you could realistically capture given you haven't sold there yet. This tool adds up to two new segments or geographies onto your current TAM, using your own size and penetration estimates, so the expansion story on your slide is a calculation, not a gesture at the map.
 </div>
 
-
 <div class="section">
-  <div class="section-header"><div class="section-num">1</div><div class="section-title">Expansion vectors</div></div>
-  <div class="section-note">List each vector with the evidence you already have, not just the ambition.</div>
-  <div id="vector-rows">
-    <div class="row-2"><input type="text" placeholder="e.g. New geography: France pilot hit 60% of the activation rate"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
-    <div class="row-2"><input type="text" placeholder="e.g. Cross-sell: 118% net revenue retention from add-on services"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
+  <div class="section-header"><div class="section-num">1</div><div class="section-title">Your current market</div></div>
+  <div class="field">
+    <label>Current TAM</label><input type="number" id="e-tam" placeholder="40000000" step="10000">
+    <div class="field-help"><strong>What it is:</strong> the size of the market you're already counting today, before adding any new segments or geographies. <strong>How to calculate:</strong> use the TAM figure from your most recent sizing work, don't re-derive it here, this tool builds on top of it.</div>
   </div>
-  <button class="add-row-btn" onclick="addRow('vector-rows','row-2','Expansion vector + evidence')">+ Add expansion vector</button>
 </div>
 
 <hr class="divider">
 
 <div class="section">
-  <div class="section-header"><div class="section-num">2</div><div class="section-title">Market structure</div></div>
-  <div class="opt-btns" id="structure-btns">
-    <button class="opt-btn" onclick="setStructure('Winner-takes-most',this)">Winner-takes-most</button>
-    <button class="opt-btn" onclick="setStructure('Fragmented',this)">Fragmented</button>
-    <button class="opt-btn" onclick="setStructure('Mixed',this)">Mixed</button>
+  <div class="section-header"><div class="section-num">2</div><div class="section-title">New segment or geography 1</div></div>
+  <div class="field">
+    <label>Name</label><input type="text" id="e-name1" placeholder="e.g. UK mid-market">
+    <div class="field-help"><strong>What it is:</strong> what you're calling this new segment or geography. <strong>How to calculate:</strong> name it specifically enough that an investor could picture the buyer, e.g. "UK mid-market retailers," not just "international."</div>
   </div>
-  <div class="field" style="margin-top:12px"><label>Why you believe this</label><textarea rows="2" id="m-structure-why" placeholder="e.g. network effects and switching costs compound as we add more investors to the platform"></textarea></div>
+  <div class="field-row col2">
+    <div class="field field-suffix">
+      <label>Estimated size</label><input type="number" id="e-size1" placeholder="8000000" step="10000"><span class="suf">€</span>
+      <div class="field-help"><strong>What it is:</strong> the total addressable spend in this new segment, on its own, before factoring in how much of it you could actually capture. <strong>How to calculate:</strong> use the same bottom-up method as your original TAM: number of potential customers in this segment × what they'd pay per year.</div>
+    </div>
+    <div class="field field-suffix">
+      <label>Expected penetration rate</label><input type="number" id="e-pen1" placeholder="10" step="0.5"><span class="suf">%</span>
+      <div class="field-help"><strong>What it is:</strong> the realistic % of that segment's total spend you could capture, given you haven't sold into it yet. <strong>How to calculate:</strong> look at your penetration rate in your proven, existing segment as a ceiling, then discount it, an unproven segment is harder to capture at the same rate as customers who already trust you.</div>
+    </div>
+  </div>
 </div>
 
 <hr class="divider">
 
 <div class="section">
-  <div class="section-header"><div class="section-num">3</div><div class="section-title">Competitors at scale</div></div>
-  <div class="field"><label>Competitors and differentiation at this stage</label><textarea rows="2" id="m-comp-scale" placeholder="e.g. well-funded accelerators could copy the model but lack our founder network data"></textarea></div>
+  <div class="section-header"><div class="section-num">3</div><div class="section-title">New segment or geography 2</div></div>
+  <div class="field">
+    <label>Name</label><input type="text" id="e-name2" placeholder="e.g. Healthcare vertical">
+    <div class="field-help"><strong>What it is:</strong> what you're calling this second new segment or geography. <strong>How to calculate:</strong> same rule as above, specific enough to picture the buyer.</div>
+  </div>
+  <div class="field-row col2">
+    <div class="field field-suffix">
+      <label>Estimated size</label><input type="number" id="e-size2" placeholder="5000000" step="10000"><span class="suf">€</span>
+      <div class="field-help"><strong>What it is:</strong> the total addressable spend in this second segment, on its own. <strong>How to calculate:</strong> same bottom-up method: potential customers in this segment × what they'd pay per year.</div>
+    </div>
+    <div class="field field-suffix">
+      <label>Expected penetration rate</label><input type="number" id="e-pen2" placeholder="8" step="0.5"><span class="suf">%</span>
+      <div class="field-help"><strong>What it is:</strong> the realistic % of this segment's total spend you could capture. <strong>How to calculate:</strong> same discounting logic as segment 1, don't assume your proven-segment penetration rate carries over.</div>
+    </div>
+  </div>
 </div>
 
+<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Calculate my expanded TAM →</button>
 
-<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Compile my expansion thesis →</button>
+<div id="results" style="display:none">
 
-<div class="result-box" id="result-box" style="display:none">
-  <div class="result-title">Your market expansion thesis</div>
-  <div class="result-line" id="r-line">Fill in the fields above and click Compile.</div>
-  <div class="result-sub" id="r-details"></div>
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">Expanded TAM</div>
+        <div class="metric-value" id="m-tam">-</div>
+      </div>
+      <div class="metric-badge amber" id="b-tam-badge">Your expanded TAM number</div>
+    </div>
+    <div class="bench-scale" id="tam-scale"></div>
+    <div class="bench-labels" id="tam-labels"></div>
+    <div class="metric-read" id="r-tam"></div>
+    <div class="path-box" id="path-tam" style="display:none"></div>
+    <div class="metric-formula">Expanded TAM = current TAM + (segment 1 size × penetration 1) + (segment 2 size × penetration 2)</div>
+  </div>
+
+  <div class="narrative-box">
+    <div class="narrative-title">What to put on your slide</div>
+    <div class="narrative-text" id="r-narrative"></div>
+  </div>
+
 </div>
 
 <div class="evidence">
   <div class="evidence-icon">✦</div>
-  <div><strong>What this needs to include:</strong> specific expansion vectors backed by early evidence, a stated view on market structure, and competitors named with differentiation at the scale you now operate at.</div>
+  <div><strong>What this needs to include:</strong> a current TAM sourced from real sizing work, named segments an investor could picture, size estimates built bottom-up rather than guessed, and penetration rates you can defend given you haven't sold into these segments yet.</div>
 </div>
 
 </div>
@@ -148,44 +205,105 @@ textarea{resize:vertical;line-height:1.65}
 </button>
 
 <script>
-function addRow(containerId, cls, placeholder){
-  const row = document.createElement('div');
-  row.className = cls;
-  if(cls==='row-3'){
-    row.innerHTML = `<input type="text" placeholder="${placeholder[0]}"><input type="text" placeholder="${placeholder[1]}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  } else {
-    row.innerHTML = `<input type="text" placeholder="${placeholder}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  }
-  document.getElementById(containerId).appendChild(row);
-}
+function num(id){ const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; }
 function val(id){ const e=document.getElementById(id); return e? e.value.trim() : ''; }
+function fmtEUR(n){ return '€' + n.toLocaleString('en-US', {maximumFractionDigits: 0}); }
+function fmt1(n){ return (Math.round(n*10)/10).toString(); }
 
-
-let currentStructure = '';
-function setStructure(s, btn){
-  currentStructure = s;
-  document.querySelectorAll('#structure-btns .opt-btn').forEach(b => b.classList.remove('on'));
-  btn.classList.add('on');
+function showPath(id, ok, title, html, note){
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.className = 'path-box' + (ok ? ' ok' : '');
+  el.innerHTML = `<div class="path-title">${title}</div>${html}` + (note ? `<div class="path-note">${note}</div>` : '');
 }
+
 function compile(){
-  const vectors = [];
-  document.querySelectorAll('#vector-rows .row-2 input').forEach(i => { if (i.value.trim()) vectors.push(i.value.trim()); });
-  const structureWhy = val('m-structure-why');
-  const compScale = val('m-comp-scale');
+  const tam = num('e-tam');
+  const name1 = val('e-name1') || 'Segment 1';
+  const size1 = num('e-size1');
+  const pen1 = num('e-pen1');
+  const name2 = val('e-name2') || 'Segment 2';
+  const size2 = num('e-size2');
+  const pen2 = num('e-pen2');
 
-  let line = `Our expansion thesis rests on ${vectors.length || 0} vector(s), in a market we believe is ${(currentStructure || 'still being assessed').toLowerCase()}.`;
-  document.getElementById('r-line').innerHTML = line;
+  document.getElementById('results').style.display = 'block';
 
-  let details = '';
-  if (vectors.length) details += `<div><strong>Expansion vectors:</strong> ${vectors.join(' &nbsp;·&nbsp; ')}</div>`;
-  if (structureWhy) details += `<div style="margin-top:8px"><strong>Why this market structure:</strong> ${structureWhy}</div>`;
-  if (compScale) details += `<div style="margin-top:8px"><strong>Competitors at scale:</strong> ${compScale}</div>`;
-  document.getElementById('r-details').innerHTML = details;
+  const tamEl = document.getElementById('m-tam');
+  const tamRead = document.getElementById('r-tam');
+  const tamScale = document.getElementById('tam-scale');
+  const tamLabels = document.getElementById('tam-labels');
 
-  document.getElementById('result-box').style.display = 'block';
-  document.getElementById('result-box').scrollIntoView({behavior:'smooth', block:'center'});
+  const haveCore = tam !== null;
+  const haveSeg1 = size1 !== null && pen1 !== null;
+  const haveSeg2 = size2 !== null && pen2 !== null;
+
+  if (haveCore && (haveSeg1 || haveSeg2)) {
+    const contribution1 = haveSeg1 ? size1 * (pen1/100) : 0;
+    const contribution2 = haveSeg2 ? size2 * (pen2/100) : 0;
+    const expandedTAM = tam + contribution1 + contribution2;
+
+    tamEl.textContent = fmtEUR(expandedTAM);
+
+    const shareCore = (tam/expandedTAM)*100;
+    const share1 = (contribution1/expandedTAM)*100;
+    const share2 = (contribution2/expandedTAM)*100;
+
+    tamScale.innerHTML = `<div style="width:${shareCore}%;background:var(--soft);border:1px solid var(--border)"></div>` +
+      (haveSeg1 ? `<div style="width:${share1}%;background:var(--amber-bg);border:1px solid var(--amber-border)"></div>` : '') +
+      (haveSeg2 ? `<div style="width:${share2}%;background:var(--green-bg);border:1px solid var(--green-border)"></div>` : '');
+    tamLabels.innerHTML = `<span>Current TAM: ${fmt1(shareCore)}%</span>` +
+      (haveSeg1 ? `<span>${name1}: ${fmt1(share1)}%</span>` : '') +
+      (haveSeg2 ? `<span>${name2}: ${fmt1(share2)}%</span>` : '');
+
+    let readHtml = `Your current TAM of <strong>${fmtEUR(tam)}</strong> is the base. `;
+    if (haveSeg1) {
+      const flag1 = pen1 > 15 ? ` <span class="metric-badge amber">Optimistic for an unproven segment</span>` : '';
+      readHtml += `<strong>${name1}</strong> adds <strong>${fmtEUR(contribution1)}</strong> (${fmtEUR(size1)} in segment size × ${fmt1(pen1)}% penetration).${flag1} `;
+    }
+    if (haveSeg2) {
+      const flag2 = pen2 > 15 ? ` <span class="metric-badge amber">Optimistic for an unproven segment</span>` : '';
+      readHtml += `<strong>${name2}</strong> adds <strong>${fmtEUR(contribution2)}</strong> (${fmtEUR(size2)} in segment size × ${fmt1(pen2)}% penetration).${flag2} `;
+    }
+    readHtml += `Together, that's an expanded TAM of <strong>${fmtEUR(expandedTAM)}</strong>.`;
+    tamRead.innerHTML = readHtml;
+
+    const flaggedSegments = [];
+    if (haveSeg1 && pen1 > 15) flaggedSegments.push({name: name1, size: size1, pen: pen1, contribution: contribution1});
+    if (haveSeg2 && pen2 > 15) flaggedSegments.push({name: name2, size: size2, pen: pen2, contribution: contribution2});
+
+    if (flaggedSegments.length > 0) {
+      let leverItems = '';
+      flaggedSegments.forEach(seg => {
+        const contributionAt15 = seg.size * 0.15;
+        const otherContribution = (seg.name === name1 ? contribution2 : contribution1) || 0;
+        const expandedAt15 = tam + (seg.name === name1 ? contributionAt15 : contribution1) + (seg.name === name2 ? contributionAt15 : contribution2);
+        leverItems += `<li>If ${seg.name}'s penetration were 15% instead of ${fmt1(seg.pen)}%, its contribution would be <strong>${fmtEUR(contributionAt15)}</strong> instead of ${fmtEUR(seg.contribution)}, and expanded TAM would be <strong>${fmtEUR(expandedAt15)}</strong> instead of ${fmtEUR(expandedTAM)}</li>`;
+      });
+      showPath('path-tam', false, 'What investors want to see, and how to get there',
+        `<div>Penetration above 15% in a segment you haven't sold into yet is hard to defend. Most credible early estimates for an unproven segment sit at 5-15%:</div>
+        <ul class="path-levers">${leverItems}</ul>`,
+        'Combining a slightly lower, more defensible penetration rate with a slightly larger segment size estimate is usually more realistic than defending one very high penetration number alone.');
+    } else {
+      showPath('path-tam', true, 'Why this works for investors',
+        `<div>Both penetration rates sit inside the 5-15% range that's defensible for a segment you haven't sold into yet. Keep citing where each size estimate came from, since a bottom-up number beats a top-down guess every time an investor pushes on it.</div>`);
+    }
+
+    let narrative = `Our current TAM is <strong>${fmtEUR(tam)}</strong>. `;
+    if (haveSeg1) narrative += `Adding <strong>${name1}</strong> contributes <strong>${fmtEUR(contribution1)}</strong>. `;
+    if (haveSeg2) narrative += `Adding <strong>${name2}</strong> contributes <strong>${fmtEUR(contribution2)}</strong>. `;
+    narrative += `Together, that expands our TAM to <strong>${fmtEUR(expandedTAM)}</strong>.`;
+    document.getElementById('r-narrative').innerHTML = narrative;
+  } else {
+    tamEl.textContent = '-';
+    tamScale.innerHTML = '';
+    tamLabels.innerHTML = '';
+    tamRead.textContent = 'Enter your current TAM and at least one new segment\'s size and penetration rate above to calculate this.';
+    document.getElementById('path-tam').style.display = 'none';
+    document.getElementById('r-narrative').innerHTML = 'Fill in the fields above to generate your slide-ready summary.';
+  }
+
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
 }
-
 
 (function(){
   const SB_URL='https://fyswympbcriibpewkxnh.supabase.co';

@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Solution Defensibility Canvas · SheBlooms</title>
+<title>Product Defensibility Score · SheBlooms</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;
+  --amber:#b45309;--amber-bg:#fffbeb;--amber-border:#fde68a;
+  --green:#166534;--green-bg:#f0fdf4;--green-border:#bbf7d0;
 }
 body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
 .page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
@@ -29,6 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
 
 .field{margin-bottom:14px}
 .field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.field-help{font-size:10.5px;color:#999;margin-top:4px;line-height:1.5}
 input[type=text],input[type=number],textarea{
   width:100%;border:1px solid var(--border);border-radius:7px;
   padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
@@ -39,6 +43,9 @@ input::placeholder,textarea::placeholder{color:#c5c5c5;font-style:italic}
 textarea{resize:vertical;line-height:1.65}
 .field-row{display:grid;gap:12px}
 .field-row.col2{grid-template-columns:1fr 1fr}
+.field-suffix{position:relative}
+.field-suffix input{padding-right:44px}
+.field-suffix .suf{position:absolute;right:12px;top:32px;font-size:11px;color:var(--muted)}
 
 .divider{border:none;border-top:1px solid var(--border);margin:24px 0}
 
@@ -53,12 +60,38 @@ textarea{resize:vertical;line-height:1.65}
 .add-row-btn{margin-top:4px;border:1px dashed var(--border);background:transparent;padding:8px 16px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;color:var(--muted);width:100%;transition:all .15s}
 .add-row-btn:hover{border-color:var(--brand);color:var(--brand)}
 
-.result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0}
-.result-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
-.result-line{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.7;color:#fff}
-.result-line strong{color:var(--brand)}
-.result-sub{font-size:12px;color:#bbb;margin-top:14px;padding-top:14px;border-top:1px solid #333;line-height:1.7}
-.result-sub strong{color:#fff}
+.metric-card{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.metric-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.metric-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.metric-value{font-family:'DM Serif Display',serif;font-size:30px;color:var(--ink);line-height:1}
+.metric-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:2px}
+.metric-badge.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.metric-badge.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.metric-badge.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.metric-read{font-size:12.5px;color:#333;line-height:1.65;padding-top:10px;border-top:1px solid var(--border)}
+.metric-formula{font-size:10.5px;color:var(--muted);margin-top:8px;font-family:'DM Serif Display',serif;font-style:italic}
+
+.bench-scale{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:10px 0 6px}
+.bench-scale div{height:100%}
+.bench-labels{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);margin-bottom:12px}
+
+.narrative-box{background:var(--soft);border-radius:10px;padding:18px 20px;margin:18px 0;border:1px solid var(--border)}
+.narrative-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.narrative-text{font-size:13px;line-height:1.7;color:var(--ink)}
+.narrative-text strong{color:var(--brand)}
+
+.path-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;margin-top:12px;font-size:12px;color:#78350f;line-height:1.7}
+.path-box.ok{background:var(--soft);border-color:var(--border);color:#333}
+.path-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#b45309;margin-bottom:7px}
+.path-box.ok .path-title{color:var(--brand)}
+.path-box strong{color:#7c2d12}
+.path-box.ok strong{color:var(--ink)}
+.path-levers{margin:6px 0 6px 0;padding-left:0;list-style:none}
+.path-levers li{margin-bottom:4px;padding-left:14px;position:relative}
+.path-levers li::before{content:'→';position:absolute;left:0;color:#b45309}
+.path-box.ok .path-levers li::before{color:var(--brand)}
+.path-note{font-size:11px;color:#92400e;margin-top:6px;font-style:italic}
+.path-box.ok .path-note{color:var(--muted)}
 
 .evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
 .evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
@@ -74,6 +107,7 @@ textarea{resize:vertical;line-height:1.65}
   .field-row.col2{grid-template-columns:1fr}
   .moat-grid{grid-template-columns:1fr}
   .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+  .metric-top{flex-direction:column}
 }
 </style>
 </head>
@@ -82,12 +116,12 @@ textarea{resize:vertical;line-height:1.65}
 
   <div class="doc-header">
     <div class="brand">SheBlooms</div>
-    <div class="doc-title">Solution Defensibility Canvas</div>
-    <div class="doc-sub">Turn a shipped product into a defensible Seed solution slide</div>
+    <div class="doc-title">Product Defensibility Score</div>
+    <div class="doc-sub">Score your product's technical defensibility across the categories that hold up under diligence</div>
   </div>
 
   <div class="intro">
-    <strong>Before you start:</strong> "better UX" will not hold up as a moat at Seed. This canvas helps you name one specific defensibility mechanism, back it with real evidence, and connect your shipped product and roadmap to that argument.
+    <strong>Before you start:</strong> "better UX" will not hold up as a moat at Seed. Investors will push on whether a competitor with funding could rebuild what you have in a few months. This tool scores your product across five categories that actually survive that pressure-test, and tells you which one to invest in next.
   </div>
 
   <div class="section">
@@ -96,11 +130,16 @@ textarea{resize:vertical;line-height:1.65}
       <div class="section-title">What's actually shipped</div>
     </div>
     <div class="field-row col2">
-      <div class="field"><label>Version / release</label><input type="text" id="d-version" placeholder="e.g. v2.3, live since March 2027"></div>
-      <div class="field"><label>Live since</label><input type="text" id="d-since" placeholder="e.g. 8 months"></div>
+      <div class="field"><label>Version / release</label><input type="text" id="d-version" placeholder="e.g. v2.3, live since March 2027">
+        <div class="field-help"><strong>What it is:</strong> the version of your product a customer can use today. <strong>How to calculate:</strong> use your actual current version label or release date, not the version you're planning to ship.</div>
+      </div>
+      <div class="field"><label>Live since</label><input type="text" id="d-since" placeholder="e.g. 8 months">
+        <div class="field-help"><strong>What it is:</strong> how long the current core product has been live with real customers. <strong>How to calculate:</strong> count months since your first paying (or seriously active) customer started using this version, not since you started building.</div>
+      </div>
     </div>
     <div class="field"><label>Core features live today</label>
       <textarea rows="2" id="d-features" placeholder="e.g. investor matching, readiness scoring, warm intro requests"></textarea>
+      <div class="field-help"><strong>What it is:</strong> the features a customer can actually use right now. <strong>How to calculate:</strong> list only what's shipped and working, not what's on the roadmap below.</div>
     </div>
   </div>
 
@@ -109,22 +148,7 @@ textarea{resize:vertical;line-height:1.65}
   <div class="section">
     <div class="section-header">
       <div class="section-num">2</div>
-      <div class="section-title">Roadmap: next 12 months</div>
-    </div>
-    <div class="section-note">List the items that deepen your moat, not just any planned feature.</div>
-    <div id="roadmap-rows">
-      <div class="feat-row"><input type="text" placeholder="e.g. Q1: automated warm-intro sequencing"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
-      <div class="feat-row"><input type="text" placeholder="e.g. Q2: expand investor database via partner data feeds"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
-    </div>
-    <button class="add-row-btn" onclick="addRow('roadmap-rows','e.g. Q3: ...')">+ Add roadmap item</button>
-  </div>
-
-  <hr class="divider">
-
-  <div class="section">
-    <div class="section-header">
-      <div class="section-num">3</div>
-      <div class="section-title">Your defensibility mechanism</div>
+      <div class="section-title">Your primary defensibility mechanism</div>
     </div>
     <div class="section-note">Pick the one (or two) that's actually true for your business.</div>
     <div class="moat-grid" id="moat-grid">
@@ -133,8 +157,10 @@ textarea{resize:vertical;line-height:1.65}
       <button class="moat-btn" onclick="toggleMoat('Switching costs',this)">Switching costs</button>
       <button class="moat-btn" onclick="toggleMoat('Technology / IP',this)">Technology / IP</button>
     </div>
+    <div class="field-help" style="margin-bottom:10px"><strong>What it is:</strong> the mechanism that will make you harder to copy as you grow. <strong>How to calculate:</strong> pick the one your five scores below actually support, don't pick the one that sounds best if your data or network score is low.</div>
     <div class="field"><label>Early evidence this mechanism is forming</label>
       <textarea rows="3" id="d-evidence" placeholder="e.g. Match accuracy has improved 18% over the last two quarters as the training data set has grown; retention improves by tenure cohort."></textarea>
+      <div class="field-help"><strong>What it is:</strong> a real, measured signal that the mechanism is already taking hold. <strong>How to calculate:</strong> use an actual before/after or cohort comparison from your own usage data, not a general industry claim.</div>
     </div>
   </div>
 
@@ -142,25 +168,69 @@ textarea{resize:vertical;line-height:1.65}
 
   <div class="section">
     <div class="section-header">
-      <div class="section-num">4</div>
-      <div class="section-title">Better than the workaround, with data</div>
+      <div class="section-num">3</div>
+      <div class="section-title">Score your technical defensibility</div>
     </div>
-    <div class="field"><label>Comparison point (usage data, not opinion)</label>
-      <textarea rows="2" id="d-better" placeholder="e.g. 71% of customers who used a spreadsheet before churned off it within their first month with us."></textarea>
+    <div class="section-note">Score each category 0 (none) to 5 (strong), based on what's true today, not your ambition.</div>
+    <div class="field-row col2">
+      <div class="field field-suffix">
+        <label>Proprietary data advantage</label><input type="number" id="d-score-data" min="0" max="5" step="1" placeholder="2"><span class="suf">/ 5</span>
+        <div class="field-help"><strong>What it is:</strong> whether your product improves with data you accumulate that competitors can't easily get. <strong>How to calculate:</strong> score 0 (no data advantage) to 5 (clear, hard-to-replicate data moat).</div>
+      </div>
+      <div class="field field-suffix">
+        <label>Technical complexity / IP</label><input type="number" id="d-score-tech" min="0" max="5" step="1" placeholder="2"><span class="suf">/ 5</span>
+        <div class="field-help"><strong>What it is:</strong> how hard your core technology is to rebuild from scratch. <strong>How to calculate:</strong> score 0 (easily rebuilt in weeks) to 5 (deep technical complexity or protected IP).</div>
+      </div>
+    </div>
+    <div class="field-row col2">
+      <div class="field field-suffix">
+        <label>Integration lock-in</label><input type="number" id="d-score-integration" min="0" max="5" step="1" placeholder="1"><span class="suf">/ 5</span>
+        <div class="field-help"><strong>What it is:</strong> how embedded your product becomes in a customer's existing workflow or systems. <strong>How to calculate:</strong> score 0 (standalone, easy to drop) to 5 (deeply integrated, costly to remove).</div>
+      </div>
+      <div class="field field-suffix">
+        <label>Community / network effects</label><input type="number" id="d-score-network" min="0" max="5" step="1" placeholder="1"><span class="suf">/ 5</span>
+        <div class="field-help"><strong>What it is:</strong> whether the product gets better as more users join. <strong>How to calculate:</strong> score 0 (none) to 5 (strong, provable network effect).</div>
+      </div>
+    </div>
+    <div class="field field-suffix" style="max-width:calc(50% - 6px)">
+      <label>Brand loyalty</label><input type="number" id="d-score-brand" min="0" max="5" step="1" placeholder="2"><span class="suf">/ 5</span>
+      <div class="field-help"><strong>What it is:</strong> whether users choose you specifically, beyond features. <strong>How to calculate:</strong> score 0 (no loyalty yet) to 5 (users actively advocate for you).</div>
     </div>
   </div>
 
-  <button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Compile my defensibility summary →</button>
+  <button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Calculate my defensibility score →</button>
 
-  <div class="result-box" id="result-box" style="display:none">
-    <div class="result-title">Your defensibility summary</div>
-    <div class="result-line" id="r-line">Fill in the fields above and click Compile.</div>
-    <div class="result-sub" id="r-details"></div>
+  <div id="results" style="display:none">
+
+    <div class="metric-card">
+      <div class="metric-top">
+        <div>
+          <div class="metric-name">Defensibility score</div>
+          <div class="metric-value" id="m-defense">-</div>
+        </div>
+        <div class="metric-badge" id="b-defense-badge">-</div>
+      </div>
+      <div class="bench-scale">
+        <div style="width:40%;background:var(--red-bg);border:1px solid var(--red-border)"></div>
+        <div style="width:30%;background:var(--amber-bg);border:1px solid var(--amber-border)"></div>
+        <div style="width:30%;background:var(--green-bg);border:1px solid var(--green-border)"></div>
+      </div>
+      <div class="bench-labels"><span>&lt; 2: weak moat</span><span>2-3.5: forming</span><span>&gt; 3.5: strong</span></div>
+      <div class="metric-read" id="r-defense"></div>
+      <div class="path-box" id="path-defense" style="display:none"></div>
+      <div class="metric-formula">Defensibility score = average of the 5 category scores (0-5 each)</div>
+    </div>
+
+    <div class="narrative-box">
+      <div class="narrative-title">What to put on your slide</div>
+      <div class="narrative-text" id="r-narrative"></div>
+    </div>
+
   </div>
 
   <div class="evidence">
     <div class="evidence-icon">✦</div>
-    <div><strong>What this slide needs to include:</strong> a live product walkthrough (not a roadmap-first pitch), a specific 12-month roadmap, one named defensibility mechanism with early evidence, and data proving you're better than the prior workaround.</div>
+    <div><strong>What this slide needs to include:</strong> a live product walkthrough (not a roadmap-first pitch), a specific 12-month roadmap, one named defensibility mechanism with early evidence, and an honest score across all five categories, not just the one that flatters you.</div>
   </div>
 
 </div>
@@ -178,39 +248,96 @@ function toggleMoat(name, btn){
   else { selectedMoats.splice(i,1); btn.classList.remove('on'); }
 }
 
-function addRow(containerId, placeholder){
-  const row = document.createElement('div');
-  row.className = 'feat-row';
-  row.innerHTML = `<input type="text" placeholder="${placeholder}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  document.getElementById(containerId).appendChild(row);
+function val(id){ return document.getElementById(id).value.trim(); }
+function num(id){ const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? 0 : Math.max(0, Math.min(5, v)); }
+
+function setBadge(el, level, text){
+  el.className = 'metric-badge ' + level;
+  el.textContent = text;
 }
 
-function val(id){ return document.getElementById(id).value.trim(); }
+function showPath(id, ok, title, html, note){
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.className = 'path-box' + (ok ? ' ok' : '');
+  el.innerHTML = `<div class="path-title">${title}</div>${html}` + (note ? `<div class="path-note">${note}</div>` : '');
+}
+
+function fmt1(n){ return (Math.round(n*10)/10).toString(); }
 
 function compile(){
   const version = val('d-version');
   const since = val('d-since');
   const features = val('d-features');
   const evidence = val('d-evidence');
-  const better = val('d-better');
 
-  const roadmapItems = [];
-  document.querySelectorAll('#roadmap-rows .feat-row input').forEach(i => { if (i.value.trim()) roadmapItems.push(i.value.trim()); });
+  document.getElementById('results').style.display = 'block';
 
-  const moatText = selectedMoats.length ? selectedMoats.join(' and ') : '[defensibility mechanism]';
+  const cats = [
+    { key:'data', name:'Proprietary data advantage', score: num('d-score-data') },
+    { key:'tech', name:'Technical complexity / IP', score: num('d-score-tech') },
+    { key:'integration', name:'Integration lock-in', score: num('d-score-integration') },
+    { key:'network', name:'Community / network effects', score: num('d-score-network') },
+    { key:'brand', name:'Brand loyalty', score: num('d-score-brand') },
+  ];
+  const sum = cats.reduce((a,c) => a + c.score, 0);
+  const avg = sum / 5;
 
-  let line = `Shipped ${version || '[version]'}${since ? ', live for ' + since : ''}. Our defensibility is ${moatText}.`;
-  document.getElementById('r-line').innerHTML = line;
+  document.getElementById('m-defense').textContent = avg.toFixed(1) + ' / 5';
+  const badge = document.getElementById('b-defense-badge');
+  const read = document.getElementById('r-defense');
+  const breakdown = cats.map(c => `${c.name}: ${c.score}`).join(', ');
 
-  let details = '';
-  if (features) details += `<div><strong>Core features:</strong> ${features}</div>`;
-  if (roadmapItems.length) details += `<div style="margin-top:8px"><strong>12-month roadmap:</strong> ${roadmapItems.join(' &nbsp;·&nbsp; ')}</div>`;
-  if (evidence) details += `<div style="margin-top:8px"><strong>Evidence it's forming:</strong> ${evidence}</div>`;
-  if (better) details += `<div style="margin-top:8px"><strong>Better than the workaround:</strong> ${better}</div>`;
-  document.getElementById('r-details').innerHTML = details;
+  const sorted = [...cats].sort((a,b) => a.score - b.score);
+  const weakest = sorted[0];
+  const secondWeakest = sorted[1];
 
-  document.getElementById('result-box').style.display = 'block';
-  document.getElementById('result-box').scrollIntoView({behavior:'smooth', block:'center'});
+  if (avg < 2) {
+    setBadge(badge, 'red', 'Weak technical moat');
+    read.innerHTML = `Your average defensibility score is <strong>${fmt1(avg)} / 5</strong> (${breakdown}). Below 2, most of these categories don't yet hold up if a well-funded competitor tried to rebuild what you have. That's normal pre-Seed evidence, but at Seed, investors will ask which of these five you're deliberately building, not hoping for.`;
+  } else if (avg <= 3.5) {
+    setBadge(badge, 'amber', 'Forming');
+    read.innerHTML = `Your average defensibility score is <strong>${fmt1(avg)} / 5</strong> (${breakdown}). You're in the range where a moat is forming but not yet proven; some categories are real, others are still closer to "feature" than "defensible." Naming which category you're actively investing in matters more here than the average itself.`;
+  } else {
+    setBadge(badge, 'green', 'Strong, defensible');
+    read.innerHTML = `Your average defensibility score is <strong>${fmt1(avg)} / 5</strong> (${breakdown}), above the 3.5 bar for a strong, defensible position. Keep the evidence behind your highest-scoring category current, since "we scored ourselves a 5" is weaker than showing the metric that earned it.`;
+  }
+
+  if (avg <= 3.5) {
+    const targetAvg = 3.6;
+    const sumTarget = targetAvg * 5;
+    const deficit = Math.max(0, sumTarget - sum);
+    const singleLeverTarget = Math.min(5, weakest.score + deficit);
+    const canHitWithOneLever = (weakest.score + deficit) <= 5;
+    const add1 = Math.ceil(deficit / 2);
+    const add2 = Math.floor(deficit / 2);
+    const twoLever1 = Math.min(5, weakest.score + add1);
+    const twoLever2 = Math.min(5, secondWeakest.score + add2);
+
+    let leverHtml = `<ul class="path-levers">`;
+    if (canHitWithOneLever) {
+      leverHtml += `<li>Raise <strong>${weakest.name}</strong> alone from ${weakest.score} to <strong>${fmt1(singleLeverTarget)}</strong> to reach an average above 3.5</li>`;
+    }
+    leverHtml += `<li>Or raise <strong>${weakest.name}</strong> from ${weakest.score} to <strong>${twoLever1}</strong> and <strong>${secondWeakest.name}</strong> from ${secondWeakest.score} to <strong>${twoLever2}</strong></li>`;
+    leverHtml += `</ul>`;
+
+    showPath('path-defense', false, 'What investors want to see, and how to get there',
+      `<div>Investors want an average above <strong>3.5</strong>. Your lowest-scoring category is <strong>${weakest.name}</strong> at ${weakest.score}/5, that's the priority to invest in next. From today's scores:</div>${leverHtml}`,
+      'Combining smaller moves on two lower-scoring categories is usually more realistic than forcing one category from a low score all the way to a 5.');
+  } else {
+    showPath('path-defense', true, 'Why this works for investors',
+      `<div>You're above the 3.5 bar. Your lowest-scoring category is still <strong>${weakest.name}</strong> at ${weakest.score}/5, worth naming as the next area you're deliberately strengthening, so the story is "here's what we're building next," not just a passed test.</div>`);
+  }
+
+  let narrative = `Our product defensibility score is <strong>${fmt1(avg)} / 5</strong>, `;
+  narrative += `with our strongest category being ${sorted[sorted.length-1].name} (${sorted[sorted.length-1].score}/5) and our weakest being ${weakest.name} (${weakest.score}/5). `;
+  if (selectedMoats.length) narrative += `Our primary defensibility mechanism is <strong>${selectedMoats.join(' and ')}</strong>. `;
+  if (evidence) narrative += `Early evidence: ${evidence}. `;
+  if (version || since) narrative += `Shipped ${version || 'current version'}${since ? ', live for ' + since : ''}. `;
+  if (features) narrative += `Core features live today: ${features}.`;
+  document.getElementById('r-narrative').innerHTML = narrative;
+
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 (function(){

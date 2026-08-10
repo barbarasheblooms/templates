@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cohort-Backed Market Sizing Worksheet · SheBlooms</title>
+<title>Cohort-Backed SOM Calculator · SheBlooms</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;
+  --amber:#b45309;--amber-bg:#fffbeb;--amber-border:#fde68a;
+  --green:#166534;--green-bg:#f0fdf4;--green-border:#bbf7d0;
 }
 body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
 .page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
@@ -29,6 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
 
 .field{margin-bottom:14px}
 .field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.field-help{font-size:10.5px;color:#999;margin-top:4px;line-height:1.5}
 input[type=text],input[type=number],textarea{
   width:100%;border:1px solid var(--border);border-radius:7px;
   padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
@@ -46,40 +50,58 @@ textarea{resize:vertical;line-height:1.65}
 
 .divider{border:none;border-top:1px solid var(--border);margin:24px 0}
 
-.opt-btns{display:flex;gap:8px;margin-bottom:4px;flex-wrap:wrap}
-.opt-btn{flex:1;min-width:100px;padding:11px 10px;border-radius:8px;border:1px solid var(--border);background:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;color:var(--ink);text-align:center;transition:all .12s}
-.opt-btn:hover{border-color:var(--brand);color:var(--brand)}
-.opt-btn.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.formula-box{background:var(--ink);color:#fff;border-radius:10px;padding:14px 18px;margin:10px 0 18px;font-family:'DM Serif Display',serif;font-size:14px;line-height:1.6}
+.formula-box .fvar{color:#a5b4ff}
 
-.row-2{display:grid;grid-template-columns:1fr 32px;gap:8px;margin-bottom:8px}
-.row-3{display:grid;grid-template-columns:1fr 1fr 32px;gap:8px;margin-bottom:8px}
-.rm-remove{width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
-.rm-remove:hover{border-color:#dc2626;color:#dc2626}
-.add-row-btn{margin-top:4px;border:1px dashed var(--border);background:transparent;padding:8px 16px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;color:var(--muted);width:100%;transition:all .15s}
-.add-row-btn:hover{border-color:var(--brand);color:var(--brand)}
+.metric-card{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.metric-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.metric-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.metric-value{font-family:'DM Serif Display',serif;font-size:30px;color:var(--ink);line-height:1}
+.metric-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:2px}
+.metric-badge.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.metric-badge.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.metric-badge.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.metric-read{font-size:12.5px;color:#333;line-height:1.65;padding-top:10px;border-top:1px solid var(--border)}
+.metric-formula{font-size:10.5px;color:var(--muted);margin-top:8px;font-family:'DM Serif Display',serif;font-style:italic}
 
-.result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0}
-.result-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
-.result-line{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.7;color:#fff}
-.result-line strong{color:var(--brand)}
-.result-sub{font-size:12px;color:#bbb;margin-top:14px;padding-top:14px;border-top:1px solid #333;line-height:1.7}
-.result-sub strong{color:#fff}
+.bench-scale{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:10px 0 6px}
+.bench-scale div{height:100%}
+.bench-labels{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);margin-bottom:12px}
+.bench-marker{position:relative;height:0}
+.bench-dot{position:absolute;top:-13px;width:2px;height:12px;background:var(--ink)}
+
+.narrative-box{background:var(--soft);border-radius:10px;padding:18px 20px;margin:18px 0;border:1px solid var(--border)}
+.narrative-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.narrative-text{font-size:13px;line-height:1.7;color:var(--ink)}
+.narrative-text strong{color:var(--brand)}
+
+.path-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;margin-top:12px;font-size:12px;color:#78350f;line-height:1.7}
+.path-box.ok{background:var(--soft);border-color:var(--border);color:#333}
+.path-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#b45309;margin-bottom:7px}
+.path-box.ok .path-title{color:var(--brand)}
+.path-box strong{color:#7c2d12}
+.path-box.ok strong{color:var(--ink)}
+.path-levers{margin:6px 0 6px 0;padding-left:0;list-style:none}
+.path-levers li{margin-bottom:4px;padding-left:14px;position:relative}
+.path-levers li::before{content:'→';position:absolute;left:0;color:#b45309}
+.path-box.ok .path-levers li::before{color:var(--brand)}
+.path-note{font-size:11px;color:#92400e;margin-top:6px;font-style:italic}
+.path-box.ok .path-note{color:var(--muted)}
 
 .evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
 .evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
 
 .print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px;transition:transform .1s}
 .print-btn:hover{transform:translateY(-1px)}
-@media print{.print-btn{display:none}.page{padding:28px 32px}.rm-remove,.add-row-btn{display:none}}
+@media print{.print-btn{display:none}.page{padding:28px 32px}}
 
 @media (max-width: 640px) {
   .page{padding:32px 20px 60px}
   .brand{font-size:22px}
   .doc-title{font-size:15px}
   .field-row.col2,.field-row.col3{grid-template-columns:1fr}
-  .opt-btns{flex-direction:column}
-  .row-3{grid-template-columns:1fr}
   .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+  .metric-top{flex-direction:column}
 }
 </style>
 </head>
@@ -88,64 +110,77 @@ textarea{resize:vertical;line-height:1.65}
 
 <div class="doc-header">
   <div class="brand">SheBlooms</div>
-  <div class="doc-title">Cohort-Backed Market Sizing Worksheet</div>
-  <div class="doc-sub">Back your market size with retention, expansion and differentiation data</div>
+  <div class="doc-title">Cohort-Backed SOM Calculator</div>
+  <div class="doc-sub">Back your market size with your own retention and expansion data, not a forecast</div>
 </div>
 
 <div class="intro">
-  <strong>Before you start:</strong> at Seed, a market size backed only by research reads as unproven. This worksheet pairs your bottom-up SOM/SAM/TAM with your own retention and expansion data, and states your differentiation with evidence.
+  <strong>Before you start:</strong> a Seed-stage SOM that's just "SAM × some %" is a guess dressed up as math. What makes a SOM credible at this stage is that it's built from your own cohort's behavior, how many of your customers actually stick around, and how much more they spend over time. This tool takes your SAM and adjusts it using your real 12-month retention and expansion numbers, so the market size you present is backed by evidence you already have, not a forecast you're hoping is true.
 </div>
 
-
 <div class="section">
-  <div class="section-header"><div class="section-num">1</div><div class="section-title">Market size recap</div></div>
-  <div class="field-row col3">
-    <div class="field field-suffix"><label>SOM</label><input type="text" id="m-som" placeholder="48M"><span class="suf">€</span></div>
-    <div class="field field-suffix"><label>SAM</label><input type="text" id="m-sam" placeholder="216M"><span class="suf">€</span></div>
-    <div class="field field-suffix"><label>TAM</label><input type="text" id="m-tam" placeholder="1B+"><span class="suf">€</span></div>
-  </div>
-</div>
-
-<hr class="divider">
-
-<div class="section">
-  <div class="section-header"><div class="section-num">2</div><div class="section-title">Cohort evidence backing the size</div></div>
+  <div class="section-header"><div class="section-num">1</div><div class="section-title">Your addressable segment</div></div>
   <div class="field-row col2">
-    <div class="field field-suffix"><label>12-month retention</label><input type="number" id="m-retention" placeholder="71"><span class="suf">%</span></div>
-    <div class="field field-suffix"><label>Net expansion</label><input type="number" id="m-expansion" placeholder="22"><span class="suf">%</span></div>
+    <div class="field field-suffix">
+      <label>SAM customer count</label><input type="number" id="c-sam" placeholder="5000"><span class="suf">customers</span>
+      <div class="field-help"><strong>What it is:</strong> the number of customers that exist in your addressable segment, the one you already sized in your Pre-Seed bottom-up work. <strong>How to calculate:</strong> pull this number directly from your Pre-Seed SAM calculation, don't re-estimate it here, this tool builds on that work rather than replacing it.</div>
+    </div>
+    <div class="field field-suffix">
+      <label>Price per customer per year</label><input type="number" id="c-price" placeholder="800" step="1"><span class="suf">€/yr</span>
+      <div class="field-help"><strong>What it is:</strong> what one customer pays you across a full year. <strong>How to calculate:</strong> if you bill monthly, multiply your monthly price by 12. If you bill annually, use that annual price directly. Use your real, tested price, not a list price you haven't charged anyone.</div>
+    </div>
   </div>
-  <div class="field"><label>What this data proves about the market</label><textarea rows="2" id="m-proof" placeholder="e.g. proves the price point holds over time and customers convert into durable revenue, not one-off purchases"></textarea></div>
 </div>
 
 <hr class="divider">
 
 <div class="section">
-  <div class="section-header"><div class="section-num">3</div><div class="section-title">Competitors and differentiation</div></div>
-  <div id="comp-rows">
-    <div class="row-2"><input type="text" placeholder="Competitor + your differentiation, e.g. Accelerators: we don't take equity"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
+  <div class="section-header"><div class="section-num">2</div><div class="section-title">Your own cohort data</div></div>
+  <div class="field-row col2">
+    <div class="field field-suffix">
+      <label>12-month retention rate</label><input type="number" id="c-retention" placeholder="70" step="0.1"><span class="suf">%</span>
+      <div class="field-help"><strong>What it is:</strong> the % of customers who are still paying you 12 months after they started. <strong>How to calculate:</strong> take the cohort of customers who signed up 12+ months ago, count how many are still active paying customers today, and divide by how many started that cohort. If you don't have a full 12-month cohort yet, use your best available cohort (e.g. 6-month) and say so when you present this.</div>
+    </div>
+    <div class="field field-suffix">
+      <label>Net revenue expansion</label><input type="number" id="c-expansion" placeholder="10" step="0.1"><span class="suf">%</span>
+      <div class="field-help"><strong>What it is:</strong> the extra revenue you collect from existing customers upgrading, adding seats, or using more, expressed as a % of what they originally paid. <strong>How to calculate:</strong> (revenue from existing customers this period − revenue from those same customers a year ago) ÷ revenue from those same customers a year ago × 100. Enter 0 if you don't have expansion revenue yet, that's a normal answer this early.</div>
+    </div>
   </div>
-  <button class="add-row-btn" onclick="addRow('comp-rows','row-2','Competitor + your differentiation')">+ Add competitor</button>
 </div>
 
-<hr class="divider">
+<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Calculate my retention-adjusted SOM →</button>
 
-<div class="section">
-  <div class="section-header"><div class="section-num">4</div><div class="section-title">Plan to scale within this market</div></div>
-  <div class="field"><label>How you plan to capture more of the SAM</label><textarea rows="2" id="m-scaleplan" placeholder="e.g. expand from Southern Europe into France and the Nordics using the same playbook"></textarea></div>
-</div>
+<div id="results" style="display:none">
 
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">Retention-adjusted SOM</div>
+        <div class="metric-value" id="m-som">-</div>
+      </div>
+      <div class="metric-badge" id="b-som-badge">-</div>
+    </div>
+    <div class="bench-scale">
+      <div style="width:60%;background:var(--red-bg);border:1px solid var(--red-border)"></div>
+      <div style="width:20%;background:var(--amber-bg);border:1px solid var(--amber-border)"></div>
+      <div style="width:20%;background:var(--green-bg);border:1px solid var(--green-border)"></div>
+    </div>
+    <div class="bench-labels"><span>&lt; 60%: weak</span><span>60–80%: workable</span><span>80%+: strong</span></div>
+    <div class="metric-read" id="r-som"></div>
+    <div class="path-box" id="path-som" style="display:none"></div>
+    <div class="metric-formula">Adjusted SOM = SAM customers × price × (1 ÷ (1 − retention)) × (1 + expansion)</div>
+  </div>
 
-<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Compile my cohort-backed market summary →</button>
+  <div class="narrative-box">
+    <div class="narrative-title">What to put on your slide</div>
+    <div class="narrative-text" id="r-narrative"></div>
+  </div>
 
-<div class="result-box" id="result-box" style="display:none">
-  <div class="result-title">Your cohort-backed market sizing</div>
-  <div class="result-line" id="r-line">Fill in the fields above and click Compile.</div>
-  <div class="result-sub" id="r-details"></div>
 </div>
 
 <div class="evidence">
   <div class="evidence-icon">✦</div>
-  <div><strong>What this needs to include:</strong> the SOM/SAM/TAM chain, retention and expansion data proving the price point holds, named competitors with specific differentiation, and a stated plan to scale within the market.</div>
+  <div><strong>What this needs to include:</strong> a SAM figure sourced from your own Pre-Seed sizing, a 12-month retention rate measured from a real cohort (not assumed), and an expansion number that's 0 if you genuinely don't have one yet. A SOM built on made-up retention is weaker than a smaller SOM built on real numbers.</div>
 </div>
 
 </div>
@@ -156,44 +191,92 @@ textarea{resize:vertical;line-height:1.65}
 </button>
 
 <script>
-function addRow(containerId, cls, placeholder){
-  const row = document.createElement('div');
-  row.className = cls;
-  if(cls==='row-3'){
-    row.innerHTML = `<input type="text" placeholder="${placeholder[0]}"><input type="text" placeholder="${placeholder[1]}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  } else {
-    row.innerHTML = `<input type="text" placeholder="${placeholder}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  }
-  document.getElementById(containerId).appendChild(row);
-}
+function num(id){ const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; }
 function val(id){ const e=document.getElementById(id); return e? e.value.trim() : ''; }
+function fmtEUR(n){ return '€' + n.toLocaleString('en-US', {maximumFractionDigits: 0}); }
+function fmt1(n){ return (Math.round(n*10)/10).toString(); }
 
+function setBadge(el, level, text){
+  el.className = 'metric-badge ' + level;
+  el.textContent = text;
+}
+
+function showPath(id, ok, title, html, note){
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.className = 'path-box' + (ok ? ' ok' : '');
+  el.innerHTML = `<div class="path-title">${title}</div>${html}` + (note ? `<div class="path-note">${note}</div>` : '');
+}
 
 function compile(){
-  const som = val('m-som') || '[SOM]';
-  const sam = val('m-sam') || '[SAM]';
-  const tam = val('m-tam') || '[TAM]';
-  const retention = val('m-retention');
-  const expansion = val('m-expansion');
-  const proof = val('m-proof');
-  const scaleplan = val('m-scaleplan');
+  const sam = num('c-sam');
+  const price = num('c-price');
+  const retention = num('c-retention');
+  const expansion = num('c-expansion');
 
-  const comps = [];
-  document.querySelectorAll('#comp-rows .row-2 input').forEach(i => { if (i.value.trim()) comps.push(i.value.trim()); });
+  document.getElementById('results').style.display = 'block';
 
-  let line = `SOM €${som}, SAM €${sam}, TAM €${tam}, backed by ${retention||'[X]'}% retention and ${expansion||'[X]'}% net expansion.`;
-  document.getElementById('r-line').innerHTML = line;
+  const somEl = document.getElementById('m-som');
+  const somBadge = document.getElementById('b-som-badge');
+  const somRead = document.getElementById('r-som');
+  let adjustedSOM = null;
 
-  let details = '';
-  if (proof) details += `<div><strong>What the data proves:</strong> ${proof}</div>`;
-  if (comps.length) details += `<div style="margin-top:8px"><strong>Competitors and differentiation:</strong> ${comps.join(' &nbsp;·&nbsp; ')}</div>`;
-  if (scaleplan) details += `<div style="margin-top:8px"><strong>Plan to scale:</strong> ${scaleplan}</div>`;
-  document.getElementById('r-details').innerHTML = details;
+  if (sam !== null && price !== null && retention !== null) {
+    const exp = expansion !== null ? expansion : 0;
+    const effectiveRetention = retention >= 99 ? 99 : retention;
+    const durableMultiplier = 1 / (1 - effectiveRetention/100);
+    adjustedSOM = sam * price * durableMultiplier * (1 + exp/100);
 
-  document.getElementById('result-box').style.display = 'block';
-  document.getElementById('result-box').scrollIntoView({behavior:'smooth', block:'center'});
+    somEl.textContent = fmtEUR(adjustedSOM);
+
+    let unstableNote = '';
+    if (retention >= 99) {
+      unstableNote = ` Near-100% retention makes the simple 1 ÷ (1 − retention) formula unstable, so we treat 99% as the effective cap for this calculation rather than dividing by a number close to zero.`;
+    }
+
+    if (retention < 60) {
+      setBadge(somBadge, 'red', 'Weak retention, weakens this number');
+      somRead.innerHTML = `With ${fmt1(retention)}% 12-month retention, your durable-revenue multiplier is only ${fmt1(durableMultiplier)}×, applied to ${sam.toLocaleString('en-US')} SAM customers at €${price}/yr gives an adjusted SOM of <strong>${fmtEUR(adjustedSOM)}</strong>. Below 60% retention, a large share of customers churn out within a year, so this SOM overstates how much of that market you can durably hold unless retention improves.${unstableNote}`;
+    } else if (retention < 80) {
+      setBadge(somBadge, 'amber', 'Workable');
+      somRead.innerHTML = `With ${fmt1(retention)}% 12-month retention, your durable-revenue multiplier is ${fmt1(durableMultiplier)}×, applied to ${sam.toLocaleString('en-US')} SAM customers at €${price}/yr gives an adjusted SOM of <strong>${fmtEUR(adjustedSOM)}</strong>. This is a workable retention level, but investors treat 80%+ as the point where a customer base is genuinely durable rather than leaky.${unstableNote}`;
+    } else {
+      setBadge(somBadge, 'green', 'Strong, durable revenue base');
+      somRead.innerHTML = `With ${fmt1(retention)}% 12-month retention, your durable-revenue multiplier is ${fmt1(durableMultiplier)}×, applied to ${sam.toLocaleString('en-US')} SAM customers at €${price}/yr gives an adjusted SOM of <strong>${fmtEUR(adjustedSOM)}</strong>. 80%+ retention means most of the customers you land this year are still paying next year, which is what makes this SOM figure durable rather than a one-time snapshot.${unstableNote}`;
+    }
+
+    if (retention < 80) {
+      const retentionTarget = 80;
+      const targetMultiplier = 1 / (1 - retentionTarget/100);
+      const somAtTarget = sam * price * targetMultiplier * (1 + exp/100);
+      showPath('path-som', false, 'What investors want to see, and how to get there',
+        `<div>Investors treat <strong>80% 12-month retention</strong> as the point where a SOM reads as durable. Holding your SAM, price, and expansion fixed:</div>
+        <ul class="path-levers">
+          <li>At your current inputs but ${retentionTarget}% retention, adjusted SOM would be <strong>${fmtEUR(somAtTarget)}</strong> instead of <strong>${fmtEUR(adjustedSOM)}</strong></li>
+          <li>Getting there usually means fixing onboarding and early-usage drop-off, since most churn in a customer base happens in the first few months, not evenly across the year</li>
+        </ul>`,
+        'Combining smaller moves on two levers, like tightening onboarding and adding a light re-engagement touch at month 3, is usually more realistic than expecting one fix to move retention 10-20 points on its own.');
+    } else {
+      showPath('path-som', true, 'Why this works for investors',
+        `<div>You're at or above the 80% retention bar that makes a SOM read as durable rather than lucky. Keep restating this retention rate as your cohort ages, since a 12-month number that holds up at 18 and 24 months is even more convincing.</div>`);
+    }
+  } else {
+    somEl.textContent = '-';
+    setBadge(somBadge, 'amber', 'Fill in SAM, price & retention');
+    somRead.textContent = 'Enter SAM customer count, price per customer per year, and 12-month retention above to calculate this.';
+    document.getElementById('path-som').style.display = 'none';
+  }
+
+  let narrative = '';
+  if (adjustedSOM !== null) {
+    narrative += `Backed by our own cohort data, our retention-adjusted SOM is <strong>${fmtEUR(adjustedSOM)}</strong>, built on a <strong>${fmt1(retention)}%</strong> 12-month retention rate`;
+    narrative += (expansion !== null && expansion > 0) ? `, plus <strong>${fmt1(expansion)}%</strong> net revenue expansion from existing customers. ` : `. `;
+    narrative += `This is a market size backed by how our customers actually behave, not a forecast.`;
+  }
+  document.getElementById('r-narrative').innerHTML = narrative || 'Fill in the fields above to generate your slide-ready summary.';
+
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
 }
-
 
 (function(){
   const SB_URL='https://fyswympbcriibpewkxnh.supabase.co';

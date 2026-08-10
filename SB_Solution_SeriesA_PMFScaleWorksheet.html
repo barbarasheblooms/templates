@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PMF & Scale Defensibility Worksheet · SheBlooms</title>
+<title>Infrastructure Efficiency at Scale · SheBlooms</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;
+  --amber:#b45309;--amber-bg:#fffbeb;--amber-border:#fde68a;
+  --green:#166534;--green-bg:#f0fdf4;--green-border:#bbf7d0;
 }
 body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
 .page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
@@ -29,6 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
 
 .field{margin-bottom:14px}
 .field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.field-help{font-size:10.5px;color:#999;margin-top:4px;line-height:1.5}
 input[type=text],input[type=number],textarea{
   width:100%;border:1px solid var(--border);border-radius:7px;
   padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
@@ -39,138 +43,139 @@ input::placeholder,textarea::placeholder{color:#c5c5c5;font-style:italic}
 textarea{resize:vertical;line-height:1.65}
 .field-row{display:grid;gap:12px}
 .field-row.col2{grid-template-columns:1fr 1fr}
-.field-row.col3{grid-template-columns:1fr 1fr 1fr}
 .field-suffix{position:relative}
 .field-suffix input{padding-right:44px}
 .field-suffix .suf{position:absolute;right:12px;top:32px;font-size:11px;color:var(--muted)}
 
 .divider{border:none;border-top:1px solid var(--border);margin:24px 0}
 
-.trend-btns{display:flex;gap:8px;margin-bottom:4px}
-.trend-btn{flex:1;padding:11px 10px;border-radius:8px;border:1px solid var(--border);background:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;color:var(--ink);text-align:center;transition:all .12s}
-.trend-btn:hover{border-color:var(--brand);color:var(--brand)}
-.trend-btn.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.metric-card{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.metric-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.metric-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.metric-value{font-family:'DM Serif Display',serif;font-size:30px;color:var(--ink);line-height:1}
+.metric-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:2px}
+.metric-badge.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.metric-badge.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.metric-badge.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.metric-read{font-size:12.5px;color:#333;line-height:1.65;padding-top:10px;border-top:1px solid var(--border)}
+.metric-formula{font-size:10.5px;color:var(--muted);margin-top:8px;font-family:'DM Serif Display',serif;font-style:italic}
 
-.feat-row{display:grid;grid-template-columns:1fr 32px;gap:8px;margin-bottom:8px}
-.rm-remove{width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
-.rm-remove:hover{border-color:#dc2626;color:#dc2626}
-.add-row-btn{margin-top:4px;border:1px dashed var(--border);background:transparent;padding:8px 16px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;color:var(--muted);width:100%;transition:all .15s}
-.add-row-btn:hover{border-color:var(--brand);color:var(--brand)}
+.bench-scale{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:10px 0 6px}
+.bench-scale div{height:100%}
+.bench-labels{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);margin-bottom:12px}
 
-.result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0}
-.result-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
-.result-line{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.7;color:#fff}
-.result-line strong{color:var(--brand)}
-.result-sub{font-size:12px;color:#bbb;margin-top:14px;padding-top:14px;border-top:1px solid #333;line-height:1.7}
-.result-sub strong{color:#fff}
+.narrative-box{background:var(--soft);border-radius:10px;padding:18px 20px;margin:18px 0;border:1px solid var(--border)}
+.narrative-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.narrative-text{font-size:13px;line-height:1.7;color:var(--ink)}
+.narrative-text strong{color:var(--brand)}
+
+.path-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;margin-top:12px;font-size:12px;color:#78350f;line-height:1.7}
+.path-box.ok{background:var(--soft);border-color:var(--border);color:#333}
+.path-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#b45309;margin-bottom:7px}
+.path-box.ok .path-title{color:var(--brand)}
+.path-box strong{color:#7c2d12}
+.path-box.ok strong{color:var(--ink)}
+.path-levers{margin:6px 0 6px 0;padding-left:0;list-style:none}
+.path-levers li{margin-bottom:4px;padding-left:14px;position:relative}
+.path-levers li::before{content:'→';position:absolute;left:0;color:#b45309}
+.path-box.ok .path-levers li::before{color:var(--brand)}
+.path-note{font-size:11px;color:#92400e;margin-top:6px;font-style:italic}
+.path-box.ok .path-note{color:var(--muted)}
 
 .evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
 .evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
 
 .print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px;transition:transform .1s}
 .print-btn:hover{transform:translateY(-1px)}
-@media print{.print-btn{display:none}.page{padding:28px 32px}.rm-remove,.add-row-btn{display:none}}
+@media print{.print-btn{display:none}.page{padding:28px 32px}}
 
 @media (max-width: 640px) {
   .page{padding:32px 20px 60px}
   .brand{font-size:22px}
   .doc-title{font-size:15px}
-  .field-row.col2,.field-row.col3{grid-template-columns:1fr}
-  .trend-btns{flex-direction:column}
+  .field-row.col2{grid-template-columns:1fr}
   .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+  .metric-top{flex-direction:column}
 }
 </style>
 </head>
 <body>
 <div class="page">
 
-  <div class="doc-header">
-    <div class="brand">SheBlooms</div>
-    <div class="doc-title">PMF & Scale Defensibility Worksheet</div>
-    <div class="doc-sub">Prove product-market fit and defensibility hold up at Series A</div>
-  </div>
+<div class="doc-header">
+  <div class="brand">SheBlooms</div>
+  <div class="doc-title">Infrastructure Efficiency at Scale</div>
+  <div class="doc-sub">Check whether your costs improve or worsen as you grow, before an investor asks</div>
+</div>
 
-  <div class="intro">
-    <strong>Before you start:</strong> at Series A, nobody is asking whether the product works. This worksheet helps you assemble evidence that fit is real and durable, that your edge strengthens rather than weakens as you scale, and that the experience holds up under real production load.
-  </div>
+<div class="intro">
+  <strong>Before you start:</strong> at Series A, investors aren't just checking that you have users, they're checking whether serving twice as many users costs you proportionally less, the same, or more. This tool compares your cost to serve one user today against your engineering team's honest projection at 2x scale, and tells you which of those three you're actually in.
+</div>
 
-  <div class="section">
-    <div class="section-header">
-      <div class="section-num">1</div>
-      <div class="section-title">Product-market fit evidence</div>
+<div class="section">
+  <div class="section-header"><div class="section-num">1</div><div class="section-title">Today</div></div>
+  <div class="field-row col2">
+    <div class="field field-suffix">
+      <label>Cost to serve per user today</label><input type="number" id="s-cost-today" placeholder="4.20" step="0.01"><span class="suf">€/mo</span>
+      <div class="field-help"><strong>What it is:</strong> your total infrastructure and support cost divided by your current user count, per month. <strong>How to calculate:</strong> total monthly infra + hosting + third-party API + support costs ÷ current active users. Use your last full month's actuals, not an estimate.</div>
     </div>
-    <div class="field-row col3">
-      <div class="field field-suffix"><label>Best cohort retention</label><input type="number" id="p-retention" placeholder="85" step="1"><span class="suf">%</span></div>
-      <div class="field field-suffix"><label>Referral / organic share</label><input type="number" id="p-organic" placeholder="30" step="1"><span class="suf">%</span></div>
-      <div class="field"><label>Usage depth trend</label><input type="text" id="p-usage" placeholder="e.g. +22% seats/account YoY"></div>
-    </div>
-    <div class="field"><label>Notes on cohort data (what's improving, and since when)</label>
-      <textarea rows="2" id="p-cohortnotes" placeholder="e.g. Retention has improved across every quarterly cohort for the last 4 quarters."></textarea>
+    <div class="field field-suffix">
+      <label>Users today</label><input type="number" id="s-users-today" placeholder="2000"><span class="suf">users</span>
+      <div class="field-help"><strong>What it is:</strong> your current active user count, the denominator you used above. <strong>How to calculate:</strong> count active users (or accounts) in the same period you used to calculate cost to serve above, so the two numbers line up.</div>
     </div>
   </div>
+</div>
 
-  <hr class="divider">
+<hr class="divider">
 
-  <div class="section">
-    <div class="section-header">
-      <div class="section-num">2</div>
-      <div class="section-title">Defensibility at scale</div>
+<div class="section">
+  <div class="section-header"><div class="section-num">2</div><div class="section-title">At 2x scale</div></div>
+  <div class="field-row col2">
+    <div class="field field-suffix">
+      <label>Projected cost to serve per user at 2x scale</label><input type="number" id="s-cost-projected" placeholder="3.50" step="0.01"><span class="suf">€/mo</span>
+      <div class="field-help"><strong>What it is:</strong> your engineering team's honest estimate of cost per user once you're at roughly double today's user count, accounting for infra changes, caching, batching, and any volume pricing you'd actually renegotiate. <strong>How to calculate:</strong> ask engineering to re-run today's cost model at 2x load with the specific technical changes you'd realistically make, not the same architecture scaled up linearly.</div>
     </div>
-    <div class="field"><label>Defensibility mechanism</label>
-      <input type="text" id="p-moat" placeholder="e.g. proprietary matching data, network effects, switching costs">
-    </div>
-    <div class="section-note" style="margin-left:0">Is this mechanism strengthening or weakening as you scale?</div>
-    <div class="trend-btns" id="trend-btns">
-      <button class="trend-btn" onclick="setTrend('Strengthening',this)">Strengthening</button>
-      <button class="trend-btn" onclick="setTrend('Flat',this)">Flat</button>
-      <button class="trend-btn" onclick="setTrend('Weakening',this)">Weakening</button>
-    </div>
-    <div class="field" style="margin-top:12px"><label>Evidence of the trend</label>
-      <textarea rows="2" id="p-trendevidence" placeholder="e.g. Match accuracy has improved every quarter as the training data set grows with each new customer."></textarea>
+    <div class="field field-suffix">
+      <label>Projected users at 2x scale</label><input type="number" id="s-users-projected" placeholder="4000"><span class="suf">users</span>
+      <div class="field-help"><strong>What it is:</strong> the user count this projection is based on. <strong>How to calculate:</strong> this should be roughly double your users-today figure above; enter your actual planning number even if it's not exactly 2x.</div>
     </div>
   </div>
+</div>
 
-  <hr class="divider">
+<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Calculate my scale efficiency →</button>
 
-  <div class="section">
-    <div class="section-header">
-      <div class="section-num">3</div>
-      <div class="section-title">Roadmap to sustain the advantage</div>
+<div id="results" style="display:none">
+
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">Cost efficiency change at 2x scale</div>
+        <div class="metric-value" id="m-change">-</div>
+      </div>
+      <div class="metric-badge" id="b-change-badge">-</div>
     </div>
-    <div class="section-note">Items that widen the moat, next 12-24 months.</div>
-    <div id="roadmap-rows">
-      <div class="feat-row"><input type="text" placeholder="e.g. Q1-Q2: expand data partnerships to deepen matching accuracy"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
-      <div class="feat-row"><input type="text" placeholder="e.g. Q3-Q4: launch enterprise tier with deeper integration lock-in"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
+    <div class="bench-scale">
+      <div style="width:30%;background:var(--red-bg);border:1px solid var(--red-border)"></div>
+      <div style="width:30%;background:var(--amber-bg);border:1px solid var(--amber-border)"></div>
+      <div style="width:40%;background:var(--green-bg);border:1px solid var(--green-border)"></div>
     </div>
-    <button class="add-row-btn" onclick="addRow('roadmap-rows','e.g. ...')">+ Add roadmap item</button>
+    <div class="bench-labels"><span>&lt; 0%: costs rising</span><span>0-10%: roughly flat</span><span>&gt; 10%: economies of scale</span></div>
+    <div class="metric-read" id="r-change"></div>
+    <div class="path-box" id="path-change" style="display:none"></div>
+    <div class="metric-formula">Cost efficiency change = (cost today - projected cost at scale) ÷ cost today</div>
   </div>
 
-  <hr class="divider">
-
-  <div class="section">
-    <div class="section-header">
-      <div class="section-num">4</div>
-      <div class="section-title">UX proof at scale</div>
-    </div>
-    <div class="field-row col3">
-      <div class="field field-suffix"><label>Uptime</label><input type="number" id="p-uptime" placeholder="99.9" step="0.1"><span class="suf">%</span></div>
-      <div class="field"><label>Support ratio trend</label><input type="text" id="p-support" placeholder="e.g. tickets/customer down 18% YoY"></div>
-      <div class="field field-suffix"><label>NPS / CSAT</label><input type="number" id="p-nps" placeholder="62"><span class="suf">score</span></div>
-    </div>
+  <div class="narrative-box">
+    <div class="narrative-title">What to put on your slide</div>
+    <div class="narrative-text" id="r-narrative"></div>
   </div>
 
-  <button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Compile my PMF & defensibility summary →</button>
+</div>
 
-  <div class="result-box" id="result-box" style="display:none">
-    <div class="result-title">Your PMF & defensibility summary</div>
-    <div class="result-line" id="r-line">Fill in the fields above and click Compile.</div>
-    <div class="result-sub" id="r-details"></div>
-  </div>
-
-  <div class="evidence">
-    <div class="evidence-icon">✦</div>
-    <div><strong>What this slide needs to include:</strong> PMF evidence across multiple cohorts, a named defensibility mechanism with a clear strengthening trend, a roadmap that widens the moat, and proof the product holds up under real production load.</div>
-  </div>
+<div class="evidence">
+  <div class="evidence-icon">✦</div>
+  <div><strong>What this needs to include:</strong> a cost-to-serve number pulled from real infra billing, not a guess; a 2x projection engineering actually stands behind, with the specific technical changes it assumes; and, if costs are flat or rising, the specific fix you're committing to, not just an assumption that scale will fix it.</div>
+</div>
 
 </div>
 
@@ -180,57 +185,75 @@ textarea{resize:vertical;line-height:1.65}
 </button>
 
 <script>
-let currentTrend = '';
-function setTrend(trend, btn){
-  currentTrend = trend;
-  document.querySelectorAll('#trend-btns .trend-btn').forEach(b => b.classList.remove('on'));
-  btn.classList.add('on');
+function num(id){ const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; }
+function fmtEUR2(n){ return '€' + n.toFixed(2); }
+
+function setBadge(el, level, text){
+  el.className = 'metric-badge ' + level;
+  el.textContent = text;
 }
 
-function addRow(containerId, placeholder){
-  const row = document.createElement('div');
-  row.className = 'feat-row';
-  row.innerHTML = `<input type="text" placeholder="${placeholder}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  document.getElementById(containerId).appendChild(row);
+function showPath(id, ok, title, html, note){
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.className = 'path-box' + (ok ? ' ok' : '');
+  el.innerHTML = `<div class="path-title">${title}</div>${html}` + (note ? `<div class="path-note">${note}</div>` : '');
 }
-
-function val(id){ return document.getElementById(id).value.trim(); }
 
 function compile(){
-  const retention = val('p-retention');
-  const organic = val('p-organic');
-  const usage = val('p-usage');
-  const cohortNotes = val('p-cohortnotes');
-  const moat = val('p-moat') || '[defensibility mechanism]';
-  const trendEvidence = val('p-trendevidence');
-  const uptime = val('p-uptime');
-  const support = val('p-support');
-  const nps = val('p-nps');
+  const costToday = num('s-cost-today');
+  const usersToday = num('s-users-today');
+  const costProjected = num('s-cost-projected');
+  const usersProjected = num('s-users-projected');
 
-  const roadmapItems = [];
-  document.querySelectorAll('#roadmap-rows .feat-row input').forEach(i => { if (i.value.trim()) roadmapItems.push(i.value.trim()); });
+  document.getElementById('results').style.display = 'block';
 
-  let line = `Our defensibility is ${moat}, and it is ${(currentTrend || 'trending').toLowerCase()} as we scale.`;
-  document.getElementById('r-line').innerHTML = line;
+  const changeEl = document.getElementById('m-change');
+  const badge = document.getElementById('b-change-badge');
+  const read = document.getElementById('r-change');
 
-  let details = '';
-  let pmf = [];
-  if (retention) pmf.push(`${retention}% best-cohort retention`);
-  if (organic) pmf.push(`${organic}% organic/referral share`);
-  if (usage) pmf.push(usage);
-  if (pmf.length) details += `<div><strong>PMF evidence:</strong> ${pmf.join(' · ')}</div>`;
-  if (cohortNotes) details += `<div style="margin-top:8px"><strong>Cohort notes:</strong> ${cohortNotes}</div>`;
-  if (trendEvidence) details += `<div style="margin-top:8px"><strong>Defensibility trend evidence:</strong> ${trendEvidence}</div>`;
-  if (roadmapItems.length) details += `<div style="margin-top:8px"><strong>Roadmap to sustain:</strong> ${roadmapItems.join(' · ')}</div>`;
-  let ux = [];
-  if (uptime) ux.push(`${uptime}% uptime`);
-  if (support) ux.push(support);
-  if (nps) ux.push(`NPS/CSAT ${nps}`);
-  if (ux.length) details += `<div style="margin-top:8px"><strong>UX at scale:</strong> ${ux.join(' · ')}</div>`;
-  document.getElementById('r-details').innerHTML = details;
+  if (costToday && costProjected !== null && costToday > 0) {
+    const pct = ((costToday - costProjected) / costToday) * 100;
+    changeEl.textContent = pct.toFixed(1) + '%';
 
-  document.getElementById('result-box').style.display = 'block';
-  document.getElementById('result-box').scrollIntoView({behavior:'smooth', block:'center'});
+    if (pct < 0) {
+      setBadge(badge, 'red', 'Diseconomies of scale');
+      read.innerHTML = `Cost to serve is projected to go from <strong>${fmtEUR2(costToday)}/mo</strong> per user today to <strong>${fmtEUR2(costProjected)}/mo</strong> at 2x scale, a <strong>${pct.toFixed(1)}%</strong> change, meaning cost per user is rising as you grow, not falling. This is a real flag at Series A: it suggests your current architecture doesn't get cheaper with volume, and investors will read a growth plan on top of this as a plan to lose more money faster.`;
+    } else if (pct <= 10) {
+      setBadge(badge, 'amber', 'Roughly flat');
+      read.innerHTML = `Cost to serve is projected to go from <strong>${fmtEUR2(costToday)}/mo</strong> per user today to <strong>${fmtEUR2(costProjected)}/mo</strong> at 2x scale, a <strong>${pct.toFixed(1)}%</strong> improvement. That's close to flat, meaning you're not yet capturing the economies of scale investors expect to see by this stage.`;
+    } else {
+      setBadge(badge, 'green', 'Economies of scale kicking in');
+      read.innerHTML = `Cost to serve is projected to go from <strong>${fmtEUR2(costToday)}/mo</strong> per user today to <strong>${fmtEUR2(costProjected)}/mo</strong> at 2x scale, a <strong>${pct.toFixed(1)}%</strong> improvement. Costs are falling per user as you grow, exactly the pattern investors want to see at this stage.`;
+    }
+
+    if (pct <= 10) {
+      const targetPct = 12;
+      const costProjectedTarget = costToday * (1 - targetPct / 100);
+      showPath('path-change', false, 'What investors want to see, and how to get there',
+        `<div>Investors want to see cost per user falling by <strong>more than 10%</strong> at 2x scale, ideally clearing 12% or more for margin of safety. From today's numbers, that means:</div>
+        <ul class="path-levers">
+          <li>Bring the projected cost per user down from ${fmtEUR2(costProjected)} to <strong>${fmtEUR2(costProjectedTarget)}</strong> or lower</li>
+          <li>Name the specific technical fix expected to bend this curve: caching, batch processing, renegotiated infra pricing, or usage-based tiering</li>
+        </ul>`,
+        'Investors will ask what specifically improves this, not just that it should. Two smaller fixes (e.g. caching plus renegotiated infra pricing) are usually a more credible story than one large architecture rewrite.');
+    } else {
+      showPath('path-change', true, 'Why this works for investors',
+        `<div>You're already past the 10% bar. Keep naming the specific technical change (caching, batching, pricing renegotiation) that produced this improvement, since "costs improve with scale" reads weaker than the actual mechanism behind it.</div>`);
+    }
+
+    let narrative = `At <strong>${usersToday || '[users today]'}</strong> users, we spend <strong>${fmtEUR2(costToday)}/mo</strong> per user to serve them. `;
+    narrative += `At roughly ${usersProjected || '2x'} users, we project <strong>${fmtEUR2(costProjected)}/mo</strong> per user, a <strong>${pct.toFixed(1)}%</strong> ${pct >= 0 ? 'improvement' : 'increase'} in cost to serve as we scale.`;
+    document.getElementById('r-narrative').innerHTML = narrative;
+  } else {
+    changeEl.textContent = '-';
+    setBadge(badge, 'amber', 'Fill in both cost fields');
+    read.textContent = 'Enter cost to serve per user today and projected cost at 2x scale above to calculate this.';
+    document.getElementById('path-change').style.display = 'none';
+    document.getElementById('r-narrative').textContent = 'Fill in the fields above to generate your slide-ready summary.';
+  }
+
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 (function(){
