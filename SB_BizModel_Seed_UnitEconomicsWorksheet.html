@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Unit Economics & Path to Profitability Worksheet · SheBlooms</title>
+<title>Unit Economics & Margin Worksheet · SheBlooms</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;
+  --amber:#b45309;--amber-bg:#fffbeb;--amber-border:#fde68a;
+  --green:#166534;--green-bg:#f0fdf4;--green-border:#bbf7d0;
 }
 body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
 .page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
@@ -29,6 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
 
 .field{margin-bottom:14px}
 .field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.field-help{font-size:10.5px;color:#999;margin-top:4px;line-height:1.5}
 input[type=text],input[type=number],textarea{
   width:100%;border:1px solid var(--border);border-radius:7px;
   padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
@@ -51,26 +55,50 @@ textarea{resize:vertical;line-height:1.65}
 .opt-btn:hover{border-color:var(--brand);color:var(--brand)}
 .opt-btn.on{background:var(--brand);color:#fff;border-color:var(--brand)}
 
-.row-2{display:grid;grid-template-columns:1fr 32px;gap:8px;margin-bottom:8px}
-.row-3{display:grid;grid-template-columns:1fr 1fr 32px;gap:8px;margin-bottom:8px}
-.rm-remove{width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
-.rm-remove:hover{border-color:#dc2626;color:#dc2626}
-.add-row-btn{margin-top:4px;border:1px dashed var(--border);background:transparent;padding:8px 16px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;color:var(--muted);width:100%;transition:all .15s}
-.add-row-btn:hover{border-color:var(--brand);color:var(--brand)}
+.formula-box{background:var(--ink);color:#fff;border-radius:10px;padding:14px 18px;margin:10px 0 18px;font-family:'DM Serif Display',serif;font-size:14px;line-height:1.6}
+.formula-box .fvar{color:#a5b4ff}
 
-.result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0}
-.result-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
-.result-line{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.7;color:#fff}
-.result-line strong{color:var(--brand)}
-.result-sub{font-size:12px;color:#bbb;margin-top:14px;padding-top:14px;border-top:1px solid #333;line-height:1.7}
-.result-sub strong{color:#fff}
+.metric-card{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.metric-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.metric-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.metric-value{font-family:'DM Serif Display',serif;font-size:30px;color:var(--ink);line-height:1}
+.metric-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:2px}
+.metric-badge.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.metric-badge.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.metric-badge.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.metric-read{font-size:12.5px;color:#333;line-height:1.65;padding-top:10px;border-top:1px solid var(--border)}
+.metric-formula{font-size:10.5px;color:var(--muted);margin-top:8px;font-family:'DM Serif Display',serif;font-style:italic}
+
+.bench-scale{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:10px 0 6px}
+.bench-scale div{height:100%}
+.bench-labels{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);margin-bottom:12px}
+.bench-marker{position:relative;height:0}
+.bench-dot{position:absolute;top:-13px;width:2px;height:12px;background:var(--ink)}
+
+.narrative-box{background:var(--soft);border-radius:10px;padding:18px 20px;margin:18px 0;border:1px solid var(--border)}
+.narrative-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.narrative-text{font-size:13px;line-height:1.7;color:var(--ink)}
+.narrative-text strong{color:var(--brand)}
+
+.path-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;margin-top:12px;font-size:12px;color:#78350f;line-height:1.7}
+.path-box.ok{background:var(--soft);border-color:var(--border);color:#333}
+.path-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#b45309;margin-bottom:7px}
+.path-box.ok .path-title{color:var(--brand)}
+.path-box strong{color:#7c2d12}
+.path-box.ok strong{color:var(--ink)}
+.path-levers{margin:6px 0 6px 0;padding-left:0;list-style:none}
+.path-levers li{margin-bottom:4px;padding-left:14px;position:relative}
+.path-levers li::before{content:'→';position:absolute;left:0;color:#b45309}
+.path-box.ok .path-levers li::before{color:var(--brand)}
+.path-note{font-size:11px;color:#92400e;margin-top:6px;font-style:italic}
+.path-box.ok .path-note{color:var(--muted)}
 
 .evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
 .evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
 
 .print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px;transition:transform .1s}
 .print-btn:hover{transform:translateY(-1px)}
-@media print{.print-btn{display:none}.page{padding:28px 32px}.rm-remove,.add-row-btn{display:none}}
+@media print{.print-btn{display:none}.page{padding:28px 32px}}
 
 @media (max-width: 640px) {
   .page{padding:32px 20px 60px}
@@ -78,8 +106,8 @@ textarea{resize:vertical;line-height:1.65}
   .doc-title{font-size:15px}
   .field-row.col2,.field-row.col3{grid-template-columns:1fr}
   .opt-btns{flex-direction:column}
-  .row-3{grid-template-columns:1fr}
   .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+  .metric-top{flex-direction:column}
 }
 </style>
 </head>
@@ -88,54 +116,115 @@ textarea{resize:vertical;line-height:1.65}
 
 <div class="doc-header">
   <div class="brand">SheBlooms</div>
-  <div class="doc-title">Unit Economics & Path to Profitability Worksheet</div>
-  <div class="doc-sub">Build real CAC, LTV, payback period and a break-even milestone</div>
+  <div class="doc-title">Unit Economics & Margin Worksheet</div>
+  <div class="doc-sub">Turn your gross margin into the LTV your Seed round actually needs</div>
 </div>
 
 <div class="intro">
-  <strong>Before you start:</strong> "we think it will work" is not a Seed-ready answer. This worksheet builds CAC by channel, LTV from real retention, payback period, and a specific path to break-even.
+  <strong>Before you start:</strong> by Seed, investors expect your unit economics to be margin-adjusted, not just top-line. A customer paying you €50/month isn't worth €50/month to your LTV if it costs you €20/month to actually serve them. This tool takes your gross margin, folds it into your LTV:CAC ratio and CAC payback, and tells you exactly where each one sits against the benchmarks investors screen Seed decks against.
 </div>
 
-
 <div class="section">
-  <div class="section-header"><div class="section-num">1</div><div class="section-title">CAC by channel</div></div>
-  <div id="channel-rows">
-    <div class="row-3"><input type="text" placeholder="Channel, e.g. Content"><input type="text" placeholder="CAC, e.g. €40"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
-    <div class="row-3"><input type="text" placeholder="Channel, e.g. Paid ads"><input type="text" placeholder="CAC, e.g. €210"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
-  </div>
-  <button class="add-row-btn" onclick="addRow('channel-rows','row-3',['Channel','CAC'])">+ Add channel</button>
-</div>
-
-<hr class="divider">
-
-<div class="section">
-  <div class="section-header"><div class="section-num">2</div><div class="section-title">LTV and payback</div></div>
+  <div class="section-header"><div class="section-num">1</div><div class="section-title">Price and cost to serve</div></div>
   <div class="field-row col2">
-    <div class="field field-suffix"><label>LTV (from real retention)</label><input type="number" id="b-ltv" placeholder="420"><span class="suf">€</span></div>
-    <div class="field field-suffix"><label>Payback period</label><input type="number" id="b-payback" placeholder="4.2"><span class="suf">months</span></div>
+    <div class="field field-suffix">
+      <label>Monthly price</label><input type="number" id="b-price" placeholder="49" step="0.01"><span class="suf">€/mo</span>
+      <div class="field-help"><strong>What it is:</strong> what one customer pays you each month. <strong>How to calculate:</strong> use your current listed or actual price; if billing is annual, per-seat, or usage-based, convert it to a single monthly-equivalent number (annual price ÷ 12, or seats × price per seat).</div>
+    </div>
+    <div class="field field-suffix">
+      <label>Cost to serve per customer</label><input type="number" id="b-cost" placeholder="12" step="0.01"><span class="suf">€/mo</span>
+      <div class="field-help"><strong>What it is:</strong> the direct monthly cost of delivering your product to one customer: hosting, support, payment processing. <strong>How to calculate:</strong> total monthly COGS (hosting + support + payment processing, not salaries or marketing) ÷ active customers this month.</div>
+    </div>
   </div>
 </div>
 
 <hr class="divider">
 
 <div class="section">
-  <div class="section-header"><div class="section-num">3</div><div class="section-title">Path to profitability</div></div>
-  <div class="field"><label>Break-even milestone and date</label><input type="text" id="b-breakeven" placeholder="e.g. month 14 at current growth rate"></div>
-  <div class="field"><label>Pricing strategy (not just current price)</label><textarea rows="2" id="b-pricingstrategy" placeholder="e.g. usage-based tier planned for larger accounts once retention stabilizes"></textarea></div>
+  <div class="section-header"><div class="section-num">2</div><div class="section-title">Acquisition and retention</div></div>
+  <div class="field-row col2">
+    <div class="field field-suffix">
+      <label>Estimated CAC</label><input type="number" id="b-cac" placeholder="140" step="0.01"><span class="suf">€</span>
+      <div class="field-help"><strong>What it is:</strong> what it costs, on average, to turn a stranger into a paying customer. <strong>How to calculate:</strong> total sales & marketing spend over a period ÷ new paying customers acquired in that same period. Include ad spend, tools, and a fair share of your own time if you're doing sales yourself.</div>
+    </div>
+    <div class="field field-suffix">
+      <label>Monthly churn rate</label><input type="number" id="b-churn" placeholder="4" step="0.1"><span class="suf">%</span>
+      <div class="field-help"><strong>What it is:</strong> the share of customers who cancel in a typical month. <strong>How to calculate:</strong> customers lost this month ÷ customers at the start of the month × 100. Use a 3-month average if one month was unusual.</div>
+    </div>
+  </div>
 </div>
 
+<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Calculate my unit economics →</button>
 
-<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Compile my unit economics summary →</button>
+<div id="results" style="display:none">
 
-<div class="result-box" id="result-box" style="display:none">
-  <div class="result-title">Your unit economics and path to profitability</div>
-  <div class="result-line" id="r-line">Fill in the fields above and click Compile.</div>
-  <div class="result-sub" id="r-details"></div>
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">Gross margin</div>
+        <div class="metric-value" id="m-margin">-</div>
+      </div>
+      <div class="metric-badge" id="b-margin-badge">-</div>
+    </div>
+    <div class="bench-scale">
+      <div style="width:60%;background:var(--red-bg);border:1px solid var(--red-border)"></div>
+      <div style="width:15%;background:var(--amber-bg);border:1px solid var(--amber-border)"></div>
+      <div style="width:25%;background:var(--green-bg);border:1px solid var(--green-border)"></div>
+    </div>
+    <div class="bench-labels"><span>&lt; 60%: thin</span><span>60–75%: below norm</span><span>75%+: healthy</span></div>
+    <div class="metric-read" id="r-margin"></div>
+    <div class="path-box" id="path-margin" style="display:none"></div>
+    <div class="metric-formula">Gross margin = (price − cost to serve) ÷ price</div>
+  </div>
+
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">LTV : CAC ratio (margin-adjusted)</div>
+        <div class="metric-value" id="m-ratio">-</div>
+      </div>
+      <div class="metric-badge" id="b-ratio-badge">-</div>
+    </div>
+    <div class="bench-scale">
+      <div style="width:33%;background:var(--red-bg);border:1px solid var(--red-border)"></div>
+      <div style="width:34%;background:var(--amber-bg);border:1px solid var(--amber-border)"></div>
+      <div style="width:33%;background:var(--green-bg);border:1px solid var(--green-border)"></div>
+    </div>
+    <div class="bench-labels"><span>&lt; 1: losing money</span><span>1–3: weak</span><span>3+: healthy</span></div>
+    <div class="metric-read" id="r-ratio"></div>
+    <div class="path-box" id="path-ratio" style="display:none"></div>
+    <div class="metric-formula">LTV : CAC = ((price − cost to serve) ÷ monthly churn) ÷ CAC</div>
+  </div>
+
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">CAC payback (margin-adjusted)</div>
+        <div class="metric-value" id="m-payback">-</div>
+      </div>
+      <div class="metric-badge" id="b-payback-badge">-</div>
+    </div>
+    <div class="bench-scale">
+      <div style="width:40%;background:var(--green-bg);border:1px solid var(--green-border)"></div>
+      <div style="width:30%;background:var(--amber-bg);border:1px solid var(--amber-border)"></div>
+      <div style="width:30%;background:var(--red-bg);border:1px solid var(--red-border)"></div>
+    </div>
+    <div class="bench-labels"><span>&lt; 12mo: healthy</span><span>12–18mo: workable</span><span>&gt; 18mo: slow</span></div>
+    <div class="metric-read" id="r-payback"></div>
+    <div class="path-box" id="path-payback" style="display:none"></div>
+    <div class="metric-formula">Payback = CAC ÷ (price − cost to serve)</div>
+  </div>
+
+  <div class="narrative-box">
+    <div class="narrative-title">What to put on your slide</div>
+    <div class="narrative-text" id="r-narrative"></div>
+  </div>
+
 </div>
 
 <div class="evidence">
   <div class="evidence-icon">✦</div>
-  <div><strong>What this needs to include:</strong> CAC broken down by channel, LTV from real retention data, a stated payback period, and a specific break-even milestone with a date.</div>
+  <div><strong>What this needs to include:</strong> a real, current price, an honest cost-to-serve figure that isn't zero, a CAC calculated from actual spend, and a churn rate measured over at least one full month, not a guess.</div>
 </div>
 
 </div>
@@ -146,43 +235,166 @@ textarea{resize:vertical;line-height:1.65}
 </button>
 
 <script>
-function addRow(containerId, cls, placeholder){
-  const row = document.createElement('div');
-  row.className = cls;
-  if(cls==='row-3'){
-    row.innerHTML = `<input type="text" placeholder="${placeholder[0]}"><input type="text" placeholder="${placeholder[1]}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  } else {
-    row.innerHTML = `<input type="text" placeholder="${placeholder}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  }
-  document.getElementById(containerId).appendChild(row);
-}
+function num(id){ const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; }
 function val(id){ const e=document.getElementById(id); return e? e.value.trim() : ''; }
+function fmtEUR(n){ return '€' + n.toLocaleString('en-US', {maximumFractionDigits: 0}); }
+function fmt1(n){ return (Math.round(n*10)/10).toString(); }
 
+function setBadge(el, level, text){
+  el.className = 'metric-badge ' + level;
+  el.textContent = text;
+}
+
+function showPath(id, ok, title, html, note){
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.className = 'path-box' + (ok ? ' ok' : '');
+  el.innerHTML = `<div class="path-title">${title}</div>${html}` + (note ? `<div class="path-note">${note}</div>` : '');
+}
 
 function compile(){
-  const channels = [];
-  document.querySelectorAll('#channel-rows .row-3').forEach(row => {
-    const inputs = row.querySelectorAll('input');
-    const ch = inputs[0].value.trim(), cac = inputs[1].value.trim();
-    if (ch && cac) channels.push(`${ch}: ${cac}`);
-  });
-  const ltv = val('b-ltv');
-  const payback = val('b-payback');
-  const breakeven = val('b-breakeven') || '[break-even milestone]';
-  const pricingstrategy = val('b-pricingstrategy');
+  const price = num('b-price');
+  const cost = num('b-cost');
+  const cac = num('b-cac');
+  const churn = num('b-churn');
 
-  const line = `LTV €${ltv||'?'}, payback period ${payback||'?'} months. Break-even target: ${breakeven}.`;
-  document.getElementById('r-line').innerHTML = line;
+  document.getElementById('results').style.display = 'block';
 
-  let details = '';
-  if (channels.length) details += `<div><strong>CAC by channel:</strong> ${channels.join(' &nbsp;·&nbsp; ')}</div>`;
-  if (pricingstrategy) details += `<div style="margin-top:8px"><strong>Pricing strategy:</strong> ${pricingstrategy}</div>`;
-  document.getElementById('r-details').innerHTML = details;
+  const margin = (price !== null && cost !== null && price > 0) ? (price - cost) : null;
 
-  document.getElementById('result-box').style.display = 'block';
-  document.getElementById('result-box').scrollIntoView({behavior:'smooth', block:'center'});
+  // --- Gross margin ---
+  const marginEl = document.getElementById('m-margin');
+  const marginBadge = document.getElementById('b-margin-badge');
+  const marginRead = document.getElementById('r-margin');
+  let gm = null;
+  if (price && cost !== null && price > 0) {
+    gm = (price - cost) / price * 100;
+    marginEl.textContent = gm.toFixed(1) + '%';
+    if (gm < 60) {
+      setBadge(marginBadge, 'red', 'Thin margin');
+      marginRead.innerHTML = `At €${price}/mo price and €${cost}/mo cost to serve, your gross margin is <strong>${gm.toFixed(1)}%</strong>. That's thin: a big share of every euro a customer pays is going straight into delivering the product, leaving little to fund sales, marketing, and the LTV investors want to see. `;
+    } else if (gm < 75) {
+      setBadge(marginBadge, 'amber', 'Below SaaS norm');
+      marginRead.innerHTML = `At €${price}/mo price and €${cost}/mo cost to serve, your gross margin is <strong>${gm.toFixed(1)}%</strong>. Software businesses are typically expected to run at 75%+ gross margin, since it's what funds acquisition spend and profit at scale. You're below that norm, though not alarmingly so. `;
+    } else {
+      setBadge(marginBadge, 'green', 'Healthy SaaS margin');
+      marginRead.innerHTML = `At €${price}/mo price and €${cost}/mo cost to serve, your gross margin is <strong>${gm.toFixed(1)}%</strong>, at or above the 75% norm investors expect from software businesses. `;
+    }
+
+    if (gm < 75) {
+      const cogsTarget = price * 0.25;
+      showPath('path-margin', false, 'What investors want to see, and how to get there',
+        `<div>Investors expect <strong>75%+</strong> gross margin from a software business. From today's price, that means:</div>
+        <ul class="path-levers">
+          <li>Cut cost to serve from €${cost}/mo to <strong>€${fmt1(cogsTarget)}/mo</strong> to reach a 75% margin</li>
+        </ul>`,
+        'Combining smaller moves on two levers, trimming cost to serve and nudging price up, is usually more realistic than forcing cost to serve down alone.');
+    } else {
+      showPath('path-margin', true, 'Why this works for investors',
+        `<div>You're at or above the 75% bar investors expect from software margins. This is what funds your CAC and profit at scale, keep restating it as cost to serve grows in absolute terms with your customer base, since the ratio, not the euro figure, is what matters.</div>`);
+    }
+  } else {
+    marginEl.textContent = '-';
+    setBadge(marginBadge, 'amber', 'Fill in price & cost to serve');
+    marginRead.textContent = 'Enter monthly price and cost to serve above to calculate this.';
+    document.getElementById('path-margin').style.display = 'none';
+  }
+
+  // --- LTV : CAC (margin-adjusted) ---
+  const ratioEl = document.getElementById('m-ratio');
+  const ratioBadge = document.getElementById('b-ratio-badge');
+  const ratioRead = document.getElementById('r-ratio');
+  let ratio = null;
+  let ltv = null;
+  if (margin !== null && churn && churn > 0 && cac) {
+    ltv = margin / (churn / 100);
+    ratio = ltv / cac;
+    ratioEl.textContent = ratio.toFixed(1) + ' : 1';
+    if (ratio < 1) {
+      setBadge(ratioBadge, 'red', 'Losing money per customer');
+      ratioRead.innerHTML = `Your margin-adjusted LTV is <strong>${fmtEUR(ltv)}</strong> against a CAC of <strong>${fmtEUR(cac)}</strong>, a ${ratio.toFixed(1)}:1 ratio. Once you account for cost to serve, you're spending more to acquire a customer than that customer will ever return in margin. `;
+    } else if (ratio < 3) {
+      setBadge(ratioBadge, 'amber', 'Below the 3:1 benchmark');
+      ratioRead.innerHTML = `Margin-adjusted LTV of <strong>${fmtEUR(ltv)}</strong> against CAC of <strong>${fmtEUR(cac)}</strong> gives you a <strong>${ratio.toFixed(1)}:1</strong> ratio. The standard SaaS benchmark is 3:1 or higher. Below that, the model works but doesn't leave enough margin over CAC to fund growth on its own. `;
+    } else {
+      setBadge(ratioBadge, 'green', 'At or above benchmark');
+      ratioRead.innerHTML = `Margin-adjusted LTV of <strong>${fmtEUR(ltv)}</strong> against CAC of <strong>${fmtEUR(cac)}</strong> gives you a <strong>${ratio.toFixed(1)}:1</strong> ratio, at or above the 3:1 benchmark investors look for. `;
+    }
+
+    if (ratio < 3) {
+      const cacTarget = ltv / 3;
+      const churnTarget = margin / (3 * cac) * 100;
+      showPath('path-ratio', false, 'What investors want to see, and how to get there',
+        `<div>Investors want <strong>3:1 or higher</strong> on a margin-adjusted basis. From today's numbers:</div>
+        <ul class="path-levers">
+          <li>Cut CAC from ${fmtEUR(cac)} to <strong>${fmtEUR(cacTarget)}</strong></li>
+          <li>Or cut monthly churn from ${fmt1(churn)}% to <strong>${fmt1(churnTarget)}%</strong></li>
+        </ul>`,
+        'Combining smaller moves on two levers, some CAC reduction plus some retention work, is usually more realistic than forcing one lever alone all the way to target.');
+    } else {
+      showPath('path-ratio', true, 'Why this works for investors',
+        `<div>You're at or above the 3:1 bar even after accounting for cost to serve, which is a stronger signal than an unadjusted ratio. Keep stating the margin-adjusted version specifically, since it shows you know the difference.</div>`);
+    }
+  } else {
+    ratioEl.textContent = '-';
+    setBadge(ratioBadge, 'amber', 'Fill in price, cost, churn & CAC');
+    ratioRead.textContent = 'Enter price, cost to serve, monthly churn, and CAC above to calculate this.';
+    document.getElementById('path-ratio').style.display = 'none';
+  }
+
+  // --- CAC payback (margin-adjusted) ---
+  const paybackEl = document.getElementById('m-payback');
+  const paybackBadge = document.getElementById('b-payback-badge');
+  const paybackRead = document.getElementById('r-payback');
+  let payback = null;
+  if (margin !== null && margin > 0 && cac) {
+    payback = cac / margin;
+    paybackEl.textContent = payback.toFixed(1) + ' mo';
+    if (payback < 12) {
+      setBadge(paybackBadge, 'green', 'Healthy');
+      paybackRead.innerHTML = `It takes about <strong>${payback.toFixed(1)} months</strong> of margin from one customer to recover what you spent acquiring them. Under 12 months is healthy, cash isn't tied up long before an acquisition pays for itself. `;
+    } else if (payback <= 18) {
+      setBadge(paybackBadge, 'amber', 'Workable, watch it');
+      paybackRead.innerHTML = `At <strong>${payback.toFixed(1)} months</strong> to pay back CAC out of margin, you're in a workable range, but each new customer ties up cash for a while before it pays off. `;
+    } else {
+      setBadge(paybackBadge, 'red', 'Slow payback');
+      paybackRead.innerHTML = `At <strong>${payback.toFixed(1)} months</strong>, it takes a long time for a customer's margin to repay their own acquisition cost. Name specifically what will shorten it: a cheaper channel, a higher price, or a lower cost to serve. `;
+    }
+
+    if (payback >= 12) {
+      const cacTarget = 12 * margin;
+      showPath('path-payback', false, 'What investors want to see, and how to get there',
+        `<div>Investors like payback <strong>under 12 months</strong>. From today's margin per customer:</div>
+        <ul class="path-levers">
+          <li>Cut CAC from ${fmtEUR(cac)} to <strong>${fmtEUR(cacTarget)}</strong> to hit 12-month payback</li>
+        </ul>`,
+        'Combining a smaller CAC cut with a small price increase or cost-to-serve reduction is usually more realistic than forcing CAC down alone.');
+    } else {
+      showPath('path-payback', true, 'Why this works for investors',
+        `<div>You're already under the 12-month bar on a margin-adjusted basis. Keep naming which channel produces this, since a healthy average is weaker than a healthy number tied to a specific channel.</div>`);
+    }
+  } else {
+    paybackEl.textContent = '-';
+    setBadge(paybackBadge, 'amber', 'Fill in price, cost & CAC');
+    paybackRead.textContent = 'Enter price, cost to serve, and CAC above to calculate this.';
+    document.getElementById('path-payback').style.display = 'none';
+  }
+
+  // --- Narrative summary ---
+  let narrative = '';
+  if (gm !== null) {
+    narrative += `Our gross margin is <strong>${gm.toFixed(1)}%</strong>. `;
+  }
+  if (ratio !== null) {
+    narrative += `Our margin-adjusted LTV:CAC ratio is <strong>${ratio.toFixed(1)}:1</strong>`;
+    narrative += payback !== null ? `, with a CAC payback of <strong>${payback.toFixed(1)} months</strong>. ` : '. ';
+  } else if (payback !== null) {
+    narrative += `Our CAC payback is <strong>${payback.toFixed(1)} months</strong>. `;
+  }
+  document.getElementById('r-narrative').innerHTML = narrative || 'Fill in the fields above to generate your slide-ready summary.';
+
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
 }
-
 
 (function(){
   const SB_URL='https://fyswympbcriibpewkxnh.supabase.co';

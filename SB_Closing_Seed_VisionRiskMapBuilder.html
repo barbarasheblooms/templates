@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vision & Risk Map Builder · SheBlooms</title>
+<title>Risk Prioritization Matrix · SheBlooms</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;
+  --amber:#b45309;--amber-bg:#fffbeb;--amber-border:#fde68a;
+  --green:#166534;--green-bg:#f0fdf4;--green-border:#bbf7d0;
 }
 body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
 .page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
@@ -29,6 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
 
 .field{margin-bottom:14px}
 .field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.field-help{font-size:10.5px;color:#999;margin-top:4px;line-height:1.5}
 input[type=text],input[type=number],textarea{
   width:100%;border:1px solid var(--border);border-radius:7px;
   padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
@@ -51,26 +55,55 @@ textarea{resize:vertical;line-height:1.65}
 .opt-btn:hover{border-color:var(--brand);color:var(--brand)}
 .opt-btn.on{background:var(--brand);color:#fff;border-color:var(--brand)}
 
-.row-2{display:grid;grid-template-columns:1fr 32px;gap:8px;margin-bottom:8px}
-.row-3{display:grid;grid-template-columns:1fr 1fr 32px;gap:8px;margin-bottom:8px}
-.rm-remove{width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
-.rm-remove:hover{border-color:#dc2626;color:#dc2626}
-.add-row-btn{margin-top:4px;border:1px dashed var(--border);background:transparent;padding:8px 16px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;color:var(--muted);width:100%;transition:all .15s}
-.add-row-btn:hover{border-color:var(--brand);color:var(--brand)}
+.formula-box{background:var(--ink);color:#fff;border-radius:10px;padding:14px 18px;margin:10px 0 18px;font-family:'DM Serif Display',serif;font-size:14px;line-height:1.6}
+.formula-box .fvar{color:#a5b4ff}
 
-.result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0}
-.result-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
-.result-line{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.7;color:#fff}
-.result-line strong{color:var(--brand)}
-.result-sub{font-size:12px;color:#bbb;margin-top:14px;padding-top:14px;border-top:1px solid #333;line-height:1.7}
-.result-sub strong{color:#fff}
+.metric-card{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.metric-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.metric-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.metric-value{font-family:'DM Serif Display',serif;font-size:30px;color:var(--ink);line-height:1}
+.metric-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:2px}
+.metric-badge.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.metric-badge.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.metric-badge.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.metric-read{font-size:12.5px;color:#333;line-height:1.65;padding-top:10px;border-top:1px solid var(--border)}
+.metric-formula{font-size:10.5px;color:var(--muted);margin-top:8px;font-family:'DM Serif Display',serif;font-style:italic}
+
+.risk-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.risk-row:last-child{border-bottom:none}
+.risk-desc{font-size:12.5px;font-weight:600;color:var(--ink);max-width:60%}
+.risk-score{font-family:'DM Serif Display',serif;font-size:16px;color:var(--ink)}
+
+.bench-scale{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:10px 0 6px}
+.bench-scale div{height:100%}
+.bench-labels{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);margin-bottom:12px}
+.bench-marker{position:relative;height:0}
+.bench-dot{position:absolute;top:-13px;width:2px;height:12px;background:var(--ink)}
+
+.narrative-box{background:var(--soft);border-radius:10px;padding:18px 20px;margin:18px 0;border:1px solid var(--border)}
+.narrative-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.narrative-text{font-size:13px;line-height:1.7;color:var(--ink)}
+.narrative-text strong{color:var(--brand)}
+
+.path-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;margin-top:12px;font-size:12px;color:#78350f;line-height:1.7}
+.path-box.ok{background:var(--soft);border-color:var(--border);color:#333}
+.path-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#b45309;margin-bottom:7px}
+.path-box.ok .path-title{color:var(--brand)}
+.path-box strong{color:#7c2d12}
+.path-box.ok strong{color:var(--ink)}
+.path-levers{margin:6px 0 6px 0;padding-left:0;list-style:none}
+.path-levers li{margin-bottom:4px;padding-left:14px;position:relative}
+.path-levers li::before{content:'→';position:absolute;left:0;color:#b45309}
+.path-box.ok .path-levers li::before{color:var(--brand)}
+.path-note{font-size:11px;color:#92400e;margin-top:6px;font-style:italic}
+.path-box.ok .path-note{color:var(--muted)}
 
 .evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
 .evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
 
 .print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px;transition:transform .1s}
 .print-btn:hover{transform:translateY(-1px)}
-@media print{.print-btn{display:none}.page{padding:28px 32px}.rm-remove,.add-row-btn{display:none}}
+@media print{.print-btn{display:none}.page{padding:28px 32px}}
 
 @media (max-width: 640px) {
   .page{padding:32px 20px 60px}
@@ -78,8 +111,8 @@ textarea{resize:vertical;line-height:1.65}
   .doc-title{font-size:15px}
   .field-row.col2,.field-row.col3{grid-template-columns:1fr}
   .opt-btns{flex-direction:column}
-  .row-3{grid-template-columns:1fr}
   .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+  .metric-top{flex-direction:column}
 }
 </style>
 </head>
@@ -88,50 +121,106 @@ textarea{resize:vertical;line-height:1.65}
 
 <div class="doc-header">
   <div class="brand">SheBlooms</div>
-  <div class="doc-title">Vision & Risk Map Builder</div>
-  <div class="doc-sub">Articulate vision, risk, and the path to Series A honestly</div>
+  <div class="doc-title">Risk Prioritization Matrix</div>
+  <div class="doc-sub">Score your risks the way a 5x5 risk matrix does, so you know which one to address first</div>
 </div>
 
 <div class="intro">
-  <strong>Before you start:</strong> pretending everything is perfect is a red flag at Seed. This builder maps your vision, path to Series A, and main risks with mitigation plans.
+  <strong>Before you start:</strong> this uses the standard "impact × likelihood" risk matrix used across risk management, from insurance to project management to venture investing. Naming risks without scoring them just produces a list; scoring them tells you and your investors which one actually needs a mitigation plan now versus which one can wait.
 </div>
 
-
 <div class="section">
-  <div class="section-header"><div class="section-num">1</div><div class="section-title">Vision and path to Series A</div></div>
-  <div class="field"><label>Long-term vision, briefly</label><input type="text" id="cl2-vision" placeholder="e.g. the default fundraising platform for female founders in Europe"></div>
-  <div class="field"><label>Specific milestones that make Series A raisable</label><textarea rows="2" id="cl2-path" placeholder="e.g. €1.2M ARR and 15% MoM growth sustained for 6 months"></textarea></div>
-</div>
-
-<hr class="divider">
-
-<div class="section">
-  <div class="section-header"><div class="section-num">2</div><div class="section-title">Main risks and mitigation</div></div>
-  <div id="risk-rows">
-    <div class="row-2"><input type="text" placeholder="e.g. CAC creep as we scale paid channels: mitigating by shifting to referral"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
+  <div class="section-header"><div class="section-num">1</div><div class="section-title">Risk 1</div></div>
+  <div class="field">
+    <label>Description</label><input type="text" id="r1-desc" placeholder="e.g. Single supplier for manufacturing">
+    <div class="field-help"><strong>What it is:</strong> a specific risk to the business. <strong>How to calculate:</strong> name it precisely enough that an investor could picture exactly what would have to happen, e.g. "single supplier for manufacturing" not "supply chain risk".</div>
   </div>
-  <button class="add-row-btn" onclick="addRow('risk-rows','row-2','Risk: mitigation plan')">+ Add risk</button>
+  <div class="field-row col2">
+    <div class="field">
+      <label>Impact (1-5)</label><input type="number" id="r1-impact" placeholder="4" min="1" max="5" step="1">
+      <div class="field-help"><strong>What it is:</strong> how much damage this risk would do if it happened. <strong>How to calculate:</strong> score 1 for minor and 5 for existential, based on the real revenue, time, or reputation cost if this risk materialized.</div>
+    </div>
+    <div class="field">
+      <label>Likelihood (1-5)</label><input type="number" id="r1-likelihood" placeholder="3" min="1" max="5" step="1">
+      <div class="field-help"><strong>What it is:</strong> how probable this risk is in the next 12 months. <strong>How to calculate:</strong> score 1 for rare and 5 for near-certain, based on what you're already seeing happen or almost happen.</div>
+    </div>
+  </div>
 </div>
 
 <hr class="divider">
 
 <div class="section">
-  <div class="section-header"><div class="section-num">3</div><div class="section-title">Advisory board</div></div>
-  <div class="field"><label>Advisors as a credibility signal</label><input type="text" id="cl2-advisors" placeholder="e.g. fund partner, serial founder x3"></div>
+  <div class="section-header"><div class="section-num">2</div><div class="section-title">Risk 2</div></div>
+  <div class="field">
+    <label>Description</label><input type="text" id="r2-desc" placeholder="e.g. Key technical co-founder dependency">
+    <div class="field-help"><strong>What it is:</strong> a specific risk to the business. <strong>How to calculate:</strong> name it precisely enough that an investor could picture exactly what would have to happen, e.g. "key technical co-founder dependency" not "team risk".</div>
+  </div>
+  <div class="field-row col2">
+    <div class="field">
+      <label>Impact (1-5)</label><input type="number" id="r2-impact" placeholder="5" min="1" max="5" step="1">
+      <div class="field-help"><strong>What it is:</strong> how much damage this risk would do if it happened. <strong>How to calculate:</strong> score 1 for minor and 5 for existential, based on the real revenue, time, or reputation cost if this risk materialized.</div>
+    </div>
+    <div class="field">
+      <label>Likelihood (1-5)</label><input type="number" id="r2-likelihood" placeholder="2" min="1" max="5" step="1">
+      <div class="field-help"><strong>What it is:</strong> how probable this risk is in the next 12 months. <strong>How to calculate:</strong> score 1 for rare and 5 for near-certain, based on what you're already seeing happen or almost happen.</div>
+    </div>
+  </div>
 </div>
 
+<hr class="divider">
 
-<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Compile my vision and risk summary →</button>
+<div class="section">
+  <div class="section-header"><div class="section-num">3</div><div class="section-title">Risk 3</div></div>
+  <div class="field">
+    <label>Description</label><input type="text" id="r3-desc" placeholder="e.g. New regulation could restrict our category">
+    <div class="field-help"><strong>What it is:</strong> a specific risk to the business. <strong>How to calculate:</strong> name it precisely enough that an investor could picture exactly what would have to happen, e.g. "new regulation could restrict our category" not "regulatory risk".</div>
+  </div>
+  <div class="field-row col2">
+    <div class="field">
+      <label>Impact (1-5)</label><input type="number" id="r3-impact" placeholder="3" min="1" max="5" step="1">
+      <div class="field-help"><strong>What it is:</strong> how much damage this risk would do if it happened. <strong>How to calculate:</strong> score 1 for minor and 5 for existential, based on the real revenue, time, or reputation cost if this risk materialized.</div>
+    </div>
+    <div class="field">
+      <label>Likelihood (1-5)</label><input type="number" id="r3-likelihood" placeholder="2" min="1" max="5" step="1">
+      <div class="field-help"><strong>What it is:</strong> how probable this risk is in the next 12 months. <strong>How to calculate:</strong> score 1 for rare and 5 for near-certain, based on what you're already seeing happen or almost happen.</div>
+    </div>
+  </div>
+</div>
 
-<div class="result-box" id="result-box" style="display:none">
-  <div class="result-title">Your vision, risk map, and path to Series A</div>
-  <div class="result-line" id="r-line">Fill in the fields above and click Compile.</div>
-  <div class="result-sub" id="r-details"></div>
+<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Score my risks →</button>
+
+<div id="results" style="display:none">
+
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">Risk scores</div>
+        <div class="metric-value" id="m-highcount">-</div>
+      </div>
+      <div class="metric-badge amber">Ranked highest to lowest</div>
+    </div>
+    <div class="bench-scale">
+      <div style="width:24%;background:var(--green-bg);border:1px solid var(--green-border)"></div>
+      <div style="width:32%;background:var(--amber-bg);border:1px solid var(--amber-border)"></div>
+      <div style="width:44%;background:var(--red-bg);border:1px solid var(--red-border)"></div>
+    </div>
+    <div class="bench-labels"><span>1–6: low</span><span>7–14: medium</span><span>15–25: high priority</span></div>
+    <div id="risk-list"></div>
+    <div class="metric-read" id="r-risks"></div>
+    <div class="path-box" id="path-risks" style="display:none"></div>
+    <div class="metric-formula">Risk score = impact × likelihood</div>
+  </div>
+
+  <div class="narrative-box">
+    <div class="narrative-title">What to put on your slide</div>
+    <div class="narrative-text" id="r-narrative"></div>
+  </div>
+
 </div>
 
 <div class="evidence">
   <div class="evidence-icon">✦</div>
-  <div><strong>What this needs to include:</strong> a long-term vision tied to a specific path to Series A, 2-3 main risks named with mitigation plans, and advisory board included.</div>
+  <div><strong>What this needs to include:</strong> risks stated specifically enough to picture, honest impact and likelihood scores (not systematically low-balled), and a named mitigation for anything scoring 15 or above, not just an acknowledgment that the risk exists.</div>
 </div>
 
 </div>
@@ -142,40 +231,92 @@ textarea{resize:vertical;line-height:1.65}
 </button>
 
 <script>
-function addRow(containerId, cls, placeholder){
-  const row = document.createElement('div');
-  row.className = cls;
-  if(cls==='row-3'){
-    row.innerHTML = `<input type="text" placeholder="${placeholder[0]}"><input type="text" placeholder="${placeholder[1]}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  } else {
-    row.innerHTML = `<input type="text" placeholder="${placeholder}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  }
-  document.getElementById(containerId).appendChild(row);
-}
+function num(id){ const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; }
 function val(id){ const e=document.getElementById(id); return e? e.value.trim() : ''; }
 
-
-function compile(){
-  const vision = val('cl2-vision') || '[vision]';
-  const path = val('cl2-path');
-  const advisors = val('cl2-advisors');
-
-  const risks = [];
-  document.querySelectorAll('#risk-rows .row-2 input').forEach(i => { if (i.value.trim()) risks.push(i.value.trim()); });
-
-  const line = `Vision: ${vision}.`;
-  document.getElementById('r-line').innerHTML = line;
-
-  let details = '';
-  if (path) details += `<div><strong>Path to Series A:</strong> ${path}</div>`;
-  if (risks.length) details += `<div style="margin-top:8px"><strong>Risks and mitigation:</strong> ${risks.join(' &nbsp;·&nbsp; ')}</div>`;
-  if (advisors) details += `<div style="margin-top:8px"><strong>Advisors:</strong> ${advisors}</div>`;
-  document.getElementById('r-details').innerHTML = details;
-
-  document.getElementById('result-box').style.display = 'block';
-  document.getElementById('result-box').scrollIntoView({behavior:'smooth', block:'center'});
+function setBadge(el, level, text){
+  el.className = 'metric-badge ' + level;
+  el.textContent = text;
 }
 
+function showPath(id, ok, title, html, note){
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.className = 'path-box' + (ok ? ' ok' : '');
+  el.innerHTML = `<div class="path-title">${title}</div>${html}` + (note ? `<div class="path-note">${note}</div>` : '');
+}
+
+function compile(){
+  const risks = [1,2,3].map(i => ({
+    desc: val('r'+i+'-desc') || ('Risk '+i),
+    impact: num('r'+i+'-impact'),
+    likelihood: num('r'+i+'-likelihood')
+  }));
+
+  document.getElementById('results').style.display = 'block';
+
+  risks.forEach(r => {
+    if (r.impact !== null && r.likelihood !== null) {
+      r.score = r.impact * r.likelihood;
+    } else {
+      r.score = null;
+    }
+  });
+
+  const valid = risks.filter(r => r.score !== null);
+  const ranked = valid.slice().sort((a,b) => b.score - a.score);
+  const highCount = valid.filter(r => r.score >= 15).length;
+
+  document.getElementById('m-highcount').textContent = highCount + ' high-priority';
+
+  const list = document.getElementById('risk-list');
+  list.innerHTML = '';
+  ranked.forEach(r => {
+    const row = document.createElement('div');
+    row.className = 'risk-row';
+    let level = 'green', levelText = 'Low';
+    if (r.score >= 15) { level = 'red'; levelText = 'High priority'; }
+    else if (r.score >= 7) { level = 'amber'; levelText = 'Medium'; }
+    row.innerHTML = `<div class="risk-desc">${r.desc}</div><div style="display:flex;align-items:center;gap:10px"><span class="risk-score">${r.score}/25</span><span class="metric-badge ${level}">${levelText}</span></div>`;
+    list.appendChild(row);
+  });
+
+  const risksRead = document.getElementById('r-risks');
+  if (valid.length === 0) {
+    risksRead.textContent = 'Enter impact and likelihood for at least one risk to calculate scores.';
+  } else {
+    const top = ranked[0];
+    risksRead.innerHTML = `<strong>${top.desc}</strong> is your highest-scoring risk at <strong>${top.score}/25</strong> (impact ${top.impact} × likelihood ${top.likelihood}). ${valid.length} of ${valid.length} entered risk${valid.length==1?'':'s'} scored; ${highCount} fall${highCount==1?'s':''} in the high-priority band of 15 or above.`;
+  }
+
+  const highRisks = ranked.filter(r => r.score >= 15);
+  if (highRisks.length > 0) {
+    const items = highRisks.map(r => `<li><strong>${r.desc}</strong> scores ${r.score}/25. Investors will ask for a named mitigation before this reads as handled, not just acknowledged.</li>`).join('');
+    showPath('path-risks', false, 'What investors want to see, and how to get there',
+      `<ul class="path-levers">${items}</ul>`,
+      'For each high-priority risk, naming one concrete mitigation step is usually enough; you don\'t need to eliminate the risk, just show you\'re actively reducing it.');
+  } else if (valid.length > 0) {
+    showPath('path-risks', true, 'Why this works for investors',
+      `<div>None of your named risks score in the high-priority band. Keep this list current as the company grows, since risks that look low today (team size, single supplier, regulation) tend to climb as you scale.</div>`);
+  } else {
+    document.getElementById('path-risks').style.display = 'none';
+  }
+
+  // Narrative
+  let narrative = '';
+  if (ranked.length > 0) {
+    const top = ranked[0];
+    narrative += `Our highest-priority risk is <strong>${top.desc}</strong>, scoring <strong>${top.score}/25</strong> on impact × likelihood. `;
+    if (top.score >= 15) {
+      narrative += `We have a specific mitigation plan in motion for this.`;
+    } else {
+      narrative += `We track this alongside our other named risks and update the scores as the business changes.`;
+    }
+  }
+  document.getElementById('r-narrative').innerHTML = narrative || 'Fill in the fields above to generate your slide-ready summary.';
+
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+}
 
 (function(){
   const SB_URL='https://fyswympbcriibpewkxnh.supabase.co';

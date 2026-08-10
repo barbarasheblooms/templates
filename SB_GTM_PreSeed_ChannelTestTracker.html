@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Channel Test Tracker · SheBlooms</title>
+<title>Channel CAC Comparison Calculator · SheBlooms</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;
+  --amber:#b45309;--amber-bg:#fffbeb;--amber-border:#fde68a;
+  --green:#166534;--green-bg:#f0fdf4;--green-border:#bbf7d0;
 }
 body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
 .page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
@@ -29,6 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
 
 .field{margin-bottom:14px}
 .field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.field-help{font-size:10.5px;color:#999;margin-top:4px;line-height:1.5}
 input[type=text],input[type=number],textarea{
   width:100%;border:1px solid var(--border);border-radius:7px;
   padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
@@ -51,26 +55,55 @@ textarea{resize:vertical;line-height:1.65}
 .opt-btn:hover{border-color:var(--brand);color:var(--brand)}
 .opt-btn.on{background:var(--brand);color:#fff;border-color:var(--brand)}
 
-.row-2{display:grid;grid-template-columns:1fr 32px;gap:8px;margin-bottom:8px}
-.row-3{display:grid;grid-template-columns:1fr 1fr 32px;gap:8px;margin-bottom:8px}
-.rm-remove{width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
-.rm-remove:hover{border-color:#dc2626;color:#dc2626}
-.add-row-btn{margin-top:4px;border:1px dashed var(--border);background:transparent;padding:8px 16px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;color:var(--muted);width:100%;transition:all .15s}
-.add-row-btn:hover{border-color:var(--brand);color:var(--brand)}
+.formula-box{background:var(--ink);color:#fff;border-radius:10px;padding:14px 18px;margin:10px 0 18px;font-family:'DM Serif Display',serif;font-size:14px;line-height:1.6}
+.formula-box .fvar{color:#a5b4ff}
 
-.result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0}
-.result-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
-.result-line{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.7;color:#fff}
-.result-line strong{color:var(--brand)}
-.result-sub{font-size:12px;color:#bbb;margin-top:14px;padding-top:14px;border-top:1px solid #333;line-height:1.7}
-.result-sub strong{color:#fff}
+.metric-card{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.metric-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.metric-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.metric-value{font-family:'DM Serif Display',serif;font-size:30px;color:var(--ink);line-height:1}
+.metric-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:2px}
+.metric-badge.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.metric-badge.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.metric-badge.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.metric-read{font-size:12.5px;color:#333;line-height:1.65;padding-top:10px;border-top:1px solid var(--border)}
+.metric-formula{font-size:10.5px;color:var(--muted);margin-top:8px;font-family:'DM Serif Display',serif;font-style:italic}
+
+.channel-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.channel-row:last-child{border-bottom:none}
+.channel-name{font-size:12.5px;font-weight:600;color:var(--ink)}
+.channel-cac{font-family:'DM Serif Display',serif;font-size:16px;color:var(--ink)}
+
+.bench-scale{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:10px 0 6px}
+.bench-scale div{height:100%}
+.bench-labels{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);margin-bottom:12px}
+.bench-marker{position:relative;height:0}
+.bench-dot{position:absolute;top:-13px;width:2px;height:12px;background:var(--ink)}
+
+.narrative-box{background:var(--soft);border-radius:10px;padding:18px 20px;margin:18px 0;border:1px solid var(--border)}
+.narrative-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.narrative-text{font-size:13px;line-height:1.7;color:var(--ink)}
+.narrative-text strong{color:var(--brand)}
+
+.path-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;margin-top:12px;font-size:12px;color:#78350f;line-height:1.7}
+.path-box.ok{background:var(--soft);border-color:var(--border);color:#333}
+.path-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#b45309;margin-bottom:7px}
+.path-box.ok .path-title{color:var(--brand)}
+.path-box strong{color:#7c2d12}
+.path-box.ok strong{color:var(--ink)}
+.path-levers{margin:6px 0 6px 0;padding-left:0;list-style:none}
+.path-levers li{margin-bottom:4px;padding-left:14px;position:relative}
+.path-levers li::before{content:'→';position:absolute;left:0;color:#b45309}
+.path-box.ok .path-levers li::before{color:var(--brand)}
+.path-note{font-size:11px;color:#92400e;margin-top:6px;font-style:italic}
+.path-box.ok .path-note{color:var(--muted)}
 
 .evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
 .evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
 
 .print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px;transition:transform .1s}
 .print-btn:hover{transform:translateY(-1px)}
-@media print{.print-btn{display:none}.page{padding:28px 32px}.rm-remove,.add-row-btn{display:none}}
+@media print{.print-btn{display:none}.page{padding:28px 32px}}
 
 @media (max-width: 640px) {
   .page{padding:32px 20px 60px}
@@ -78,8 +111,8 @@ textarea{resize:vertical;line-height:1.65}
   .doc-title{font-size:15px}
   .field-row.col2,.field-row.col3{grid-template-columns:1fr}
   .opt-btns{flex-direction:column}
-  .row-3{grid-template-columns:1fr}
   .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+  .metric-top{flex-direction:column}
 }
 </style>
 </head>
@@ -88,53 +121,116 @@ textarea{resize:vertical;line-height:1.65}
 
 <div class="doc-header">
   <div class="brand">SheBlooms</div>
-  <div class="doc-title">Channel Test Tracker</div>
-  <div class="doc-sub">Validate your first acquisition channel with real CAC and a scale plan</div>
+  <div class="doc-title">Channel CAC Comparison Calculator</div>
+  <div class="doc-sub">Find out which channel is actually working, with real numbers</div>
 </div>
 
 <div class="intro">
-  <strong>Before you start:</strong> one proven channel beats five hypothetical ones. This tracker records your tested channel, its real CAC, and the learnings from what did not work.
+  <strong>Before you start:</strong> at Pre-Seed, "we tried a few channels" isn't a data point investors can use. What they want is a real cost-per-customer for each channel you tested, side by side. This tool takes what you spent and what you got from each of up to three channels and tells you which one is actually cheap and which one is quietly burning cash.
 </div>
 
-
 <div class="section">
-  <div class="section-header"><div class="section-num">1</div><div class="section-title">Your primary channel</div></div>
-  <div class="field"><label>Channel</label><input type="text" id="g-channel" placeholder="e.g. Content and community"></div>
+  <div class="section-header"><div class="section-num">1</div><div class="section-title">Channel 1</div></div>
+  <div class="field">
+    <label>Channel name</label><input type="text" id="c1-name" placeholder="e.g. LinkedIn outbound">
+    <div class="field-help"><strong>What it is:</strong> the specific channel you tested. <strong>How to calculate:</strong> name it precisely enough that you could rerun the same test again, e.g. "LinkedIn outbound" not "social media".</div>
+  </div>
   <div class="field-row col2">
-    <div class="field field-suffix"><label>CAC</label><input type="number" id="g-cac" placeholder="0"><span class="suf">€</span></div>
-    <div class="field"><label>Volume so far</label><input type="text" id="g-volume" placeholder="e.g. 4,200 subscribers, 3.1% conversion"></div>
+    <div class="field field-suffix">
+      <label>Spend</label><input type="number" id="c1-spend" placeholder="800" step="1"><span class="suf">€</span>
+      <div class="field-help"><strong>What it is:</strong> total money spent testing this channel. <strong>How to calculate:</strong> add ad spend + tools/software for this channel + a fair share of your own time if you ran it yourself (hours spent × what you'd pay someone else to do it).</div>
+    </div>
+    <div class="field field-suffix">
+      <label>Customers acquired</label><input type="number" id="c1-customers" placeholder="4"><span class="suf">customers</span>
+      <div class="field-help"><strong>What it is:</strong> paying customers who came specifically from this channel. <strong>How to calculate:</strong> track via signup source (UTM, referral field) or ask each customer directly how they found you, then count only the ones from this channel.</div>
+    </div>
   </div>
 </div>
 
 <hr class="divider">
 
 <div class="section">
-  <div class="section-header"><div class="section-num">2</div><div class="section-title">Plan to scale it</div></div>
-  <div class="field"><label>How you will scale this channel</label><textarea rows="2" id="g-scaleplan" placeholder="e.g. double newsletter cadence and add a referral incentive"></textarea></div>
+  <div class="section-header"><div class="section-num">2</div><div class="section-title">Channel 2</div></div>
+  <div class="field">
+    <label>Channel name</label><input type="text" id="c2-name" placeholder="e.g. Instagram ads">
+    <div class="field-help"><strong>What it is:</strong> the specific channel you tested. <strong>How to calculate:</strong> name it precisely enough that you could rerun the same test again, e.g. "Instagram ads" not "social media".</div>
+  </div>
+  <div class="field-row col2">
+    <div class="field field-suffix">
+      <label>Spend</label><input type="number" id="c2-spend" placeholder="1200" step="1"><span class="suf">€</span>
+      <div class="field-help"><strong>What it is:</strong> total money spent testing this channel. <strong>How to calculate:</strong> add ad spend + tools/software for this channel + a fair share of your own time if you ran it yourself (hours spent × what you'd pay someone else to do it).</div>
+    </div>
+    <div class="field field-suffix">
+      <label>Customers acquired</label><input type="number" id="c2-customers" placeholder="2"><span class="suf">customers</span>
+      <div class="field-help"><strong>What it is:</strong> paying customers who came specifically from this channel. <strong>How to calculate:</strong> track via signup source (UTM, referral field) or ask each customer directly how they found you, then count only the ones from this channel.</div>
+    </div>
+  </div>
 </div>
 
 <hr class="divider">
 
 <div class="section">
-  <div class="section-header"><div class="section-num">3</div><div class="section-title">What did not work</div></div>
-  <div id="fail-rows">
-    <div class="row-2"><input type="text" placeholder="e.g. Paid ads: CAC €340, too high, paused after 6 weeks"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
+  <div class="section-header"><div class="section-num">3</div><div class="section-title">Channel 3</div></div>
+  <div class="field">
+    <label>Channel name</label><input type="text" id="c3-name" placeholder="e.g. Founder-led events">
+    <div class="field-help"><strong>What it is:</strong> the specific channel you tested. <strong>How to calculate:</strong> name it precisely enough that you could rerun the same test again, e.g. "Founder-led events" not "networking".</div>
   </div>
-  <button class="add-row-btn" onclick="addRow('fail-rows','row-2','Channel + why it did not work')">+ Add channel tried</button>
+  <div class="field-row col2">
+    <div class="field field-suffix">
+      <label>Spend</label><input type="number" id="c3-spend" placeholder="400" step="1"><span class="suf">€</span>
+      <div class="field-help"><strong>What it is:</strong> total money spent testing this channel. <strong>How to calculate:</strong> add ad spend + tools/software for this channel + a fair share of your own time if you ran it yourself (hours spent × what you'd pay someone else to do it).</div>
+    </div>
+    <div class="field field-suffix">
+      <label>Customers acquired</label><input type="number" id="c3-customers" placeholder="5"><span class="suf">customers</span>
+      <div class="field-help"><strong>What it is:</strong> paying customers who came specifically from this channel. <strong>How to calculate:</strong> track via signup source (UTM, referral field) or ask each customer directly how they found you, then count only the ones from this channel.</div>
+    </div>
+  </div>
 </div>
 
+<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Compare my channels →</button>
 
-<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Compile my channel summary →</button>
+<div id="results" style="display:none">
 
-<div class="result-box" id="result-box" style="display:none">
-  <div class="result-title">Your first channel test summary</div>
-  <div class="result-line" id="r-line">Fill in the fields above and click Compile.</div>
-  <div class="result-sub" id="r-details"></div>
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">Channel breakdown</div>
+        <div class="metric-value" id="m-breakdown-count">-</div>
+      </div>
+      <div class="metric-badge amber">Ranking, not benchmark</div>
+    </div>
+    <div id="channel-list"></div>
+    <div class="metric-read" id="r-breakdown"></div>
+    <div class="path-box" id="path-breakdown" style="display:none"></div>
+    <div class="metric-formula">CAC per channel = spend ÷ customers acquired</div>
+  </div>
+
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">Blended CAC</div>
+        <div class="metric-value" id="m-blended">-</div>
+      </div>
+      <div class="metric-badge amber" id="b-blended-badge">Track this over time</div>
+    </div>
+    <div class="bench-scale">
+      <div style="width:100%;background:var(--soft);border:1px solid var(--border)"></div>
+    </div>
+    <div class="bench-labels"><span>No fixed benchmark, this is a trend to watch quarter over quarter</span></div>
+    <div class="metric-read" id="r-blended"></div>
+    <div class="metric-formula">Blended CAC = total spend across all channels ÷ total customers across all channels</div>
+  </div>
+
+  <div class="narrative-box">
+    <div class="narrative-title">What to put on your slide</div>
+    <div class="narrative-text" id="r-narrative"></div>
+  </div>
+
 </div>
 
 <div class="evidence">
   <div class="evidence-icon">✦</div>
-  <div><strong>What this needs to include:</strong> one primary channel with a real calculated CAC, a plan to scale it, and honest learnings from what did not work.</div>
+  <div><strong>What this needs to include:</strong> real spend per channel (including your own time), a real customer count tracked back to source, and an honest statement of which channel you're doubling down on and which one you're cutting, not just a list of everything you tried.</div>
 </div>
 
 </div>
@@ -145,41 +241,121 @@ textarea{resize:vertical;line-height:1.65}
 </button>
 
 <script>
-function addRow(containerId, cls, placeholder){
-  const row = document.createElement('div');
-  row.className = cls;
-  if(cls==='row-3'){
-    row.innerHTML = `<input type="text" placeholder="${placeholder[0]}"><input type="text" placeholder="${placeholder[1]}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  } else {
-    row.innerHTML = `<input type="text" placeholder="${placeholder}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  }
-  document.getElementById(containerId).appendChild(row);
-}
+function num(id){ const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; }
 function val(id){ const e=document.getElementById(id); return e? e.value.trim() : ''; }
+function fmtEUR(n){ return '€' + n.toLocaleString('en-US', {maximumFractionDigits: 0}); }
 
+function setBadge(el, level, text){
+  el.className = 'metric-badge ' + level;
+  el.textContent = text;
+}
+
+function showPath(id, ok, title, html, note){
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.className = 'path-box' + (ok ? ' ok' : '');
+  el.innerHTML = `<div class="path-title">${title}</div>${html}` + (note ? `<div class="path-note">${note}</div>` : '');
+}
 
 function compile(){
-  const channel = val('g-channel') || '[channel]';
-  const cac = val('g-cac');
-  const volume = val('g-volume');
-  const scaleplan = val('g-scaleplan');
+  const channels = [1,2,3].map(i => ({
+    name: val('c'+i+'-name') || ('Channel '+i),
+    spend: num('c'+i+'-spend'),
+    customers: num('c'+i+'-customers')
+  }));
 
-  const fails = [];
-  document.querySelectorAll('#fail-rows .row-2 input').forEach(i => { if (i.value.trim()) fails.push(i.value.trim()); });
+  document.getElementById('results').style.display = 'block';
 
-  const line = `Primary channel: ${channel}, CAC €${cac||'0'}.`;
-  document.getElementById('r-line').innerHTML = line;
+  // Compute CAC per channel
+  channels.forEach(c => {
+    if (c.customers && c.customers > 0 && c.spend !== null) {
+      c.cac = c.spend / c.customers;
+    } else {
+      c.cac = null;
+    }
+  });
 
-  let details = '';
-  if (volume) details += `<div><strong>Volume:</strong> ${volume}</div>`;
-  if (scaleplan) details += `<div style="margin-top:8px"><strong>Plan to scale:</strong> ${scaleplan}</div>`;
-  if (fails.length) details += `<div style="margin-top:8px"><strong>What did not work:</strong> ${fails.join(' &nbsp;·&nbsp; ')}</div>`;
-  document.getElementById('r-details').innerHTML = details;
+  const valid = channels.filter(c => c.cac !== null);
+  let cheapest = null, mostExpensive = null;
+  if (valid.length > 0) {
+    cheapest = valid.reduce((a,b) => a.cac <= b.cac ? a : b);
+    mostExpensive = valid.reduce((a,b) => a.cac >= b.cac ? a : b);
+  }
 
-  document.getElementById('result-box').style.display = 'block';
-  document.getElementById('result-box').scrollIntoView({behavior:'smooth', block:'center'});
+  document.getElementById('m-breakdown-count').textContent = valid.length + ' / 3 valid';
+
+  const list = document.getElementById('channel-list');
+  list.innerHTML = '';
+  channels.forEach(c => {
+    const row = document.createElement('div');
+    row.className = 'channel-row';
+    let badgeHtml = '';
+    let cacText = 'No customers yet';
+    if (c.cac !== null) {
+      cacText = fmtEUR(c.cac) + ' / customer';
+      if (cheapest && c === cheapest && valid.length > 1) {
+        badgeHtml = '<span class="metric-badge green">Cheapest so far</span>';
+      } else if (mostExpensive && c === mostExpensive && valid.length > 1) {
+        badgeHtml = '<span class="metric-badge red">Most expensive so far</span>';
+      }
+    }
+    row.innerHTML = `<div><div class="channel-name">${c.name}</div></div><div style="display:flex;align-items:center;gap:10px"><span class="channel-cac">${cacText}</span>${badgeHtml}</div>`;
+    list.appendChild(row);
+  });
+
+  const breakdownRead = document.getElementById('r-breakdown');
+  if (valid.length === 0) {
+    breakdownRead.textContent = 'Enter spend and customers for at least one channel to compare CAC across channels.';
+  } else if (valid.length === 1) {
+    breakdownRead.innerHTML = `Only <strong>${cheapest.name}</strong> has a valid CAC so far, at <strong>${fmtEUR(cheapest.cac)}</strong> per customer. Fill in the other channels once they have at least one paying customer, so you have something to compare against.`;
+  } else {
+    breakdownRead.innerHTML = `<strong>${cheapest.name}</strong> is your cheapest valid channel at <strong>${fmtEUR(cheapest.cac)}</strong> per customer. <strong>${mostExpensive.name}</strong> is your most expensive at <strong>${fmtEUR(mostExpensive.cac)}</strong> per customer, ${(mostExpensive.cac/cheapest.cac).toFixed(1)}x more expensive to acquire a customer through.`;
+  }
+
+  // Path box: weakest channel = spend > 0 but 0 customers, or has spend and is most expensive with low volume
+  const weak = channels.find(c => c.spend && c.spend > 0 && (!c.customers || c.customers === 0));
+  if (cheapest && weak) {
+    showPath('path-breakdown', false, 'What investors want to see, and how to get there',
+      `<div>Put more of your next testing budget into <strong>${cheapest.name}</strong>, and pause or rework <strong>${weak.name}</strong> before spending more there. Spending €${weak.spend} with 0 customers to show for it is the pattern investors flag first when they ask "how do you know this channel works?"</div>`,
+      'Combining smaller moves on two channels (more budget to the cheapest, a fix to the weakest) is usually more realistic than betting everything on one channel alone.');
+  } else if (cheapest && mostExpensive && cheapest !== mostExpensive) {
+    showPath('path-breakdown', false, 'What investors want to see, and how to get there',
+      `<div>Put more of your next testing budget into <strong>${cheapest.name}</strong> at ${fmtEUR(cheapest.cac)} per customer, and rework <strong>${mostExpensive.name}</strong> before spending more there, since it's currently costing ${fmtEUR(mostExpensive.cac)} per customer.</div>`,
+      'Combining smaller moves on two channels is usually more realistic than betting everything on one channel alone.');
+  } else if (valid.length >= 1) {
+    showPath('path-breakdown', true, 'Why this works for investors',
+      `<div>You have at least one channel with a real, tracked CAC. Keep testing a second channel so you can show investors this isn't a one-channel fluke.</div>`);
+  } else {
+    document.getElementById('path-breakdown').style.display = 'none';
+  }
+
+  // Blended CAC
+  const totalSpend = channels.reduce((sum,c) => sum + (c.spend || 0), 0);
+  const totalCustomers = channels.reduce((sum,c) => sum + (c.customers || 0), 0);
+  const blendedEl = document.getElementById('m-blended');
+  const blendedRead = document.getElementById('r-blended');
+  let blended = null;
+  if (totalCustomers > 0) {
+    blended = totalSpend / totalCustomers;
+    blendedEl.textContent = fmtEUR(blended);
+    blendedRead.innerHTML = `Across all three channels combined, you spent <strong>${fmtEUR(totalSpend)}</strong> to acquire <strong>${totalCustomers}</strong> customer${totalCustomers==1?'':'s'}, a blended CAC of <strong>${fmtEUR(blended)}</strong>. This number matters less on its own and more as a trend: watch whether it goes down as you concentrate spend on your cheapest channel.`;
+  } else {
+    blendedEl.textContent = '-';
+    blendedRead.textContent = 'Enter spend and customers for at least one channel to calculate blended CAC.';
+  }
+
+  // Narrative
+  let narrative = '';
+  if (blended !== null) {
+    narrative += `Across our channel tests, blended CAC is <strong>${fmtEUR(blended)}</strong>. `;
+  }
+  if (cheapest) {
+    narrative += `<strong>${cheapest.name}</strong> is our best-performing channel so far at <strong>${fmtEUR(cheapest.cac)}</strong> per customer, and that's where we're putting our next testing budget.`;
+  }
+  document.getElementById('r-narrative').innerHTML = narrative || 'Fill in the fields above to generate your slide-ready summary.';
+
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
 }
-
 
 (function(){
   const SB_URL='https://fyswympbcriibpewkxnh.supabase.co';

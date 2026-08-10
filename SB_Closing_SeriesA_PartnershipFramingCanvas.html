@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Risk, Exit & Partnership Framing Canvas · SheBlooms</title>
+<title>Cap Table Impact Calculator · SheBlooms</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;
+  --amber:#b45309;--amber-bg:#fffbeb;--amber-border:#fde68a;
+  --green:#166534;--green-bg:#f0fdf4;--green-border:#bbf7d0;
 }
 body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
 .page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
@@ -29,6 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
 
 .field{margin-bottom:14px}
 .field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.field-help{font-size:10.5px;color:#999;margin-top:4px;line-height:1.5}
 input[type=text],input[type=number],textarea{
   width:100%;border:1px solid var(--border);border-radius:7px;
   padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
@@ -51,26 +55,50 @@ textarea{resize:vertical;line-height:1.65}
 .opt-btn:hover{border-color:var(--brand);color:var(--brand)}
 .opt-btn.on{background:var(--brand);color:#fff;border-color:var(--brand)}
 
-.row-2{display:grid;grid-template-columns:1fr 32px;gap:8px;margin-bottom:8px}
-.row-3{display:grid;grid-template-columns:1fr 1fr 32px;gap:8px;margin-bottom:8px}
-.rm-remove{width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
-.rm-remove:hover{border-color:#dc2626;color:#dc2626}
-.add-row-btn{margin-top:4px;border:1px dashed var(--border);background:transparent;padding:8px 16px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;color:var(--muted);width:100%;transition:all .15s}
-.add-row-btn:hover{border-color:var(--brand);color:var(--brand)}
+.formula-box{background:var(--ink);color:#fff;border-radius:10px;padding:14px 18px;margin:10px 0 18px;font-family:'DM Serif Display',serif;font-size:14px;line-height:1.6}
+.formula-box .fvar{color:#a5b4ff}
 
-.result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0}
-.result-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
-.result-line{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.7;color:#fff}
-.result-line strong{color:var(--brand)}
-.result-sub{font-size:12px;color:#bbb;margin-top:14px;padding-top:14px;border-top:1px solid #333;line-height:1.7}
-.result-sub strong{color:#fff}
+.metric-card{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.metric-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.metric-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.metric-value{font-family:'DM Serif Display',serif;font-size:30px;color:var(--ink);line-height:1}
+.metric-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:2px}
+.metric-badge.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.metric-badge.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.metric-badge.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.metric-read{font-size:12.5px;color:#333;line-height:1.65;padding-top:10px;border-top:1px solid var(--border)}
+.metric-formula{font-size:10.5px;color:var(--muted);margin-top:8px;font-family:'DM Serif Display',serif;font-style:italic}
+
+.bench-scale{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:10px 0 6px}
+.bench-scale div{height:100%}
+.bench-labels{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);margin-bottom:12px}
+.bench-marker{position:relative;height:0}
+.bench-dot{position:absolute;top:-13px;width:2px;height:12px;background:var(--ink)}
+
+.narrative-box{background:var(--soft);border-radius:10px;padding:18px 20px;margin:18px 0;border:1px solid var(--border)}
+.narrative-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.narrative-text{font-size:13px;line-height:1.7;color:var(--ink)}
+.narrative-text strong{color:var(--brand)}
+
+.path-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;margin-top:12px;font-size:12px;color:#78350f;line-height:1.7}
+.path-box.ok{background:var(--soft);border-color:var(--border);color:#333}
+.path-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#b45309;margin-bottom:7px}
+.path-box.ok .path-title{color:var(--brand)}
+.path-box strong{color:#7c2d12}
+.path-box.ok strong{color:var(--ink)}
+.path-levers{margin:6px 0 6px 0;padding-left:0;list-style:none}
+.path-levers li{margin-bottom:4px;padding-left:14px;position:relative}
+.path-levers li::before{content:'→';position:absolute;left:0;color:#b45309}
+.path-box.ok .path-levers li::before{color:var(--brand)}
+.path-note{font-size:11px;color:#92400e;margin-top:6px;font-style:italic}
+.path-box.ok .path-note{color:var(--muted)}
 
 .evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
 .evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
 
 .print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px;transition:transform .1s}
 .print-btn:hover{transform:translateY(-1px)}
-@media print{.print-btn{display:none}.page{padding:28px 32px}.rm-remove,.add-row-btn{display:none}}
+@media print{.print-btn{display:none}.page{padding:28px 32px}}
 
 @media (max-width: 640px) {
   .page{padding:32px 20px 60px}
@@ -78,8 +106,8 @@ textarea{resize:vertical;line-height:1.65}
   .doc-title{font-size:15px}
   .field-row.col2,.field-row.col3{grid-template-columns:1fr}
   .opt-btns{flex-direction:column}
-  .row-3{grid-template-columns:1fr}
   .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+  .metric-top{flex-direction:column}
 }
 </style>
 </head>
@@ -88,46 +116,77 @@ textarea{resize:vertical;line-height:1.65}
 
 <div class="doc-header">
   <div class="brand">SheBlooms</div>
-  <div class="doc-title">Risk, Exit & Partnership Framing Canvas</div>
-  <div class="doc-sub">Frame your close as a partnership conversation about returns</div>
+  <div class="doc-title">Cap Table Impact Calculator</div>
+  <div class="doc-sub">See what this round actually does to your ownership before you're in the room</div>
 </div>
 
 <div class="intro">
-  <strong>Before you start:</strong> the close at Series A should read as a considered conversation about returns. This canvas maps regulatory and concentration risks, and your exit strategy view.
+  <strong>Before you start:</strong> a term sheet headline number (valuation, raise size) hides what actually happens to your ownership once the option pool and investor stake are accounted for. This tool walks the real math backward from your term sheet so you know your resulting founder ownership before you're negotiating live, not after you sign.
 </div>
 
-
 <div class="section">
-  <div class="section-header"><div class="section-num">1</div><div class="section-title">Regulatory and market risks</div></div>
-  <div class="field"><label>Risks and your considered response</label><textarea rows="2" id="cl3-regrisk" placeholder="e.g. limited regulatory exposure given our current markets"></textarea></div>
+  <div class="section-header"><div class="section-num">1</div><div class="section-title">This round's terms</div></div>
+  <div class="field-row col2">
+    <div class="field field-suffix">
+      <label>Pre-money valuation</label><input type="number" id="c-premoney" placeholder="8000000" step="10000"><span class="suf">€</span>
+      <div class="field-help"><strong>What it is:</strong> what your company is valued at right before this round's new money comes in. <strong>How to calculate:</strong> this is set by comparable Series A deals in your sector and stage, not a formula. Use the number on your term sheet, or your lead investor's proposed valuation.</div>
+    </div>
+    <div class="field field-suffix">
+      <label>Raise amount</label><input type="number" id="c-raise" placeholder="2000000" step="10000"><span class="suf">€</span>
+      <div class="field-help"><strong>What it is:</strong> the total new money coming into the company in this round. <strong>How to calculate:</strong> use your target raise amount from your term sheet or fundraising deck.</div>
+    </div>
+  </div>
 </div>
 
 <hr class="divider">
 
 <div class="section">
-  <div class="section-header"><div class="section-num">2</div><div class="section-title">Customer or channel concentration</div></div>
-  <div class="field"><label>Dependency and diversification plan</label><textarea rows="2" id="cl3-concentration" placeholder="e.g. top 3 customers represent 22% of revenue, diversifying through two new distribution partnerships"></textarea></div>
+  <div class="section-header"><div class="section-num">2</div><div class="section-title">Dilution factors</div></div>
+  <div class="field-row col2">
+    <div class="field field-suffix">
+      <label>Option pool top-up</label><input type="number" id="c-pool" placeholder="12" step="0.5"><span class="suf">%</span>
+      <div class="field-help"><strong>What it is:</strong> new equity set aside for future hires, created just before this round closes. <strong>How to calculate:</strong> investors typically ask for 10-15% of post-money set aside for this. Check your actual term sheet for the number being negotiated, don't assume the midpoint.</div>
+    </div>
+    <div class="field field-suffix">
+      <label>Your current combined founder ownership</label><input type="number" id="c-founder" placeholder="62" step="0.1"><span class="suf">%</span>
+      <div class="field-help"><strong>What it is:</strong> the total % of the company all founders own today, fully diluted, before this round. <strong>How to calculate:</strong> sum every founder's fully-diluted % from your current cap table (vested and unvested founder shares), before this round's new investors or pool top-up.</div>
+    </div>
+  </div>
 </div>
 
-<hr class="divider">
+<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Calculate my ownership after this round →</button>
 
-<div class="section">
-  <div class="section-header"><div class="section-num">3</div><div class="section-title">Exit strategy</div></div>
-  <div class="field"><label>Exit strategy view and rough timing</label><input type="text" id="cl3-exit" placeholder="e.g. M&A-likely path, realistic in 24 to 36 months"></div>
-</div>
+<div id="results" style="display:none">
 
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">Founder ownership after this round</div>
+        <div class="metric-value" id="m-founder">-</div>
+      </div>
+      <div class="metric-badge" id="b-founder-badge">-</div>
+    </div>
+    <div class="bench-scale">
+      <div style="width:30%;background:var(--red-bg);border:1px solid var(--red-border)"></div>
+      <div style="width:10%;background:var(--amber-bg);border:1px solid var(--amber-border)"></div>
+      <div style="width:60%;background:var(--green-bg);border:1px solid var(--green-border)"></div>
+    </div>
+    <div class="bench-labels"><span>&lt; 30%: erodes control</span><span>30–40%: getting diluted</span><span>40%+: solid stake</span></div>
+    <div class="metric-read" id="r-founder"></div>
+    <div class="path-box" id="path-founder" style="display:none"></div>
+    <div class="metric-formula">Founder ownership after ≈ current founder % × (1 − pool top-up %) × pre-money ÷ post-money</div>
+  </div>
 
-<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Compile my partnership framing →</button>
+  <div class="narrative-box">
+    <div class="narrative-title">What to put on your slide</div>
+    <div class="narrative-text" id="r-narrative"></div>
+  </div>
 
-<div class="result-box" id="result-box" style="display:none">
-  <div class="result-title">Your risk, exit and partnership framing</div>
-  <div class="result-line" id="r-line">Fill in the fields above and click Compile.</div>
-  <div class="result-sub" id="r-details"></div>
 </div>
 
 <div class="evidence">
   <div class="evidence-icon">✦</div>
-  <div><strong>What this needs to include:</strong> regulatory and market risks mapped, customer or channel concentration addressed with a diversification plan, and a considered exit strategy view.</div>
+  <div><strong>What this needs to include:</strong> a pre-money value benchmarked against comparable deals, this round's actual raise amount, an accurate option pool % pulled from your term sheet, and your real fully-diluted founder ownership from your cap table, not an estimate.</div>
 </div>
 
 </div>
@@ -138,36 +197,71 @@ textarea{resize:vertical;line-height:1.65}
 </button>
 
 <script>
-function addRow(containerId, cls, placeholder){
-  const row = document.createElement('div');
-  row.className = cls;
-  if(cls==='row-3'){
-    row.innerHTML = `<input type="text" placeholder="${placeholder[0]}"><input type="text" placeholder="${placeholder[1]}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  } else {
-    row.innerHTML = `<input type="text" placeholder="${placeholder}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  }
-  document.getElementById(containerId).appendChild(row);
-}
+function num(id){ const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; }
 function val(id){ const e=document.getElementById(id); return e? e.value.trim() : ''; }
+function fmtEUR(n){ return '€' + n.toLocaleString('en-US', {maximumFractionDigits: 0}); }
 
+function setBadge(el, level, text){
+  el.className = 'metric-badge ' + level;
+  el.textContent = text;
+}
+
+function fmt1(n){ return (Math.round(n*10)/10).toString(); }
+
+function showPath(id, ok, title, html, note){
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.className = 'path-box' + (ok ? ' ok' : '');
+  el.innerHTML = `<div class="path-title">${title}</div>${html}` + (note ? `<div class="path-note">${note}</div>` : '');
+}
 
 function compile(){
-  const regrisk = val('cl3-regrisk');
-  const concentration = val('cl3-concentration');
-  const exit = val('cl3-exit') || '[exit strategy view]';
+  const pre = num('c-premoney');
+  const raise = num('c-raise');
+  const pool = num('c-pool');
+  const founder = num('c-founder');
 
-  const line = `Exit strategy: ${exit}.`;
-  document.getElementById('r-line').innerHTML = line;
+  document.getElementById('results').style.display = 'block';
 
-  let details = '';
-  if (regrisk) details += `<div><strong>Regulatory / market risk:</strong> ${regrisk}</div>`;
-  if (concentration) details += `<div style="margin-top:8px"><strong>Concentration and diversification:</strong> ${concentration}</div>`;
-  document.getElementById('r-details').innerHTML = details;
+  const founderEl = document.getElementById('m-founder');
+  const founderBadge = document.getElementById('b-founder-badge');
+  const founderRead = document.getElementById('r-founder');
+  let postMoney = null, investorPct = null, founderAfter = null;
 
-  document.getElementById('result-box').style.display = 'block';
-  document.getElementById('result-box').scrollIntoView({behavior:'smooth', block:'center'});
+  if (pre !== null && raise !== null && pool !== null && founder !== null) {
+    postMoney = pre + raise;
+    investorPct = (raise / postMoney) * 100;
+    founderAfter = founder * (1 - pool/100) * (pre / postMoney);
+
+    founderEl.textContent = fmt1(founderAfter) + '%';
+    founderRead.innerHTML = `Post-money after this round is <strong>${fmtEUR(postMoney)}</strong>. New investors end up owning about <strong>${fmt1(investorPct)}%</strong> of the company. Based on your ${fmt1(pool)}% pool top-up and your current ${fmt1(founder)}% combined founder ownership, your resulting founder ownership comes out to approximately <strong>${fmt1(founderAfter)}%</strong>. This is an approximation: real cap tables also depend on preferred stock terms and exact allocation mechanics, so treat it as directionally correct, not exact to the decimal.`;
+
+    if (founderAfter < 40) {
+      setBadge(founderBadge, 'amber', 'Getting diluted');
+      showPath('path-founder', false, 'What investors want to see, and how to get there',
+        `<div>Landing under 40% combined founder ownership by Series A is common and not a red flag on its own. What matters is the trend from here.</div>`,
+        `This is common by Series A, but if it trends toward under 30% by Series B, raise future pool sizing and any secondary sale plans with your board before it's a problem, not after a term sheet is on the table.`);
+    } else {
+      setBadge(founderBadge, 'green', 'Still holding a solid stake');
+      showPath('path-founder', true, 'Why this works for investors',
+        `<div>Holding 40%+ combined ownership after a Series A keeps founders meaningfully incentivized and signals a cap table that still has room for future rounds without forcing founders below a workable stake.</div>`);
+    }
+  } else {
+    founderEl.textContent = '-';
+    setBadge(founderBadge, 'amber', 'Fill in the fields above');
+    founderRead.textContent = 'Enter pre-money valuation, raise amount, option pool top-up, and your current founder ownership above to calculate this.';
+    document.getElementById('path-founder').style.display = 'none';
+  }
+
+  let narrative = '';
+  if (postMoney !== null) {
+    narrative += `This round values us at <strong>${fmtEUR(pre)}</strong> pre-money, raising <strong>${fmtEUR(raise)}</strong> for a post-money of <strong>${fmtEUR(postMoney)}</strong>. `;
+    narrative += `New investors will own approximately <strong>${fmt1(investorPct)}%</strong> of the company, leaving founders with approximately <strong>${fmt1(founderAfter)}%</strong> combined.`;
+  }
+  document.getElementById('r-narrative').innerHTML = narrative || 'Fill in the fields above to generate your slide-ready summary.';
+
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
 }
-
 
 (function(){
   const SB_URL='https://fyswympbcriibpewkxnh.supabase.co';

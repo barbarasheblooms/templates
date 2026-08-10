@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Burn, Runway & Break-Even Projector · SheBlooms</title>
+<title>Break-Even Projector · SheBlooms</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;
+  --amber:#b45309;--amber-bg:#fffbeb;--amber-border:#fde68a;
+  --green:#166534;--green-bg:#f0fdf4;--green-border:#bbf7d0;
 }
 body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
 .page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
@@ -29,6 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
 
 .field{margin-bottom:14px}
 .field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.field-help{font-size:10.5px;color:#999;margin-top:4px;line-height:1.5}
 input[type=text],input[type=number],textarea{
   width:100%;border:1px solid var(--border);border-radius:7px;
   padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
@@ -51,26 +55,50 @@ textarea{resize:vertical;line-height:1.65}
 .opt-btn:hover{border-color:var(--brand);color:var(--brand)}
 .opt-btn.on{background:var(--brand);color:#fff;border-color:var(--brand)}
 
-.row-2{display:grid;grid-template-columns:1fr 32px;gap:8px;margin-bottom:8px}
-.row-3{display:grid;grid-template-columns:1fr 1fr 32px;gap:8px;margin-bottom:8px}
-.rm-remove{width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
-.rm-remove:hover{border-color:#dc2626;color:#dc2626}
-.add-row-btn{margin-top:4px;border:1px dashed var(--border);background:transparent;padding:8px 16px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;color:var(--muted);width:100%;transition:all .15s}
-.add-row-btn:hover{border-color:var(--brand);color:var(--brand)}
+.formula-box{background:var(--ink);color:#fff;border-radius:10px;padding:14px 18px;margin:10px 0 18px;font-family:'DM Serif Display',serif;font-size:14px;line-height:1.6}
+.formula-box .fvar{color:#a5b4ff}
 
-.result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0}
-.result-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
-.result-line{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.7;color:#fff}
-.result-line strong{color:var(--brand)}
-.result-sub{font-size:12px;color:#bbb;margin-top:14px;padding-top:14px;border-top:1px solid #333;line-height:1.7}
-.result-sub strong{color:#fff}
+.metric-card{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.metric-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.metric-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.metric-value{font-family:'DM Serif Display',serif;font-size:30px;color:var(--ink);line-height:1}
+.metric-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:2px}
+.metric-badge.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.metric-badge.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.metric-badge.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.metric-read{font-size:12.5px;color:#333;line-height:1.65;padding-top:10px;border-top:1px solid var(--border)}
+.metric-formula{font-size:10.5px;color:var(--muted);margin-top:8px;font-family:'DM Serif Display',serif;font-style:italic}
+
+.bench-scale{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:10px 0 6px}
+.bench-scale div{height:100%}
+.bench-labels{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);margin-bottom:12px}
+.bench-marker{position:relative;height:0}
+.bench-dot{position:absolute;top:-13px;width:2px;height:12px;background:var(--ink)}
+
+.narrative-box{background:var(--soft);border-radius:10px;padding:18px 20px;margin:18px 0;border:1px solid var(--border)}
+.narrative-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.narrative-text{font-size:13px;line-height:1.7;color:var(--ink)}
+.narrative-text strong{color:var(--brand)}
+
+.path-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;margin-top:12px;font-size:12px;color:#78350f;line-height:1.7}
+.path-box.ok{background:var(--soft);border-color:var(--border);color:#333}
+.path-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#b45309;margin-bottom:7px}
+.path-box.ok .path-title{color:var(--brand)}
+.path-box strong{color:#7c2d12}
+.path-box.ok strong{color:var(--ink)}
+.path-levers{margin:6px 0 6px 0;padding-left:0;list-style:none}
+.path-levers li{margin-bottom:4px;padding-left:14px;position:relative}
+.path-levers li::before{content:'→';position:absolute;left:0;color:#b45309}
+.path-box.ok .path-levers li::before{color:var(--brand)}
+.path-note{font-size:11px;color:#92400e;margin-top:6px;font-style:italic}
+.path-box.ok .path-note{color:var(--muted)}
 
 .evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
 .evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
 
 .print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px;transition:transform .1s}
 .print-btn:hover{transform:translateY(-1px)}
-@media print{.print-btn{display:none}.page{padding:28px 32px}.rm-remove,.add-row-btn{display:none}}
+@media print{.print-btn{display:none}.page{padding:28px 32px}}
 
 @media (max-width: 640px) {
   .page{padding:32px 20px 60px}
@@ -78,8 +106,8 @@ textarea{resize:vertical;line-height:1.65}
   .doc-title{font-size:15px}
   .field-row.col2,.field-row.col3{grid-template-columns:1fr}
   .opt-btns{flex-direction:column}
-  .row-3{grid-template-columns:1fr}
   .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+  .metric-top{flex-direction:column}
 }
 </style>
 </head>
@@ -88,52 +116,65 @@ textarea{resize:vertical;line-height:1.65}
 
 <div class="doc-header">
   <div class="brand">SheBlooms</div>
-  <div class="doc-title">Burn, Runway & Break-Even Projector</div>
-  <div class="doc-sub">Build a 12-24 month projection anchored to your real numbers</div>
+  <div class="doc-title">Break-Even Projector</div>
+  <div class="doc-sub">Project the month you stop burning cash, from your real growth rate</div>
 </div>
 
 <div class="intro">
-  <strong>Before you start:</strong> the financial conversation gets more detailed at Seed. This projector anchors your 12-24 month plan to your current MRR, burn, and actual growth rate.
+  <strong>Before you start:</strong> "we'll be profitable eventually" is not a number investors can check. A break-even month, projected honestly from your current MRR, burn, and growth rate, is. This tool runs the actual compounding math on your numbers instead of asking you to guess.
 </div>
 
-
 <div class="section">
-  <div class="section-header"><div class="section-num">1</div><div class="section-title">Current numbers</div></div>
+  <div class="section-header"><div class="section-num">1</div><div class="section-title">Your current numbers</div></div>
   <div class="field-row col2">
-    <div class="field field-suffix"><label>Current MRR</label><input type="number" id="f2-mrr" placeholder="2800"><span class="suf">€</span></div>
-    <div class="field field-suffix"><label>Current monthly burn</label><input type="number" id="f2-burn" placeholder="6200"><span class="suf">€</span></div>
+    <div class="field field-suffix">
+      <label>Current MRR</label><input type="number" id="b-mrr" placeholder="9000" step="100"><span class="suf">€</span>
+      <div class="field-help"><strong>What it is:</strong> your active recurring revenue this month. <strong>How to calculate:</strong> sum of active recurring revenue this month; exclude one-time revenue like setup fees or one-off consulting.</div>
+    </div>
+    <div class="field field-suffix">
+      <label>Current monthly burn</label><input type="number" id="b-burn" placeholder="18000" step="500"><span class="suf">€/mo</span>
+      <div class="field-help"><strong>What it is:</strong> how much cash leaves your account each month, net of revenue. <strong>How to calculate:</strong> total monthly expenses minus monthly revenue collected. Use your last 1-3 months' average, not one unusual month.</div>
+    </div>
+  </div>
+  <div class="field field-suffix">
+    <label>Expected MoM revenue growth rate</label><input type="number" id="b-growth" placeholder="8" step="0.1"><span class="suf">%</span>
+    <div class="field-help"><strong>What it is:</strong> how fast your MRR is growing, month over month. <strong>How to calculate:</strong> (this month's MRR − last month's MRR) ÷ last month's MRR × 100, averaged over the last 3 months so one unusual month doesn't skew the projection.</div>
   </div>
 </div>
 
-<hr class="divider">
+<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Project my break-even →</button>
 
-<div class="section">
-  <div class="section-header"><div class="section-num">2</div><div class="section-title">Growth rate and break-even</div></div>
-  <div class="field-row col2">
-    <div class="field field-suffix"><label>Your actual MoM growth rate</label><input type="number" id="f2-growth" placeholder="18"><span class="suf">%</span></div>
-    <div class="field"><label>Break-even month and key assumption</label><input type="text" id="f2-breakeven" placeholder="e.g. month 18, if CAC holds within 20% of today"></div>
+<div id="results" style="display:none">
+
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">Months to break-even</div>
+        <div class="metric-value" id="m-breakeven">-</div>
+      </div>
+      <div class="metric-badge" id="b-breakeven-badge">-</div>
+    </div>
+    <div class="bench-scale">
+      <div style="width:35%;background:var(--green-bg);border:1px solid var(--green-border)"></div>
+      <div style="width:35%;background:var(--amber-bg);border:1px solid var(--amber-border)"></div>
+      <div style="width:30%;background:var(--red-bg);border:1px solid var(--red-border)"></div>
+    </div>
+    <div class="bench-labels"><span>&le; 12mo: fast</span><span>12–24mo: reasonable</span><span>&gt; 24mo: long</span></div>
+    <div class="metric-read" id="r-breakeven"></div>
+    <div class="path-box" id="path-breakeven" style="display:none"></div>
+    <div class="metric-formula" id="mf-breakeven" style="display:none">Months to break-even = ln(burn ÷ MRR) ÷ ln(1 + growth rate)</div>
   </div>
-</div>
 
-<hr class="divider">
+  <div class="narrative-box">
+    <div class="narrative-title">What to put on your slide</div>
+    <div class="narrative-text" id="r-narrative"></div>
+  </div>
 
-<div class="section">
-  <div class="section-header"><div class="section-num">3</div><div class="section-title">Raise allocation</div></div>
-  <div class="field"><label>How the raise is allocated</label><textarea rows="2" id="f2-allocation" placeholder="e.g. 50% team, 30% marketing, 20% product"></textarea></div>
-</div>
-
-
-<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Compile my projection summary →</button>
-
-<div class="result-box" id="result-box" style="display:none">
-  <div class="result-title">Your financial projection summary</div>
-  <div class="result-line" id="r-line">Fill in the fields above and click Compile.</div>
-  <div class="result-sub" id="r-details"></div>
 </div>
 
 <div class="evidence">
   <div class="evidence-icon">✦</div>
-  <div><strong>What this needs to include:</strong> current MRR and burn stated precisely, a projection using your actual growth rate, a specific break-even milestone, and raise allocation.</div>
+  <div><strong>What this needs to include:</strong> current MRR and burn measured the same way you'd defend them in diligence, and a growth rate averaged over several months, not the best single month you've had.</div>
 </div>
 
 </div>
@@ -144,37 +185,109 @@ textarea{resize:vertical;line-height:1.65}
 </button>
 
 <script>
-function addRow(containerId, cls, placeholder){
-  const row = document.createElement('div');
-  row.className = cls;
-  if(cls==='row-3'){
-    row.innerHTML = `<input type="text" placeholder="${placeholder[0]}"><input type="text" placeholder="${placeholder[1]}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  } else {
-    row.innerHTML = `<input type="text" placeholder="${placeholder}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  }
-  document.getElementById(containerId).appendChild(row);
-}
+function num(id){ const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; }
 function val(id){ const e=document.getElementById(id); return e? e.value.trim() : ''; }
+function fmtEUR(n){ return '€' + n.toLocaleString('en-US', {maximumFractionDigits: 0}); }
+function fmt1(n){ return (Math.round(n*10)/10).toString(); }
 
+function setBadge(el, level, text){
+  el.className = 'metric-badge ' + level;
+  el.textContent = text;
+}
+
+function showPath(id, ok, title, html, note){
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.className = 'path-box' + (ok ? ' ok' : '');
+  el.innerHTML = `<div class="path-title">${title}</div>${html}` + (note ? `<div class="path-note">${note}</div>` : '');
+}
 
 function compile(){
-  const mrr = val('f2-mrr');
-  const burn = val('f2-burn');
-  const growth = val('f2-growth');
-  const breakeven = val('f2-breakeven') || '[break-even milestone]';
-  const allocation = val('f2-allocation');
+  const mrr = num('b-mrr');
+  const burn = num('b-burn');
+  const growth = num('b-growth');
 
-  const line = `Current MRR €${mrr||'?'}, burn €${burn||'?'}/month, growing at ${growth||'?'}% MoM. Break-even: ${breakeven}.`;
-  document.getElementById('r-line').innerHTML = line;
+  document.getElementById('results').style.display = 'block';
 
-  let details = '';
-  if (allocation) details += `<div><strong>Raise allocation:</strong> ${allocation}</div>`;
-  document.getElementById('r-details').innerHTML = details;
+  const beEl = document.getElementById('m-breakeven');
+  const beBadge = document.getElementById('b-breakeven-badge');
+  const beRead = document.getElementById('r-breakeven');
+  const beFormula = document.getElementById('mf-breakeven');
+  const bePath = document.getElementById('path-breakeven');
 
-  document.getElementById('result-box').style.display = 'block';
-  document.getElementById('result-box').scrollIntoView({behavior:'smooth', block:'center'});
+  let months = null;
+  let verdict = '';
+
+  if (mrr === null || burn === null || growth === null) {
+    beEl.textContent = '-';
+    setBadge(beBadge, 'amber', 'Fill in MRR, burn & growth');
+    beRead.textContent = 'Enter current MRR, current monthly burn, and expected MoM growth rate above to calculate this.';
+    beFormula.style.display = 'none';
+    bePath.style.display = 'none';
+  } else if (mrr >= burn) {
+    beEl.textContent = 'Already there';
+    setBadge(beBadge, 'green', 'At or past break-even');
+    beRead.innerHTML = `Your current MRR of <strong>${fmtEUR(mrr)}</strong> already covers your monthly burn of <strong>${fmtEUR(burn)}</strong>. You're at or past break-even today, so there's no future month to project.`;
+    beFormula.style.display = 'none';
+    showPath('path-breakeven', true, 'Why this works for investors',
+      `<div>You're not burning cash net of revenue right now. State this plainly and show the trend that got you here, since "already break-even" is a rare and strong claim if it holds up under a close look at both numbers.</div>`);
+    verdict = `We are already at or past break-even: MRR of <strong>${fmtEUR(mrr)}</strong> covers burn of <strong>${fmtEUR(burn)}</strong>.`;
+  } else if (growth <= 0) {
+    beEl.textContent = 'Never';
+    setBadge(beBadge, 'red', 'Never, at 0% growth');
+    beRead.innerHTML = `At a growth rate of <strong>${fmt1(growth)}%</strong> per month, your MRR of ${fmtEUR(mrr)} never catches up to your burn of ${fmtEUR(burn)}. A positive month-over-month growth rate is required for a break-even month to even exist mathematically.`;
+    beFormula.style.display = 'none';
+    showPath('path-breakeven', false, 'What investors want to see, and how to get there',
+      `<div>Investors need a monthly growth rate above zero before a break-even date is calculable at all. Right now that isn't the case, so the honest move is to name the specific lever that gets growth positive:</div>
+      <ul class="path-levers">
+        <li>A pricing change, a churn fix, or a new acquisition channel that reliably adds net new MRR each month</li>
+      </ul>`,
+      'Combining a smaller price increase with a churn reduction is usually more realistic than expecting one new channel to fix growth alone.');
+    verdict = `At our current growth rate of <strong>${fmt1(growth)}%</strong>/month, we do not reach break-even.`;
+  } else {
+    months = Math.log(burn / mrr) / Math.log(1 + growth / 100);
+    beEl.textContent = months.toFixed(1) + ' mo';
+    beFormula.style.display = 'block';
+    if (months <= 12) {
+      setBadge(beBadge, 'green', 'Fast path to break-even');
+      beRead.innerHTML = `At <strong>${fmt1(growth)}%</strong> MoM growth, MRR of ${fmtEUR(mrr)} catches up to burn of ${fmtEUR(burn)} in about <strong>${months.toFixed(1)} months</strong>, a fast path to break-even.`;
+    } else if (months <= 24) {
+      setBadge(beBadge, 'amber', 'Reasonable, given time');
+      beRead.innerHTML = `At <strong>${fmt1(growth)}%</strong> MoM growth, MRR of ${fmtEUR(mrr)} catches up to burn of ${fmtEUR(burn)} in about <strong>${months.toFixed(1)} months</strong>, a reasonable timeline but not a fast one.`;
+    } else {
+      setBadge(beBadge, 'red', 'Long runway needed at this rate');
+      beRead.innerHTML = `At <strong>${fmt1(growth)}%</strong> MoM growth, MRR of ${fmtEUR(mrr)} catches up to burn of ${fmtEUR(burn)} only after about <strong>${months.toFixed(1)} months</strong>, a long runway needed at this rate.`;
+    }
+
+    if (months > 12) {
+      const requiredGrowth = (Math.pow(burn / mrr, 1 / 18) - 1) * 100;
+      const burnTarget = mrr * Math.pow(1 + growth / 100, 18);
+      showPath('path-breakeven', false, 'What investors want to see, and how to get there',
+        `<div>Investors like a break-even path <strong>within 18 months</strong>. From today's numbers:</div>
+        <ul class="path-levers">
+          <li>Grow at <strong>${fmt1(requiredGrowth)}%</strong>/month instead of ${fmt1(growth)}%/month to break even within 18 months</li>
+          <li>Or cut burn to <strong>${fmtEUR(burnTarget)}</strong> at your current growth rate to break even within 18 months</li>
+        </ul>`,
+        'Combining a smaller growth-rate improvement with a partial burn cut is usually more realistic than forcing one lever alone all the way to target.');
+    } else {
+      showPath('path-breakeven', true, 'Why this works for investors',
+        `<div>You're on a break-even path inside 12 months, which is fast enough that investors will focus more on whether the growth rate holds than on the math itself. Keep showing the trailing trend behind this growth number.</div>`);
+    }
+
+    verdict = `At our current trajectory, we project break-even in about <strong>${months.toFixed(1)} months</strong>.`;
+  }
+
+  // --- Narrative summary ---
+  let narrative = verdict;
+  if (growth !== null && growth > 0 && mrr !== null) {
+    const mrr12 = mrr * Math.pow(1 + growth / 100, 12);
+    const mrr24 = mrr * Math.pow(1 + growth / 100, 24);
+    narrative += ` At this growth rate, MRR reaches <strong>${fmtEUR(mrr12)}</strong> by month 12 and <strong>${fmtEUR(mrr24)}</strong> by month 24.`;
+  }
+  document.getElementById('r-narrative').innerHTML = narrative || 'Fill in the fields above to generate your slide-ready summary.';
+
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
 }
-
 
 (function(){
   const SB_URL='https://fyswympbcriibpewkxnh.supabase.co';

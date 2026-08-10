@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sensitivity & Efficiency Metrics Worksheet · SheBlooms</title>
+<title>Burn Multiple & Sensitivity Worksheet · SheBlooms</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;
+  --amber:#b45309;--amber-bg:#fffbeb;--amber-border:#fde68a;
+  --green:#166534;--green-bg:#f0fdf4;--green-border:#bbf7d0;
 }
 body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
 .page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
@@ -29,6 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
 
 .field{margin-bottom:14px}
 .field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.field-help{font-size:10.5px;color:#999;margin-top:4px;line-height:1.5}
 input[type=text],input[type=number],textarea{
   width:100%;border:1px solid var(--border);border-radius:7px;
   padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
@@ -51,26 +55,50 @@ textarea{resize:vertical;line-height:1.65}
 .opt-btn:hover{border-color:var(--brand);color:var(--brand)}
 .opt-btn.on{background:var(--brand);color:#fff;border-color:var(--brand)}
 
-.row-2{display:grid;grid-template-columns:1fr 32px;gap:8px;margin-bottom:8px}
-.row-3{display:grid;grid-template-columns:1fr 1fr 32px;gap:8px;margin-bottom:8px}
-.rm-remove{width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
-.rm-remove:hover{border-color:#dc2626;color:#dc2626}
-.add-row-btn{margin-top:4px;border:1px dashed var(--border);background:transparent;padding:8px 16px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;color:var(--muted);width:100%;transition:all .15s}
-.add-row-btn:hover{border-color:var(--brand);color:var(--brand)}
+.formula-box{background:var(--ink);color:#fff;border-radius:10px;padding:14px 18px;margin:10px 0 18px;font-family:'DM Serif Display',serif;font-size:14px;line-height:1.6}
+.formula-box .fvar{color:#a5b4ff}
 
-.result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0}
-.result-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
-.result-line{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.7;color:#fff}
-.result-line strong{color:var(--brand)}
-.result-sub{font-size:12px;color:#bbb;margin-top:14px;padding-top:14px;border-top:1px solid #333;line-height:1.7}
-.result-sub strong{color:#fff}
+.metric-card{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.metric-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.metric-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.metric-value{font-family:'DM Serif Display',serif;font-size:30px;color:var(--ink);line-height:1}
+.metric-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:2px}
+.metric-badge.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.metric-badge.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.metric-badge.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.metric-read{font-size:12.5px;color:#333;line-height:1.65;padding-top:10px;border-top:1px solid var(--border)}
+.metric-formula{font-size:10.5px;color:var(--muted);margin-top:8px;font-family:'DM Serif Display',serif;font-style:italic}
+
+.bench-scale{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:10px 0 6px}
+.bench-scale div{height:100%}
+.bench-labels{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);margin-bottom:12px}
+.bench-marker{position:relative;height:0}
+.bench-dot{position:absolute;top:-13px;width:2px;height:12px;background:var(--ink)}
+
+.narrative-box{background:var(--soft);border-radius:10px;padding:18px 20px;margin:18px 0;border:1px solid var(--border)}
+.narrative-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.narrative-text{font-size:13px;line-height:1.7;color:var(--ink)}
+.narrative-text strong{color:var(--brand)}
+
+.path-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;margin-top:12px;font-size:12px;color:#78350f;line-height:1.7}
+.path-box.ok{background:var(--soft);border-color:var(--border);color:#333}
+.path-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#b45309;margin-bottom:7px}
+.path-box.ok .path-title{color:var(--brand)}
+.path-box strong{color:#7c2d12}
+.path-box.ok strong{color:var(--ink)}
+.path-levers{margin:6px 0 6px 0;padding-left:0;list-style:none}
+.path-levers li{margin-bottom:4px;padding-left:14px;position:relative}
+.path-levers li::before{content:'→';position:absolute;left:0;color:#b45309}
+.path-box.ok .path-levers li::before{color:var(--brand)}
+.path-note{font-size:11px;color:#92400e;margin-top:6px;font-style:italic}
+.path-box.ok .path-note{color:var(--muted)}
 
 .evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
 .evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
 
 .print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px;transition:transform .1s}
 .print-btn:hover{transform:translateY(-1px)}
-@media print{.print-btn{display:none}.page{padding:28px 32px}.rm-remove,.add-row-btn{display:none}}
+@media print{.print-btn{display:none}.page{padding:28px 32px}}
 
 @media (max-width: 640px) {
   .page{padding:32px 20px 60px}
@@ -78,8 +106,8 @@ textarea{resize:vertical;line-height:1.65}
   .doc-title{font-size:15px}
   .field-row.col2,.field-row.col3{grid-template-columns:1fr}
   .opt-btns{flex-direction:column}
-  .row-3{grid-template-columns:1fr}
   .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+  .metric-top{flex-direction:column}
 }
 </style>
 </head>
@@ -88,57 +116,100 @@ textarea{resize:vertical;line-height:1.65}
 
 <div class="doc-header">
   <div class="brand">SheBlooms</div>
-  <div class="doc-title">Sensitivity & Efficiency Metrics Worksheet</div>
-  <div class="doc-sub">Build a Series A-ready model with downside scenarios and efficiency metrics</div>
+  <div class="doc-title">Burn Multiple & Sensitivity Worksheet</div>
+  <div class="doc-sub">The efficiency metric growth investors check before they check your growth rate</div>
 </div>
 
 <div class="intro">
-  <strong>Before you start:</strong> hand-wavy numbers do not pass at Series A. This worksheet builds your Magic Number, Burn Multiple, burn breakdown, and a stress-tested downside scenario.
+  <strong>Before you start:</strong> Bessemer Venture Partners popularized the "burn multiple": how much cash you burn for every dollar of new recurring revenue you add. A fast-growing company that burns €3 for every €1 of new ARR is not efficient, no matter how good the growth headline looks. This tool calculates your burn multiple against Bessemer's own benchmark, and stress-tests your ARR against a worse churn scenario so you know how exposed the number is.
 </div>
 
-
 <div class="section">
-  <div class="section-header"><div class="section-num">1</div><div class="section-title">Efficiency metrics</div></div>
+  <div class="section-header"><div class="section-num">1</div><div class="section-title">Burn efficiency</div></div>
   <div class="field-row col2">
-    <div class="field field-suffix"><label>Magic Number</label><input type="number" id="f3-magicnumber" step="0.1" placeholder="0.9"><span class="suf">x</span></div>
-    <div class="field field-suffix"><label>Burn Multiple</label><input type="number" id="f3-burnmultiple" step="0.1" placeholder="1.4"><span class="suf">x</span></div>
+    <div class="field field-suffix">
+      <label>Net burn last quarter</label><input type="number" id="b-burn" placeholder="600000" step="1000"><span class="suf">€</span>
+      <div class="field-help"><strong>What it is:</strong> the cash your business actually consumed last quarter. <strong>How to calculate:</strong> total cash out minus cash in for the quarter.</div>
+    </div>
+    <div class="field field-suffix">
+      <label>Net new ARR added last quarter</label><input type="number" id="b-arr-added" placeholder="300000" step="1000"><span class="suf">€</span>
+      <div class="field-help"><strong>What it is:</strong> how much annualized recurring revenue you added in the quarter. <strong>How to calculate:</strong> ARR at quarter-end minus ARR at quarter-start.</div>
+    </div>
   </div>
 </div>
 
 <hr class="divider">
 
 <div class="section">
-  <div class="section-header"><div class="section-num">2</div><div class="section-title">Burn breakdown</div></div>
-  <div class="field field-suffix"><label>Share of burn that is salaries</label><input type="number" id="f3-salaryshare" placeholder="68"><span class="suf">%</span></div>
+  <div class="section-header"><div class="section-num">2</div><div class="section-title">Churn sensitivity</div></div>
+  <div class="field-row col2">
+    <div class="field field-suffix">
+      <label>Current ARR</label><input type="number" id="b-arr" placeholder="4000000" step="1000"><span class="suf">€</span>
+      <div class="field-help"><strong>What it is:</strong> your total annualized recurring revenue right now. <strong>How to calculate:</strong> current MRR × 12, or sum of active annual contracts.</div>
+    </div>
+    <div class="field field-suffix">
+      <label>Base-case annual churn</label><input type="number" id="b-churn-base" placeholder="10" step="0.1"><span class="suf">%</span>
+      <div class="field-help"><strong>What it is:</strong> the annual churn rate you expect under normal conditions. <strong>How to calculate:</strong> ARR lost to cancellations and downgrades over the last 12 months ÷ ARR at the start of that period × 100.</div>
+    </div>
+  </div>
+  <div class="field field-suffix">
+    <label>Stress-case annual churn</label><input type="number" id="b-churn-stress" placeholder="25" step="0.1"><span class="suf">%</span>
+    <div class="field-help"><strong>What it is:</strong> a worse, still-plausible churn rate you'd want to survive. <strong>How to calculate:</strong> pick a rate meaningfully above your base case, informed by your worst historical quarter or a comparable company's downside scenario, not an arbitrary round number.</div>
+  </div>
 </div>
 
-<hr class="divider">
+<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Calculate my burn efficiency →</button>
 
-<div class="section">
-  <div class="section-header"><div class="section-num">3</div><div class="section-title">Base case and downside scenario</div></div>
-  <div class="field"><label>Base case (18-36 months)</label><input type="text" id="f3-basecase" placeholder="e.g. €1.2M ARR by month 24"></div>
-  <div class="field"><label>Downside scenario, stress-tested</label><textarea rows="2" id="f3-downside" placeholder="e.g. 25% slower growth, 15% higher CAC: still reaches €900K ARR without an additional raise"></textarea></div>
-</div>
+<div id="results" style="display:none">
 
-<hr class="divider">
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">Burn multiple</div>
+        <div class="metric-value" id="m-burnmult">-</div>
+      </div>
+      <div class="metric-badge" id="b-burnmult-badge">-</div>
+    </div>
+    <div class="bench-scale">
+      <div style="width:40%;background:var(--green-bg);border:1px solid var(--green-border)"></div>
+      <div style="width:30%;background:var(--amber-bg);border:1px solid var(--amber-border)"></div>
+      <div style="width:30%;background:var(--red-bg);border:1px solid var(--red-border)"></div>
+    </div>
+    <div class="bench-labels"><span>&lt; 1.5: great</span><span>1.5–3: workable</span><span>&gt; 3: inefficient</span></div>
+    <div class="metric-read" id="r-burnmult"></div>
+    <div class="path-box" id="path-burnmult" style="display:none"></div>
+    <div class="metric-formula">Burn multiple = net burn ÷ net new ARR</div>
+  </div>
 
-<div class="section">
-  <div class="section-header"><div class="section-num">4</div><div class="section-title">Exit strategy and next round</div></div>
-  <div class="field"><label>Exit strategy and next-round timing</label><textarea rows="2" id="f3-exit" placeholder="e.g. M&A likely path, next round expected in 20-24 months"></textarea></div>
-</div>
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">Churn sensitivity (12mo)</div>
+        <div class="metric-value" id="m-sensitivity">-</div>
+      </div>
+      <div class="metric-badge" id="b-sensitivity-badge">-</div>
+    </div>
+    <div class="bench-scale">
+      <div style="width:35%;background:var(--green-bg);border:1px solid var(--green-border)"></div>
+      <div style="width:35%;background:var(--amber-bg);border:1px solid var(--amber-border)"></div>
+      <div style="width:30%;background:var(--red-bg);border:1px solid var(--red-border)"></div>
+    </div>
+    <div class="bench-labels"><span>&lt; 10%: resilient</span><span>10–25%: moderate</span><span>&gt; 25%: highly sensitive</span></div>
+    <div class="metric-read" id="r-sensitivity"></div>
+    <div class="path-box" id="path-sensitivity" style="display:none"></div>
+    <div class="metric-formula">Base case ARR = ARR × (1 − base churn); stress case = ARR × (1 − stress churn)</div>
+  </div>
 
+  <div class="narrative-box">
+    <div class="narrative-title">What to put on your slide</div>
+    <div class="narrative-text" id="r-narrative"></div>
+  </div>
 
-<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Compile my financial model summary →</button>
-
-<div class="result-box" id="result-box" style="display:none">
-  <div class="result-title">Your sensitivity and efficiency summary</div>
-  <div class="result-line" id="r-line">Fill in the fields above and click Compile.</div>
-  <div class="result-sub" id="r-details"></div>
 </div>
 
 <div class="evidence">
   <div class="evidence-icon">✦</div>
-  <div><strong>What this needs to include:</strong> Magic Number and Burn Multiple stated, burn broken down by category, a base case with a stress-tested downside scenario, and a view on exit strategy.</div>
+  <div><strong>What this needs to include:</strong> net burn and net new ARR measured over the same quarter, and a stress-case churn number that's a real downside scenario informed by your own history, not a token worst case picked to look manageable.</div>
 </div>
 
 </div>
@@ -149,39 +220,122 @@ textarea{resize:vertical;line-height:1.65}
 </button>
 
 <script>
-function addRow(containerId, cls, placeholder){
-  const row = document.createElement('div');
-  row.className = cls;
-  if(cls==='row-3'){
-    row.innerHTML = `<input type="text" placeholder="${placeholder[0]}"><input type="text" placeholder="${placeholder[1]}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  } else {
-    row.innerHTML = `<input type="text" placeholder="${placeholder}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  }
-  document.getElementById(containerId).appendChild(row);
-}
+function num(id){ const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; }
 function val(id){ const e=document.getElementById(id); return e? e.value.trim() : ''; }
+function fmtEUR(n){ return '€' + n.toLocaleString('en-US', {maximumFractionDigits: 0}); }
+function fmt1(n){ return (Math.round(n*10)/10).toString(); }
 
+function setBadge(el, level, text){
+  el.className = 'metric-badge ' + level;
+  el.textContent = text;
+}
+
+function showPath(id, ok, title, html, note){
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.className = 'path-box' + (ok ? ' ok' : '');
+  el.innerHTML = `<div class="path-title">${title}</div>${html}` + (note ? `<div class="path-note">${note}</div>` : '');
+}
 
 function compile(){
-  const magicnumber = val('f3-magicnumber');
-  const burnmultiple = val('f3-burnmultiple');
-  const salaryshare = val('f3-salaryshare');
-  const basecase = val('f3-basecase') || '[base case]';
-  const downside = val('f3-downside');
-  const exit = val('f3-exit');
+  const netBurn = num('b-burn');
+  const arrAdded = num('b-arr-added');
+  const arr = num('b-arr');
+  const churnBase = num('b-churn-base');
+  const churnStress = num('b-churn-stress');
 
-  const line = `Magic Number ${magicnumber||'?'}x, Burn Multiple ${burnmultiple||'?'}x. Base case: ${basecase}.`;
-  document.getElementById('r-line').innerHTML = line;
+  document.getElementById('results').style.display = 'block';
 
-  let details = `<div><strong>Salaries share of burn:</strong> ${salaryshare||'?'}%</div>`;
-  if (downside) details += `<div style="margin-top:8px"><strong>Downside scenario:</strong> ${downside}</div>`;
-  if (exit) details += `<div style="margin-top:8px"><strong>Exit strategy:</strong> ${exit}</div>`;
-  document.getElementById('r-details').innerHTML = details;
+  // --- Burn multiple ---
+  const bmEl = document.getElementById('m-burnmult');
+  const bmBadge = document.getElementById('b-burnmult-badge');
+  const bmRead = document.getElementById('r-burnmult');
+  let burnMultiple = null;
+  if (netBurn !== null && arrAdded) {
+    burnMultiple = netBurn / arrAdded;
+    bmEl.textContent = burnMultiple.toFixed(2) + 'x';
+    if (burnMultiple < 1.5) {
+      setBadge(bmBadge, 'green', "Great efficiency by Bessemer's benchmark");
+      bmRead.innerHTML = `You burned ${fmtEUR(netBurn)} to add ${fmtEUR(arrAdded)} in net new ARR last quarter, a burn multiple of <strong>${burnMultiple.toFixed(2)}x</strong>. Bessemer's benchmark treats under 1.5x as great efficiency, spending under €1.50 to generate €1 of new annualized revenue.`;
+    } else if (burnMultiple <= 3) {
+      setBadge(bmBadge, 'amber', 'Workable, worth watching');
+      bmRead.innerHTML = `You burned ${fmtEUR(netBurn)} to add ${fmtEUR(arrAdded)} in net new ARR last quarter, a burn multiple of <strong>${burnMultiple.toFixed(2)}x</strong>. Bessemer's benchmark puts 1.5x to 3x as workable but worth watching, you're spending more than €1.50 for every €1 of new ARR.`;
+    } else {
+      setBadge(bmBadge, 'red', "Inefficient by Bessemer's benchmark");
+      bmRead.innerHTML = `You burned ${fmtEUR(netBurn)} to add ${fmtEUR(arrAdded)} in net new ARR last quarter, a burn multiple of <strong>${burnMultiple.toFixed(2)}x</strong>. Bessemer's benchmark treats above 3x as inefficient, you're spending more than €3 to generate every €1 of new annualized revenue.`;
+    }
 
-  document.getElementById('result-box').style.display = 'block';
-  document.getElementById('result-box').scrollIntoView({behavior:'smooth', block:'center'});
+    if (burnMultiple >= 1.5) {
+      const arrTarget = netBurn / 1.5;
+      const burnTarget = arrAdded * 1.5;
+      showPath('path-burnmult', false, 'What investors want to see, and how to get there',
+        `<div>Bessemer's efficient bar is <strong>under 1.5x</strong>. From today's numbers:</div>
+        <ul class="path-levers">
+          <li>Add <strong>${fmtEUR(arrTarget)}</strong> more in net new ARR, holding burn steady</li>
+          <li>Or cut net burn to <strong>${fmtEUR(burnTarget)}</strong>, holding ARR added steady</li>
+        </ul>`,
+        'Combining a smaller burn cut with faster ARR growth is usually more realistic than forcing one lever alone all the way to target.');
+    } else {
+      showPath('path-burnmult', true, 'Why this works for investors',
+        `<div>You're under Bessemer's 1.5x bar for efficient growth. Keep showing this quarter over quarter, a single efficient quarter reads differently from a sustained trend.</div>`);
+    }
+  } else {
+    bmEl.textContent = '-';
+    setBadge(bmBadge, 'amber', 'Fill in net burn & net new ARR');
+    bmRead.textContent = 'Enter net burn last quarter and net new ARR added last quarter above to calculate this.';
+    document.getElementById('path-burnmult').style.display = 'none';
+  }
+
+  // --- Churn sensitivity ---
+  const sensEl = document.getElementById('m-sensitivity');
+  const sensBadge = document.getElementById('b-sensitivity-badge');
+  const sensRead = document.getElementById('r-sensitivity');
+  let gapPct = null;
+  let gap = null;
+  let arrBase = null;
+  let arrStress = null;
+  if (arr && churnBase !== null && churnStress !== null) {
+    arrBase = arr * (1 - churnBase / 100);
+    arrStress = arr * (1 - churnStress / 100);
+    gap = arrBase - arrStress;
+    gapPct = gap / arr * 100;
+    sensEl.textContent = fmt1(gapPct) + '%';
+    if (gapPct < 10) {
+      setBadge(sensBadge, 'green', 'Model is resilient to churn swings');
+      sensRead.innerHTML = `Base-case churn of ${fmt1(churnBase)}% leaves you with ${fmtEUR(arrBase)} ARR; stress-case churn of ${fmt1(churnStress)}% leaves you with ${fmtEUR(arrStress)} ARR, a gap of <strong>${fmtEUR(gap)}</strong> (${fmt1(gapPct)}% of current ARR). Under 10% means your model is resilient to churn swings.`;
+    } else if (gapPct <= 25) {
+      setBadge(sensBadge, 'amber', 'Moderately sensitive');
+      sensRead.innerHTML = `Base-case churn of ${fmt1(churnBase)}% leaves you with ${fmtEUR(arrBase)} ARR; stress-case churn of ${fmt1(churnStress)}% leaves you with ${fmtEUR(arrStress)} ARR, a gap of <strong>${fmtEUR(gap)}</strong> (${fmt1(gapPct)}% of current ARR). That's a moderately sensitive model, the stress case meaningfully changes your picture.`;
+    } else {
+      setBadge(sensBadge, 'red', 'Highly sensitive to churn assumptions');
+      sensRead.innerHTML = `Base-case churn of ${fmt1(churnBase)}% leaves you with ${fmtEUR(arrBase)} ARR; stress-case churn of ${fmt1(churnStress)}% leaves you with ${fmtEUR(arrStress)} ARR, a gap of <strong>${fmtEUR(gap)}</strong> (${fmt1(gapPct)}% of current ARR). Above 25% means the model is highly sensitive to your churn assumptions.`;
+    }
+
+    showPath('path-sensitivity', false, 'What investors want to see, and how to get there',
+      `<div>There's no target number to hit here, the useful move is naming the driver:</div>
+      <ul class="path-levers">
+        <li>Name the specific driver behind this gap, contract length, expansion revenue, or a churn cause you're already seeing, since investors will ask what closes it</li>
+      </ul>`,
+      'Combining smaller moves on two levers, like longer contract terms plus a specific churn fix, is usually more realistic than pointing to one fix alone.');
+  } else {
+    sensEl.textContent = '-';
+    setBadge(sensBadge, 'amber', 'Fill in ARR & both churn rates');
+    sensRead.textContent = 'Enter current ARR, base-case churn, and stress-case churn above to calculate this.';
+    document.getElementById('path-sensitivity').style.display = 'none';
+  }
+
+  // --- Narrative summary ---
+  let narrative = '';
+  if (burnMultiple !== null) {
+    narrative += `Our burn multiple is <strong>${burnMultiple.toFixed(2)}x</strong>. `;
+  }
+  if (gap !== null) {
+    narrative += `Under a stress-case churn scenario, our 12-month ARR gap between base and stress case is <strong>${fmtEUR(gap)}</strong> (${fmt1(gapPct)}% of current ARR).`;
+  }
+  document.getElementById('r-narrative').innerHTML = narrative || 'Fill in the fields above to generate your slide-ready summary.';
+
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
 }
-
 
 (function(){
   const SB_URL='https://fyswympbcriibpewkxnh.supabase.co';

@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Scale Economics Benchmark Worksheet · SheBlooms</title>
+<title>Scale Economics: Magic Number & Rule of 40 · SheBlooms</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;
+  --amber:#b45309;--amber-bg:#fffbeb;--amber-border:#fde68a;
+  --green:#166534;--green-bg:#f0fdf4;--green-border:#bbf7d0;
 }
 body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
 .page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
@@ -29,6 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
 
 .field{margin-bottom:14px}
 .field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.field-help{font-size:10.5px;color:#999;margin-top:4px;line-height:1.5}
 input[type=text],input[type=number],textarea{
   width:100%;border:1px solid var(--border);border-radius:7px;
   padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
@@ -51,26 +55,50 @@ textarea{resize:vertical;line-height:1.65}
 .opt-btn:hover{border-color:var(--brand);color:var(--brand)}
 .opt-btn.on{background:var(--brand);color:#fff;border-color:var(--brand)}
 
-.row-2{display:grid;grid-template-columns:1fr 32px;gap:8px;margin-bottom:8px}
-.row-3{display:grid;grid-template-columns:1fr 1fr 32px;gap:8px;margin-bottom:8px}
-.rm-remove{width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
-.rm-remove:hover{border-color:#dc2626;color:#dc2626}
-.add-row-btn{margin-top:4px;border:1px dashed var(--border);background:transparent;padding:8px 16px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;color:var(--muted);width:100%;transition:all .15s}
-.add-row-btn:hover{border-color:var(--brand);color:var(--brand)}
+.formula-box{background:var(--ink);color:#fff;border-radius:10px;padding:14px 18px;margin:10px 0 18px;font-family:'DM Serif Display',serif;font-size:14px;line-height:1.6}
+.formula-box .fvar{color:#a5b4ff}
 
-.result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0}
-.result-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
-.result-line{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.7;color:#fff}
-.result-line strong{color:var(--brand)}
-.result-sub{font-size:12px;color:#bbb;margin-top:14px;padding-top:14px;border-top:1px solid #333;line-height:1.7}
-.result-sub strong{color:#fff}
+.metric-card{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.metric-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.metric-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.metric-value{font-family:'DM Serif Display',serif;font-size:30px;color:var(--ink);line-height:1}
+.metric-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:2px}
+.metric-badge.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.metric-badge.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.metric-badge.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.metric-read{font-size:12.5px;color:#333;line-height:1.65;padding-top:10px;border-top:1px solid var(--border)}
+.metric-formula{font-size:10.5px;color:var(--muted);margin-top:8px;font-family:'DM Serif Display',serif;font-style:italic}
+
+.bench-scale{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:10px 0 6px}
+.bench-scale div{height:100%}
+.bench-labels{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);margin-bottom:12px}
+.bench-marker{position:relative;height:0}
+.bench-dot{position:absolute;top:-13px;width:2px;height:12px;background:var(--ink)}
+
+.narrative-box{background:var(--soft);border-radius:10px;padding:18px 20px;margin:18px 0;border:1px solid var(--border)}
+.narrative-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.narrative-text{font-size:13px;line-height:1.7;color:var(--ink)}
+.narrative-text strong{color:var(--brand)}
+
+.path-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;margin-top:12px;font-size:12px;color:#78350f;line-height:1.7}
+.path-box.ok{background:var(--soft);border-color:var(--border);color:#333}
+.path-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#b45309;margin-bottom:7px}
+.path-box.ok .path-title{color:var(--brand)}
+.path-box strong{color:#7c2d12}
+.path-box.ok strong{color:var(--ink)}
+.path-levers{margin:6px 0 6px 0;padding-left:0;list-style:none}
+.path-levers li{margin-bottom:4px;padding-left:14px;position:relative}
+.path-levers li::before{content:'→';position:absolute;left:0;color:#b45309}
+.path-box.ok .path-levers li::before{color:var(--brand)}
+.path-note{font-size:11px;color:#92400e;margin-top:6px;font-style:italic}
+.path-box.ok .path-note{color:var(--muted)}
 
 .evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
 .evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
 
 .print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px;transition:transform .1s}
 .print-btn:hover{transform:translateY(-1px)}
-@media print{.print-btn{display:none}.page{padding:28px 32px}.rm-remove,.add-row-btn{display:none}}
+@media print{.print-btn{display:none}.page{padding:28px 32px}}
 
 @media (max-width: 640px) {
   .page{padding:32px 20px 60px}
@@ -78,8 +106,8 @@ textarea{resize:vertical;line-height:1.65}
   .doc-title{font-size:15px}
   .field-row.col2,.field-row.col3{grid-template-columns:1fr}
   .opt-btns{flex-direction:column}
-  .row-3{grid-template-columns:1fr}
   .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+  .metric-top{flex-direction:column}
 }
 </style>
 </head>
@@ -88,50 +116,100 @@ textarea{resize:vertical;line-height:1.65}
 
 <div class="doc-header">
   <div class="brand">SheBlooms</div>
-  <div class="doc-title">Scale Economics Benchmark Worksheet</div>
-  <div class="doc-sub">Prove your unit economics hold up, or improve, at scale</div>
+  <div class="doc-title">Scale Economics: Magic Number & Rule of 40</div>
+  <div class="doc-sub">The two efficiency metrics Series A investors actually run on your numbers</div>
 </div>
 
 <div class="intro">
-  <strong>Before you start:</strong> healthy unit economics today are assumed at Series A. This worksheet benchmarks your gross margin, states net revenue retention, and explains how pricing evolves with growth.
+  <strong>Before you start:</strong> at Series A, investors stop asking "are you growing" and start asking "how efficiently are you buying that growth." The Magic Number tells them how much ARR your sales & marketing spend is producing right now. The Rule of 40 tells them whether your growth rate and your profitability, taken together, clear a bar that's become a standard shorthand for a healthy SaaS business. This tool calculates both from your real quarterly numbers.
 </div>
 
-
 <div class="section">
-  <div class="section-header"><div class="section-num">1</div><div class="section-title">Gross margin, benchmarked</div></div>
-  <div class="field-row col3">
-    <div class="field field-suffix"><label>Current gross margin</label><input type="number" id="b-margin" placeholder="68"><span class="suf">%</span></div>
-    <div class="field field-suffix"><label>Margin 2 quarters ago</label><input type="number" id="b-margin-prev" placeholder="61"><span class="suf">%</span></div>
-    <div class="field field-suffix"><label>Benchmark range</label><input type="text" id="b-margin-benchmark" placeholder="60-70"><span class="suf">%</span></div>
+  <div class="section-header"><div class="section-num">1</div><div class="section-title">Sales efficiency</div></div>
+  <div class="field-row col2">
+    <div class="field field-suffix">
+      <label>ARR this quarter</label><input type="number" id="b-arr-this" placeholder="1200000" step="1000"><span class="suf">€</span>
+      <div class="field-help"><strong>What it is:</strong> your annualized recurring revenue at the end of this quarter. <strong>How to calculate:</strong> MRR at quarter-end × 12.</div>
+    </div>
+    <div class="field field-suffix">
+      <label>ARR last quarter</label><input type="number" id="b-arr-last" placeholder="1000000" step="1000"><span class="suf">€</span>
+      <div class="field-help"><strong>What it is:</strong> the same ARR figure, one quarter earlier. <strong>How to calculate:</strong> MRR at the end of the prior quarter × 12.</div>
+    </div>
+  </div>
+  <div class="field field-suffix">
+    <label>S&M spend last quarter</label><input type="number" id="b-sm" placeholder="200000" step="1000"><span class="suf">€</span>
+    <div class="field-help"><strong>What it is:</strong> everything you spent to acquire and sell to customers during the prior quarter. <strong>How to calculate:</strong> fully-loaded, salaries, ads, tools, commissions, for sales and marketing across that quarter.</div>
   </div>
 </div>
 
 <hr class="divider">
 
 <div class="section">
-  <div class="section-header"><div class="section-num">2</div><div class="section-title">Net revenue retention</div></div>
-  <div class="field field-suffix"><label>Net revenue retention</label><input type="number" id="b-nrr" placeholder="114"><span class="suf">%</span></div>
+  <div class="section-header"><div class="section-num">2</div><div class="section-title">Growth and profitability</div></div>
+  <div class="field-row col2">
+    <div class="field field-suffix">
+      <label>Trailing 12-month revenue growth rate</label><input type="number" id="b-growth" placeholder="65" step="0.1"><span class="suf">%</span>
+      <div class="field-help"><strong>What it is:</strong> how much your revenue grew over the last full year. <strong>How to calculate:</strong> (revenue this year − revenue last year) ÷ revenue last year × 100.</div>
+    </div>
+    <div class="field field-suffix">
+      <label>Profit margin / EBITDA margin</label><input type="number" id="b-margin" placeholder="-15" step="0.1"><span class="suf">%</span>
+      <div class="field-help"><strong>What it is:</strong> how profitable the business is, as a share of revenue. <strong>How to calculate:</strong> (revenue − total costs) ÷ revenue × 100. This can be negative if you're still burning to grow, that's fine, enter the negative number.</div>
+    </div>
+  </div>
 </div>
 
-<hr class="divider">
+<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Calculate my scale economics →</button>
 
-<div class="section">
-  <div class="section-header"><div class="section-num">3</div><div class="section-title">Pricing evolution</div></div>
-  <div class="field"><label>How pricing has evolved with growth</label><textarea rows="2" id="b-pricingevo" placeholder="e.g. introduced an enterprise tier carrying 30% higher gross margin than the original plan"></textarea></div>
-</div>
+<div id="results" style="display:none">
 
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">Magic Number</div>
+        <div class="metric-value" id="m-magic">-</div>
+      </div>
+      <div class="metric-badge" id="b-magic-badge">-</div>
+    </div>
+    <div class="bench-scale">
+      <div style="width:40%;background:var(--red-bg);border:1px solid var(--red-border)"></div>
+      <div style="width:20%;background:var(--amber-bg);border:1px solid var(--amber-border)"></div>
+      <div style="width:40%;background:var(--green-bg);border:1px solid var(--green-border)"></div>
+    </div>
+    <div class="bench-labels"><span>&lt; 0.5: inefficient</span><span>0.5–0.75: below bar</span><span>0.75+: efficient</span></div>
+    <div class="metric-read" id="r-magic"></div>
+    <div class="path-box" id="path-magic" style="display:none"></div>
+    <div class="metric-formula">Magic Number = (this quarter's ARR − last quarter's ARR) × 4 ÷ last quarter's S&M spend</div>
+  </div>
 
-<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Compile my scale economics summary →</button>
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">Rule of 40</div>
+        <div class="metric-value" id="m-r40">-</div>
+      </div>
+      <div class="metric-badge" id="b-r40-badge">-</div>
+    </div>
+    <div class="bench-scale">
+      <div style="width:35%;background:var(--red-bg);border:1px solid var(--red-border)"></div>
+      <div style="width:25%;background:var(--amber-bg);border:1px solid var(--amber-border)"></div>
+      <div style="width:40%;background:var(--green-bg);border:1px solid var(--green-border)"></div>
+    </div>
+    <div class="bench-labels"><span>&lt; 30: well below</span><span>30–40: close</span><span>40+: meets it</span></div>
+    <div class="metric-read" id="r-r40"></div>
+    <div class="path-box" id="path-r40" style="display:none"></div>
+    <div class="metric-formula">Rule of 40 = revenue growth % + profit margin %</div>
+  </div>
 
-<div class="result-box" id="result-box" style="display:none">
-  <div class="result-title">Your scale economics benchmark</div>
-  <div class="result-line" id="r-line">Fill in the fields above and click Compile.</div>
-  <div class="result-sub" id="r-details"></div>
+  <div class="narrative-box">
+    <div class="narrative-title">What to put on your slide</div>
+    <div class="narrative-text" id="r-narrative"></div>
+  </div>
+
 </div>
 
 <div class="evidence">
   <div class="evidence-icon">✦</div>
-  <div><strong>What this needs to include:</strong> gross margin benchmarked against peers with a trend shown, net revenue retention stated, and pricing evolution explained in terms of its effect on unit economics.</div>
+  <div><strong>What this needs to include:</strong> a real quarterly ARR figure (not a hopeful annualized guess), fully-loaded S&M spend for the same period, and a growth rate and margin measured over the trailing 12 months, not a single strong month.</div>
 </div>
 
 </div>
@@ -142,37 +220,125 @@ textarea{resize:vertical;line-height:1.65}
 </button>
 
 <script>
-function addRow(containerId, cls, placeholder){
-  const row = document.createElement('div');
-  row.className = cls;
-  if(cls==='row-3'){
-    row.innerHTML = `<input type="text" placeholder="${placeholder[0]}"><input type="text" placeholder="${placeholder[1]}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  } else {
-    row.innerHTML = `<input type="text" placeholder="${placeholder}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  }
-  document.getElementById(containerId).appendChild(row);
-}
+function num(id){ const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; }
 function val(id){ const e=document.getElementById(id); return e? e.value.trim() : ''; }
+function fmtEUR(n){ return '€' + n.toLocaleString('en-US', {maximumFractionDigits: 0}); }
+function fmt1(n){ return (Math.round(n*10)/10).toString(); }
 
+function setBadge(el, level, text){
+  el.className = 'metric-badge ' + level;
+  el.textContent = text;
+}
+
+function showPath(id, ok, title, html, note){
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.className = 'path-box' + (ok ? ' ok' : '');
+  el.innerHTML = `<div class="path-title">${title}</div>${html}` + (note ? `<div class="path-note">${note}</div>` : '');
+}
 
 function compile(){
-  const margin = val('b-margin');
-  const marginPrev = val('b-margin-prev');
-  const benchmark = val('b-margin-benchmark');
-  const nrr = val('b-nrr');
-  const pricingevo = val('b-pricingevo');
+  const arrThis = num('b-arr-this');
+  const arrLast = num('b-arr-last');
+  const sm = num('b-sm');
+  const growth = num('b-growth');
+  const margin = num('b-margin');
 
-  const line = `Gross margin ${margin||'?'}% (benchmark ${benchmark||'?'}%), up from ${marginPrev||'?'}%. Net revenue retention: ${nrr||'?'}%.`;
-  document.getElementById('r-line').innerHTML = line;
+  document.getElementById('results').style.display = 'block';
 
-  let details = '';
-  if (pricingevo) details += `<div><strong>Pricing evolution:</strong> ${pricingevo}</div>`;
-  document.getElementById('r-details').innerHTML = details;
+  // --- Magic Number ---
+  const magicEl = document.getElementById('m-magic');
+  const magicBadge = document.getElementById('b-magic-badge');
+  const magicRead = document.getElementById('r-magic');
+  let magic = null;
+  if (arrThis !== null && arrLast !== null && sm) {
+    magic = (arrThis - arrLast) * 4 / sm;
+    magicEl.textContent = magic.toFixed(2);
+    const excellentNote = magic > 1 ? ` A number above 1.0 is considered excellent, worth double-checking your S&M spend isn't undercounted before you put this on a slide.` : '';
+    if (magic < 0.5) {
+      setBadge(magicBadge, 'red', 'Inefficient');
+      magicRead.innerHTML = `Going from ${fmtEUR(arrLast)} to ${fmtEUR(arrThis)} in ARR while spending ${fmtEUR(sm)} on S&M last quarter gives a Magic Number of <strong>${magic.toFixed(2)}</strong>. Below 0.5 means your sales & marketing engine isn't yet producing enough new ARR to justify accelerating spend on it.${excellentNote}`;
+    } else if (magic < 0.75) {
+      setBadge(magicBadge, 'amber', 'Below the efficient bar');
+      magicRead.innerHTML = `Going from ${fmtEUR(arrLast)} to ${fmtEUR(arrThis)} in ARR while spending ${fmtEUR(sm)} on S&M last quarter gives a Magic Number of <strong>${magic.toFixed(2)}</strong>. The efficient-growth bar investors use is 0.75. You're below it, meaning each euro of S&M spend is producing less than 0.75 euro of new annualized revenue.${excellentNote}`;
+    } else {
+      setBadge(magicBadge, 'green', 'Capital-efficient growth');
+      magicRead.innerHTML = `Going from ${fmtEUR(arrLast)} to ${fmtEUR(arrThis)} in ARR while spending ${fmtEUR(sm)} on S&M last quarter gives a Magic Number of <strong>${magic.toFixed(2)}</strong>, at or above the 0.75 bar for capital-efficient growth.${excellentNote}`;
+    }
 
-  document.getElementById('result-box').style.display = 'block';
-  document.getElementById('result-box').scrollIntoView({behavior:'smooth', block:'center'});
+    if (magic < 0.75) {
+      const smTarget = (arrThis - arrLast) * 4 / 0.75;
+      const arrGrowthTarget = 0.75 * sm / 4 + arrLast;
+      showPath('path-magic', false, 'What investors want to see, and how to get there',
+        `<div>Investors want a Magic Number of <strong>0.75 or higher</strong>. From today's numbers:</div>
+        <ul class="path-levers">
+          <li>Cut S&M spend from ${fmtEUR(sm)} to <strong>${fmtEUR(smTarget)}</strong>, holding ARR growth steady</li>
+          <li>Or grow ARR to <strong>${fmtEUR(arrGrowthTarget)}</strong> this quarter instead of ${fmtEUR(arrThis)}, holding S&M spend steady</li>
+        </ul>`,
+        'Combining a smaller S&M cut with faster ARR growth is usually more realistic than forcing one lever alone all the way to target.');
+    } else {
+      showPath('path-magic', true, 'Why this works for investors',
+        `<div>You're at or above the 0.75 bar for capital-efficient growth. Keep showing this quarter over quarter, since one strong quarter reads differently from a sustained trend.</div>`);
+    }
+  } else {
+    magicEl.textContent = '-';
+    setBadge(magicBadge, 'amber', 'Fill in ARR & S&M spend');
+    magicRead.textContent = 'Enter ARR this quarter, ARR last quarter, and S&M spend above to calculate this.';
+    document.getElementById('path-magic').style.display = 'none';
+  }
+
+  // --- Rule of 40 ---
+  const r40El = document.getElementById('m-r40');
+  const r40Badge = document.getElementById('b-r40-badge');
+  const r40Read = document.getElementById('r-r40');
+  let r40 = null;
+  if (growth !== null && margin !== null) {
+    r40 = growth + margin;
+    r40El.textContent = r40.toFixed(1);
+    if (r40 < 30) {
+      setBadge(r40Badge, 'red', 'Well below the bar');
+      r40Read.innerHTML = `Growth of <strong>${fmt1(growth)}%</strong> plus profit margin of <strong>${fmt1(margin)}%</strong> gives a Rule of 40 score of <strong>${r40.toFixed(1)}</strong>. The Rule of 40 says growth rate plus profit margin should add up to 40 or more; you're well below that combined bar.`;
+    } else if (r40 < 40) {
+      setBadge(r40Badge, 'amber', 'Close, but short');
+      r40Read.innerHTML = `Growth of <strong>${fmt1(growth)}%</strong> plus profit margin of <strong>${fmt1(margin)}%</strong> gives a Rule of 40 score of <strong>${r40.toFixed(1)}</strong>, close to the 40 bar but still short of it.`;
+    } else {
+      setBadge(r40Badge, 'green', 'Meets the Rule of 40');
+      r40Read.innerHTML = `Growth of <strong>${fmt1(growth)}%</strong> plus profit margin of <strong>${fmt1(margin)}%</strong> gives a Rule of 40 score of <strong>${r40.toFixed(1)}</strong>, at or above the 40 bar investors use as a shorthand for a healthy SaaS business.`;
+    }
+
+    if (r40 < 40) {
+      const neededGrowth = 40 - margin;
+      const neededMargin = 40 - growth;
+      showPath('path-r40', false, 'What investors want to see, and how to get there',
+        `<div>Investors use <strong>40</strong> as the combined bar for growth plus margin. From today's numbers:</div>
+        <ul class="path-levers">
+          <li>Grow revenue at <strong>${fmt1(neededGrowth)}%</strong>/year instead of ${fmt1(growth)}%/year, holding margin steady</li>
+          <li>Or improve margin to <strong>${fmt1(neededMargin)}%</strong>, holding your current growth rate steady</li>
+        </ul>`,
+        'Combining smaller moves on both growth and margin is usually more realistic than forcing one lever alone all the way to target.');
+    } else {
+      showPath('path-r40', true, 'Why this works for investors',
+        `<div>You clear the Rule of 40 bar. Show the split between growth and margin explicitly, since investors want to know whether you're a growth story, a margin story, or a balance of both.</div>`);
+    }
+  } else {
+    r40El.textContent = '-';
+    setBadge(r40Badge, 'amber', 'Fill in growth & margin');
+    r40Read.textContent = 'Enter trailing 12-month growth rate and profit margin above to calculate this.';
+    document.getElementById('path-r40').style.display = 'none';
+  }
+
+  // --- Narrative summary ---
+  let narrative = '';
+  if (magic !== null) {
+    narrative += `Our Magic Number is <strong>${magic.toFixed(2)}</strong>. `;
+  }
+  if (r40 !== null) {
+    narrative += `Our Rule of 40 score is <strong>${r40.toFixed(1)}</strong> (${fmt1(growth)}% growth + ${fmt1(margin)}% margin). `;
+  }
+  document.getElementById('r-narrative').innerHTML = narrative || 'Fill in the fields above to generate your slide-ready summary.';
+
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
 }
-
 
 (function(){
   const SB_URL='https://fyswympbcriibpewkxnh.supabase.co';

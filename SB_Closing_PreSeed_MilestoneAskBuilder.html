@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Milestone-Driven Ask Builder · SheBlooms</title>
+<title>Ask & Dilution Builder · SheBlooms</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;
+  --amber:#b45309;--amber-bg:#fffbeb;--amber-border:#fde68a;
+  --green:#166534;--green-bg:#f0fdf4;--green-border:#bbf7d0;
 }
 body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
 .page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
@@ -29,6 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
 
 .field{margin-bottom:14px}
 .field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.field-help{font-size:10.5px;color:#999;margin-top:4px;line-height:1.5}
 input[type=text],input[type=number],textarea{
   width:100%;border:1px solid var(--border);border-radius:7px;
   padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
@@ -51,26 +55,55 @@ textarea{resize:vertical;line-height:1.65}
 .opt-btn:hover{border-color:var(--brand);color:var(--brand)}
 .opt-btn.on{background:var(--brand);color:#fff;border-color:var(--brand)}
 
-.row-2{display:grid;grid-template-columns:1fr 32px;gap:8px;margin-bottom:8px}
-.row-3{display:grid;grid-template-columns:1fr 1fr 32px;gap:8px;margin-bottom:8px}
-.rm-remove{width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
-.rm-remove:hover{border-color:#dc2626;color:#dc2626}
-.add-row-btn{margin-top:4px;border:1px dashed var(--border);background:transparent;padding:8px 16px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;color:var(--muted);width:100%;transition:all .15s}
-.add-row-btn:hover{border-color:var(--brand);color:var(--brand)}
+.formula-box{background:var(--ink);color:#fff;border-radius:10px;padding:14px 18px;margin:10px 0 18px;font-family:'DM Serif Display',serif;font-size:14px;line-height:1.6}
+.formula-box .fvar{color:#a5b4ff}
 
-.result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0}
-.result-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
-.result-line{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.7;color:#fff}
-.result-line strong{color:var(--brand)}
-.result-sub{font-size:12px;color:#bbb;margin-top:14px;padding-top:14px;border-top:1px solid #333;line-height:1.7}
-.result-sub strong{color:#fff}
+.metric-card{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.metric-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.metric-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.metric-value{font-family:'DM Serif Display',serif;font-size:30px;color:var(--ink);line-height:1}
+.metric-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:2px}
+.metric-badge.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.metric-badge.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.metric-badge.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.metric-read{font-size:12.5px;color:#333;line-height:1.65;padding-top:10px;border-top:1px solid var(--border)}
+.metric-formula{font-size:10.5px;color:var(--muted);margin-top:8px;font-family:'DM Serif Display',serif;font-style:italic}
+
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.stat-row:last-child{border-bottom:none}
+.stat-label{font-size:12px;color:var(--muted)}
+.stat-value{font-family:'DM Serif Display',serif;font-size:16px;color:var(--ink)}
+
+.bench-scale{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:10px 0 6px}
+.bench-scale div{height:100%}
+.bench-labels{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);margin-bottom:12px}
+.bench-marker{position:relative;height:0}
+.bench-dot{position:absolute;top:-13px;width:2px;height:12px;background:var(--ink)}
+
+.narrative-box{background:var(--soft);border-radius:10px;padding:18px 20px;margin:18px 0;border:1px solid var(--border)}
+.narrative-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.narrative-text{font-size:13px;line-height:1.7;color:var(--ink)}
+.narrative-text strong{color:var(--brand)}
+
+.path-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;margin-top:12px;font-size:12px;color:#78350f;line-height:1.7}
+.path-box.ok{background:var(--soft);border-color:var(--border);color:#333}
+.path-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#b45309;margin-bottom:7px}
+.path-box.ok .path-title{color:var(--brand)}
+.path-box strong{color:#7c2d12}
+.path-box.ok strong{color:var(--ink)}
+.path-levers{margin:6px 0 6px 0;padding-left:0;list-style:none}
+.path-levers li{margin-bottom:4px;padding-left:14px;position:relative}
+.path-levers li::before{content:'→';position:absolute;left:0;color:#b45309}
+.path-box.ok .path-levers li::before{color:var(--brand)}
+.path-note{font-size:11px;color:#92400e;margin-top:6px;font-style:italic}
+.path-box.ok .path-note{color:var(--muted)}
 
 .evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
 .evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
 
 .print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px;transition:transform .1s}
 .print-btn:hover{transform:translateY(-1px)}
-@media print{.print-btn{display:none}.page{padding:28px 32px}.rm-remove,.add-row-btn{display:none}}
+@media print{.print-btn{display:none}.page{padding:28px 32px}}
 
 @media (max-width: 640px) {
   .page{padding:32px 20px 60px}
@@ -78,8 +111,8 @@ textarea{resize:vertical;line-height:1.65}
   .doc-title{font-size:15px}
   .field-row.col2,.field-row.col3{grid-template-columns:1fr}
   .opt-btns{flex-direction:column}
-  .row-3{grid-template-columns:1fr}
   .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+  .metric-top{flex-direction:column}
 }
 </style>
 </head>
@@ -88,50 +121,95 @@ textarea{resize:vertical;line-height:1.65}
 
 <div class="doc-header">
   <div class="brand">SheBlooms</div>
-  <div class="doc-title">Milestone-Driven Ask Builder</div>
-  <div class="doc-sub">Close with a specific ask and the milestones it unlocks</div>
+  <div class="doc-title">Ask & Dilution Builder</div>
+  <div class="doc-sub">Turn your ask into a number investors can sanity-check in one look</div>
 </div>
 
 <div class="intro">
-  <strong>Before you start:</strong> exit talk is premature at Pre-Seed. This builder assembles your raise, instrument, milestones, and a one-sentence vision close.
+  <strong>Before you start:</strong> a vague "we're raising €250K" ask makes investors do the dilution math themselves, and if it comes out high, that's the first impression they form. This tool calculates your dilution percentage from your own raise and valuation, tells you if it's in the typical Pre-Seed range, and if not, gives you the exact numbers that would bring it back in range.
 </div>
 
-
 <div class="section">
-  <div class="section-header"><div class="section-num">1</div><div class="section-title">The ask</div></div>
+  <div class="section-header"><div class="section-num">1</div><div class="section-title">Raise and valuation</div></div>
   <div class="field-row col2">
-    <div class="field field-suffix"><label>Raise amount</label><input type="text" id="cl-raise" placeholder="250000"><span class="suf">€</span></div>
-    <div class="field"><label>Instrument</label><input type="text" id="cl-instrument" placeholder="SAFE"></div>
+    <div class="field field-suffix">
+      <label>Raise amount</label><input type="number" id="a-raise" placeholder="250000" step="1000"><span class="suf">€</span>
+      <div class="field-help"><strong>What it is:</strong> the total amount you're asking for in this round. <strong>How to calculate:</strong> use your target number for this specific round, tied to the milestone below, not your total funding needs over the next several years.</div>
+    </div>
+    <div class="field field-suffix">
+      <label>Pre-money valuation</label><input type="number" id="a-premoney" placeholder="1500000" step="10000"><span class="suf">€</span>
+      <div class="field-help"><strong>What it is:</strong> what your company is worth before this round's cash is added. <strong>How to calculate:</strong> this isn't a formula you derive yourself, it's usually set by comparable Pre-Seed deals in your market and stage; ask your lead investor or check recent deals of similar companies to anchor it.</div>
+    </div>
   </div>
-  <div class="field"><label>Committed so far, if any</label><input type="text" id="cl-committed" placeholder="e.g. €60K committed"></div>
 </div>
 
 <hr class="divider">
 
 <div class="section">
-  <div class="section-header"><div class="section-num">2</div><div class="section-title">Milestones this capital unlocks</div></div>
-  <div class="field"><label>Milestones tied to your next round</label><textarea rows="2" id="cl-milestones" placeholder="e.g. 500 subscribers and €18K MRR, positioning us for a €1.2M Seed round"></textarea></div>
+  <div class="section-header"><div class="section-num">2</div><div class="section-title">Runway and milestone</div></div>
+  <div class="field-row col2">
+    <div class="field field-suffix">
+      <label>Runway target</label><input type="number" id="a-runway" placeholder="15" step="1"><span class="suf">months</span>
+      <div class="field-help"><strong>What it is:</strong> how many months you want this raise to last. <strong>How to calculate:</strong> typically 12-18 months, giving you enough time to hit your milestone and start the next raise process (which itself takes 3-6 months) with a safety margin.</div>
+    </div>
+    <div class="field">
+      <label>Key milestone</label><input type="text" id="a-milestone" placeholder="e.g. €20K MRR">
+      <div class="field-help"><strong>What it is:</strong> the one specific, provable thing this money buys. <strong>How to calculate:</strong> state a concrete number or fact you can prove happened, e.g. "€20K MRR" or "50 paying customers", not a vague goal like "grow the team" or "expand marketing".</div>
+    </div>
+  </div>
 </div>
 
-<hr class="divider">
+<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Calculate my ask →</button>
 
-<div class="section">
-  <div class="section-header"><div class="section-num">3</div><div class="section-title">Vision close</div></div>
-  <div class="field"><label>One sentence vision</label><input type="text" id="cl-vision" placeholder="e.g. the platform every female founder in Europe uses to raise her first round"></div>
-</div>
+<div id="results" style="display:none">
 
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">Dilution</div>
+        <div class="metric-value" id="m-dilution">-</div>
+      </div>
+      <div class="metric-badge" id="b-dilution-badge">-</div>
+    </div>
+    <div class="bench-scale">
+      <div style="width:10%;background:var(--amber-bg);border:1px solid var(--amber-border)"></div>
+      <div style="width:10%;background:var(--green-bg);border:1px solid var(--green-border)"></div>
+      <div style="width:10%;background:var(--green-bg);border:1px solid var(--green-border)"></div>
+      <div style="width:5%;background:var(--amber-bg);border:1px solid var(--amber-border)"></div>
+      <div style="width:25%;background:var(--red-bg);border:1px solid var(--red-border)"></div>
+    </div>
+    <div class="bench-labels"><span>&lt;10%: unusually low</span><span>10–20%: typical</span><span>20–25%: high</span><span>&gt;25%: very high</span></div>
+    <div class="metric-read" id="r-dilution"></div>
+    <div class="path-box" id="path-dilution" style="display:none"></div>
+    <div class="metric-formula">Dilution = raise ÷ (pre-money + raise)</div>
+  </div>
 
-<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Compile my closing ask →</button>
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">Implied monthly budget</div>
+        <div class="metric-value" id="m-budget">-</div>
+      </div>
+      <div class="metric-badge amber">Informational</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-label">Post-money valuation</div>
+      <div class="stat-value" id="m-postmoney">-</div>
+    </div>
+    <div class="metric-read" id="r-budget"></div>
+    <div class="metric-formula">Implied monthly budget = raise ÷ runway target</div>
+  </div>
 
-<div class="result-box" id="result-box" style="display:none">
-  <div class="result-title">Your milestone-driven close</div>
-  <div class="result-line" id="r-line">Fill in the fields above and click Compile.</div>
-  <div class="result-sub" id="r-details"></div>
+  <div class="narrative-box">
+    <div class="narrative-title">What to put on your slide</div>
+    <div class="narrative-text" id="r-narrative"></div>
+  </div>
+
 </div>
 
 <div class="evidence">
   <div class="evidence-icon">✦</div>
-  <div><strong>What this needs to include:</strong> the raise amount and instrument stated exactly, milestones tied to the next round, commitments noted, and a one-sentence vision close.</div>
+  <div><strong>What this needs to include:</strong> a raise amount and pre-money valuation you can defend with comparable deals, a dilution percentage stated plainly (not hidden), and a milestone specific enough that an investor could check in 12-18 months whether you hit it.</div>
 </div>
 
 </div>
@@ -142,39 +220,106 @@ textarea{resize:vertical;line-height:1.65}
 </button>
 
 <script>
-function addRow(containerId, cls, placeholder){
-  const row = document.createElement('div');
-  row.className = cls;
-  if(cls==='row-3'){
-    row.innerHTML = `<input type="text" placeholder="${placeholder[0]}"><input type="text" placeholder="${placeholder[1]}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  } else {
-    row.innerHTML = `<input type="text" placeholder="${placeholder}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  }
-  document.getElementById(containerId).appendChild(row);
-}
+function num(id){ const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; }
 function val(id){ const e=document.getElementById(id); return e? e.value.trim() : ''; }
+function fmtEUR(n){ return '€' + n.toLocaleString('en-US', {maximumFractionDigits: 0}); }
 
+function setBadge(el, level, text){
+  el.className = 'metric-badge ' + level;
+  el.textContent = text;
+}
+
+function showPath(id, ok, title, html, note){
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.className = 'path-box' + (ok ? ' ok' : '');
+  el.innerHTML = `<div class="path-title">${title}</div>${html}` + (note ? `<div class="path-note">${note}</div>` : '');
+}
 
 function compile(){
-  const raise = val('cl-raise') || '[raise amount]';
-  const instrument = val('cl-instrument') || '[instrument]';
-  const committed = val('cl-committed');
-  const milestones = val('cl-milestones');
-  const vision = val('cl-vision');
+  const raise = num('a-raise');
+  const pre = num('a-premoney');
+  const runwayTarget = num('a-runway');
+  const milestone = val('a-milestone');
 
-  const line = `Raising €${raise} on a ${instrument}.`;
-  document.getElementById('r-line').innerHTML = line;
+  document.getElementById('results').style.display = 'block';
 
-  let details = '';
-  if (committed) details += `<div><strong>Committed so far:</strong> ${committed}</div>`;
-  if (milestones) details += `<div style="margin-top:8px"><strong>Milestones this unlocks:</strong> ${milestones}</div>`;
-  if (vision) details += `<div style="margin-top:8px"><strong>Vision:</strong> ${vision}</div>`;
-  document.getElementById('r-details').innerHTML = details;
+  // Dilution
+  const dilutionEl = document.getElementById('m-dilution');
+  const dilutionBadge = document.getElementById('b-dilution-badge');
+  const dilutionRead = document.getElementById('r-dilution');
+  const postmoneyEl = document.getElementById('m-postmoney');
+  let dilution = null, post = null;
+  if (raise !== null && pre !== null && (raise + pre) > 0) {
+    post = pre + raise;
+    dilution = (raise / post) * 100;
+    dilutionEl.textContent = dilution.toFixed(1) + '%';
+    postmoneyEl.textContent = fmtEUR(post);
+    if (dilution < 10) {
+      setBadge(dilutionBadge, 'amber', 'Unusually low, are you raising enough?');
+      dilutionRead.innerHTML = `Raising <strong>${fmtEUR(raise)}</strong> against a pre-money of <strong>${fmtEUR(pre)}</strong> gives a post-money of <strong>${fmtEUR(post)}</strong> and dilution of <strong>${dilution.toFixed(1)}%</strong>. Under 10% is unusually low for Pre-Seed; check whether you're actually raising enough to hit your milestone, or whether your pre-money is set too high relative to comparable deals.`;
+    } else if (dilution <= 20) {
+      setBadge(dilutionBadge, 'green', 'Typical Pre-Seed range');
+      dilutionRead.innerHTML = `Raising <strong>${fmtEUR(raise)}</strong> against a pre-money of <strong>${fmtEUR(pre)}</strong> gives a post-money of <strong>${fmtEUR(post)}</strong> and dilution of <strong>${dilution.toFixed(1)}%</strong>, right in the typical 10-20% Pre-Seed range investors expect to see.`;
+    } else if (dilution <= 25) {
+      setBadge(dilutionBadge, 'amber', 'On the high end');
+      dilutionRead.innerHTML = `Raising <strong>${fmtEUR(raise)}</strong> against a pre-money of <strong>${fmtEUR(pre)}</strong> gives a post-money of <strong>${fmtEUR(post)}</strong> and dilution of <strong>${dilution.toFixed(1)}%</strong>. That's on the high end for Pre-Seed; investors will notice and may ask why.`;
+    } else {
+      setBadge(dilutionBadge, 'red', 'High dilution for this stage');
+      dilutionRead.innerHTML = `Raising <strong>${fmtEUR(raise)}</strong> against a pre-money of <strong>${fmtEUR(pre)}</strong> gives a post-money of <strong>${fmtEUR(post)}</strong> and dilution of <strong>${dilution.toFixed(1)}%</strong>. That's high dilution for Pre-Seed, and it leaves you with less room in future rounds.`;
+    }
 
-  document.getElementById('result-box').style.display = 'block';
-  document.getElementById('result-box').scrollIntoView({behavior:'smooth', block:'center'});
+    if (dilution >= 20) {
+      const preTarget = raise * (1 - 0.15) / 0.15;
+      const raiseTarget = pre * 0.15 / 0.85;
+      showPath('path-dilution', false, 'What investors want to see, and how to get there',
+        `<div>A dilution closer to <strong>15%</strong> is a comfortable mid-point in the typical range. Either of these alone would get you there:</div>
+        <ul class="path-levers">
+          <li>At your raise amount of ${fmtEUR(raise)}, a pre-money of <strong>${fmtEUR(preTarget)}</strong> keeps dilution at 15%</li>
+          <li>Or, at your pre-money of ${fmtEUR(pre)}, raising <strong>${fmtEUR(raiseTarget)}</strong> instead keeps dilution at 15%</li>
+        </ul>`,
+        'Moving both numbers a little (a slightly higher pre-money and a slightly smaller raise) is usually more realistic than pushing one lever this far alone, since pre-money is partly a negotiation and raise size is partly set by your actual cash need.');
+    } else {
+      showPath('path-dilution', true, 'Why this works for investors',
+        `<div>Your dilution sits in a range investors consider normal for this stage. Keep your pre-money defensible with 2-3 comparable deals so this number doesn't become the thing you have to explain in the room.</div>`);
+    }
+  } else {
+    dilutionEl.textContent = '-';
+    postmoneyEl.textContent = '-';
+    setBadge(dilutionBadge, 'amber', 'Fill in raise & pre-money');
+    dilutionRead.textContent = 'Enter raise amount and pre-money valuation above to calculate this.';
+    document.getElementById('path-dilution').style.display = 'none';
+  }
+
+  // Implied monthly budget
+  const budgetEl = document.getElementById('m-budget');
+  const budgetRead = document.getElementById('r-budget');
+  let budget = null;
+  if (raise !== null && runwayTarget && runwayTarget > 0) {
+    budget = raise / runwayTarget;
+    budgetEl.textContent = fmtEUR(budget);
+    budgetRead.innerHTML = `At a runway target of <strong>${runwayTarget} months</strong>, your raise of <strong>${fmtEUR(raise)}</strong> implies a monthly budget of <strong>${fmtEUR(budget)}</strong>. Sanity-check this against your actual planned monthly burn (salaries, tools, rent) to see if the runway target is realistic.`;
+  } else {
+    budgetEl.textContent = '-';
+    budgetRead.textContent = 'Enter raise amount and runway target above to calculate this.';
+  }
+
+  // Narrative
+  let narrative = '';
+  if (raise !== null) {
+    narrative += `We're raising <strong>${fmtEUR(raise)}</strong>`;
+    if (dilution !== null) {
+      narrative += ` at <strong>${dilution.toFixed(1)}%</strong> dilution`;
+    }
+    narrative += '. ';
+  }
+  if (milestone) {
+    narrative += `This buys us to <strong>${milestone}</strong>.`;
+  }
+  document.getElementById('r-narrative').innerHTML = narrative || 'Fill in the fields above to generate your slide-ready summary.';
+
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
 }
-
 
 (function(){
   const SB_URL='https://fyswympbcriibpewkxnh.supabase.co';

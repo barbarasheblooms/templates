@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Competitive Landscape & Founder-Fit Mapper · SheBlooms</title>
+<title>Differentiation Scorecard · SheBlooms</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --brand:#5B75FE;--ink:#0A0A08;--soft:#F7F8FF;--border:#D8D9E5;--muted:#888;--white:#fff;
+  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;
+  --amber:#b45309;--amber-bg:#fffbeb;--amber-border:#fde68a;
+  --green:#166534;--green-bg:#f0fdf4;--green-border:#bbf7d0;
 }
 body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size:13px;line-height:1.6}
 .page{max-width:780px;margin:0 auto;padding:52px 44px 60px}
@@ -29,6 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);font-size
 
 .field{margin-bottom:14px}
 .field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.field-help{font-size:10.5px;color:#999;margin-top:4px;line-height:1.5}
 input[type=text],input[type=number],textarea{
   width:100%;border:1px solid var(--border);border-radius:7px;
   padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;
@@ -40,6 +44,7 @@ textarea{resize:vertical;line-height:1.65}
 .field-row{display:grid;gap:12px}
 .field-row.col2{grid-template-columns:1fr 1fr}
 .field-row.col3{grid-template-columns:1fr 1fr 1fr}
+.field-row.col4{grid-template-columns:1fr 1fr 1fr 1fr}
 .field-suffix{position:relative}
 .field-suffix input{padding-right:44px}
 .field-suffix .suf{position:absolute;right:12px;top:32px;font-size:11px;color:var(--muted)}
@@ -51,35 +56,59 @@ textarea{resize:vertical;line-height:1.65}
 .opt-btn:hover{border-color:var(--brand);color:var(--brand)}
 .opt-btn.on{background:var(--brand);color:#fff;border-color:var(--brand)}
 
-.row-2{display:grid;grid-template-columns:1fr 32px;gap:8px;margin-bottom:8px}
-.row-3{display:grid;grid-template-columns:1fr 1fr 32px;gap:8px;margin-bottom:8px}
-.rm-remove{width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
-.rm-remove:hover{border-color:#dc2626;color:#dc2626}
-.add-row-btn{margin-top:4px;border:1px dashed var(--border);background:transparent;padding:8px 16px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;color:var(--muted);width:100%;transition:all .15s}
-.add-row-btn:hover{border-color:var(--brand);color:var(--brand)}
+.formula-box{background:var(--ink);color:#fff;border-radius:10px;padding:14px 18px;margin:10px 0 18px;font-family:'DM Serif Display',serif;font-size:14px;line-height:1.6}
+.formula-box .fvar{color:#a5b4ff}
 
-.result-box{background:var(--ink);color:#fff;border-radius:12px;padding:24px 26px;margin:20px 0}
-.result-title{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
-.result-line{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.7;color:#fff}
-.result-line strong{color:var(--brand)}
-.result-sub{font-size:12px;color:#bbb;margin-top:14px;padding-top:14px;border-top:1px solid #333;line-height:1.7}
-.result-sub strong{color:#fff}
+.metric-card{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.metric-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.metric-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.metric-value{font-family:'DM Serif Display',serif;font-size:30px;color:var(--ink);line-height:1}
+.metric-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:2px}
+.metric-badge.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.metric-badge.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.metric-badge.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.metric-read{font-size:12.5px;color:#333;line-height:1.65;padding-top:10px;border-top:1px solid var(--border)}
+.metric-formula{font-size:10.5px;color:var(--muted);margin-top:8px;font-family:'DM Serif Display',serif;font-style:italic}
+
+.bench-scale{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:10px 0 6px}
+.bench-scale div{height:100%}
+.bench-labels{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);margin-bottom:12px}
+.bench-marker{position:relative;height:0}
+.bench-dot{position:absolute;top:-13px;width:2px;height:12px;background:var(--ink)}
+
+.narrative-box{background:var(--soft);border-radius:10px;padding:18px 20px;margin:18px 0;border:1px solid var(--border)}
+.narrative-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.narrative-text{font-size:13px;line-height:1.7;color:var(--ink)}
+.narrative-text strong{color:var(--brand)}
+
+.path-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;margin-top:12px;font-size:12px;color:#78350f;line-height:1.7}
+.path-box.ok{background:var(--soft);border-color:var(--border);color:#333}
+.path-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#b45309;margin-bottom:7px}
+.path-box.ok .path-title{color:var(--brand)}
+.path-box strong{color:#7c2d12}
+.path-box.ok strong{color:var(--ink)}
+.path-levers{margin:6px 0 6px 0;padding-left:0;list-style:none}
+.path-levers li{margin-bottom:4px;padding-left:14px;position:relative}
+.path-levers li::before{content:'→';position:absolute;left:0;color:#b45309}
+.path-box.ok .path-levers li::before{color:var(--brand)}
+.path-note{font-size:11px;color:#92400e;margin-top:6px;font-style:italic}
+.path-box.ok .path-note{color:var(--muted)}
 
 .evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
 .evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
 
 .print-btn{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;border:none;padding:11px 20px;border-radius:22px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(91,117,254,.35);display:flex;align-items:center;gap:7px;transition:transform .1s}
 .print-btn:hover{transform:translateY(-1px)}
-@media print{.print-btn{display:none}.page{padding:28px 32px}.rm-remove,.add-row-btn{display:none}}
+@media print{.print-btn{display:none}.page{padding:28px 32px}}
 
 @media (max-width: 640px) {
   .page{padding:32px 20px 60px}
   .brand{font-size:22px}
   .doc-title{font-size:15px}
-  .field-row.col2,.field-row.col3{grid-template-columns:1fr}
+  .field-row.col2,.field-row.col3,.field-row.col4{grid-template-columns:1fr}
   .opt-btns{flex-direction:column}
-  .row-3{grid-template-columns:1fr}
   .print-btn{bottom:16px;right:16px;padding:9px 14px;font-size:11px}
+  .metric-top{flex-direction:column}
 }
 </style>
 </head>
@@ -88,51 +117,119 @@ textarea{resize:vertical;line-height:1.65}
 
 <div class="doc-header">
   <div class="brand">SheBlooms</div>
-  <div class="doc-title">Competitive Landscape & Founder-Fit Mapper</div>
-  <div class="doc-sub">Map direct and indirect alternatives and your founder-market fit argument</div>
+  <div class="doc-title">Differentiation Scorecard</div>
+  <div class="doc-sub">Score yourself against competitors on the dimensions customers actually choose on</div>
 </div>
 
 <div class="intro">
-  <strong>Before you start:</strong> there is rarely a product moat at Pre-Seed. This mapper names the alternatives customers use today and builds your founder-market fit argument.
+  <strong>Before you start:</strong> "we're different because we care more" is not a differentiation argument investors can test. Scoring yourself and two real competitors on the same dimensions, from a customer's point of view, turns a vague claim into a number you can defend and improve on.
 </div>
 
-
 <div class="section">
-  <div class="section-header"><div class="section-num">1</div><div class="section-title">Direct and indirect alternatives</div></div>
-  <div class="section-note">Think from the customer's perspective: what do they do today instead of your product?</div>
-  <div id="alt-rows">
-    <div class="row-2"><input type="text" placeholder="e.g. Accelerators: take equity, last 3 months"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
-    <div class="row-2"><input type="text" placeholder="e.g. LinkedIn: unstructured, no matching"><button class="rm-remove" onclick="this.parentElement.remove()">×</button></div>
+  <div class="section-header"><div class="section-num">1</div><div class="section-title">Who you're scoring</div></div>
+  <div class="field-row col3">
+    <div class="field"><label>Your product name</label><input type="text" id="d-yourname" placeholder="e.g. Bloom"></div>
+    <div class="field"><label>Competitor 1 name</label><input type="text" id="d-c1name" placeholder="e.g. Competitor A"></div>
+    <div class="field"><label>Competitor 2 name</label><input type="text" id="d-c2name" placeholder="e.g. Competitor B"></div>
   </div>
-  <button class="add-row-btn" onclick="addRow('alt-rows','row-2','Alternative + why it falls short')">+ Add alternative</button>
 </div>
 
 <hr class="divider">
 
 <div class="section">
-  <div class="section-header"><div class="section-num">2</div><div class="section-title">Founder-market fit</div></div>
-  <div class="field"><label>Why your team specifically wins this</label><textarea rows="3" id="c-fit" placeholder="e.g. our founder spent 8 years inside this ecosystem building the exact network we now match founders against"></textarea></div>
+  <div class="section-header"><div class="section-num">2</div><div class="section-title">Competitor 1 scores</div></div>
+  <div class="section-note">Score 1 (weak) to 5 (best-in-class) on each dimension, from a customer's point of view.</div>
+  <div class="field-row col4">
+    <div class="field"><label>Price / value</label><input type="number" id="d-c1-price" min="1" max="5" placeholder="3">
+      <div class="field-help"><strong>What it is:</strong> how this competitor performs on price/value, from a customer's point of view, not your own. <strong>How to calculate:</strong> score 1 (weak) to 5 (best-in-class) based on actual customer feedback or trials, not assumption.</div>
+    </div>
+    <div class="field"><label>Ease of use</label><input type="number" id="d-c1-ease" min="1" max="5" placeholder="3">
+      <div class="field-help"><strong>What it is:</strong> how this competitor performs on ease of use, from a customer's point of view, not your own. <strong>How to calculate:</strong> score 1 (weak) to 5 (best-in-class) based on actual customer feedback or trials, not assumption.</div>
+    </div>
+    <div class="field"><label>Feature completeness</label><input type="number" id="d-c1-features" min="1" max="5" placeholder="3">
+      <div class="field-help"><strong>What it is:</strong> how this competitor performs on feature completeness, from a customer's point of view, not your own. <strong>How to calculate:</strong> score 1 (weak) to 5 (best-in-class) based on actual customer feedback or trials, not assumption.</div>
+    </div>
+    <div class="field"><label>Speed of support</label><input type="number" id="d-c1-support" min="1" max="5" placeholder="3">
+      <div class="field-help"><strong>What it is:</strong> how this competitor performs on speed of support, from a customer's point of view, not your own. <strong>How to calculate:</strong> score 1 (weak) to 5 (best-in-class) based on actual customer feedback or trials, not assumption.</div>
+    </div>
+  </div>
 </div>
 
 <hr class="divider">
 
 <div class="section">
-  <div class="section-header"><div class="section-num">3</div><div class="section-title">Your sharpest differentiators</div></div>
-  <div class="field"><label>1 to 2 points of differentiation</label><textarea rows="2" id="c-diff" placeholder="e.g. we only win when founders close; no equity taken"></textarea></div>
+  <div class="section-header"><div class="section-num">3</div><div class="section-title">Competitor 2 scores</div></div>
+  <div class="section-note">Same scale, same honesty standard: 1 (weak) to 5 (best-in-class).</div>
+  <div class="field-row col4">
+    <div class="field"><label>Price / value</label><input type="number" id="d-c2-price" min="1" max="5" placeholder="3">
+      <div class="field-help"><strong>What it is:</strong> how this competitor performs on price/value, from a customer's point of view, not your own. <strong>How to calculate:</strong> score 1 (weak) to 5 (best-in-class) based on actual customer feedback or trials, not assumption.</div>
+    </div>
+    <div class="field"><label>Ease of use</label><input type="number" id="d-c2-ease" min="1" max="5" placeholder="3">
+      <div class="field-help"><strong>What it is:</strong> how this competitor performs on ease of use, from a customer's point of view, not your own. <strong>How to calculate:</strong> score 1 (weak) to 5 (best-in-class) based on actual customer feedback or trials, not assumption.</div>
+    </div>
+    <div class="field"><label>Feature completeness</label><input type="number" id="d-c2-features" min="1" max="5" placeholder="3">
+      <div class="field-help"><strong>What it is:</strong> how this competitor performs on feature completeness, from a customer's point of view, not your own. <strong>How to calculate:</strong> score 1 (weak) to 5 (best-in-class) based on actual customer feedback or trials, not assumption.</div>
+    </div>
+    <div class="field"><label>Speed of support</label><input type="number" id="d-c2-support" min="1" max="5" placeholder="3">
+      <div class="field-help"><strong>What it is:</strong> how this competitor performs on speed of support, from a customer's point of view, not your own. <strong>How to calculate:</strong> score 1 (weak) to 5 (best-in-class) based on actual customer feedback or trials, not assumption.</div>
+    </div>
+  </div>
 </div>
 
+<hr class="divider">
 
-<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Compile my competitive summary →</button>
+<div class="section">
+  <div class="section-header"><div class="section-num">4</div><div class="section-title">Your product's scores</div></div>
+  <div class="section-note">Be as honest here as you were about your competitors. This tool only works if this row isn't inflated.</div>
+  <div class="field-row col4">
+    <div class="field"><label>Price / value</label><input type="number" id="d-you-price" min="1" max="5" placeholder="3">
+      <div class="field-help"><strong>What it is:</strong> how you perform on price/value, from a customer's point of view, not your own. <strong>How to calculate:</strong> score 1 (weak) to 5 (best-in-class) based on actual customer feedback or trials, not assumption.</div>
+    </div>
+    <div class="field"><label>Ease of use</label><input type="number" id="d-you-ease" min="1" max="5" placeholder="4">
+      <div class="field-help"><strong>What it is:</strong> how you perform on ease of use, from a customer's point of view, not your own. <strong>How to calculate:</strong> score 1 (weak) to 5 (best-in-class) based on actual customer feedback or trials, not assumption.</div>
+    </div>
+    <div class="field"><label>Feature completeness</label><input type="number" id="d-you-features" min="1" max="5" placeholder="3">
+      <div class="field-help"><strong>What it is:</strong> how you perform on feature completeness, from a customer's point of view, not your own. <strong>How to calculate:</strong> score 1 (weak) to 5 (best-in-class) based on actual customer feedback or trials, not assumption.</div>
+    </div>
+    <div class="field"><label>Speed of support</label><input type="number" id="d-you-support" min="1" max="5" placeholder="4">
+      <div class="field-help"><strong>What it is:</strong> how you perform on speed of support, from a customer's point of view, not your own. <strong>How to calculate:</strong> score 1 (weak) to 5 (best-in-class) based on actual customer feedback or trials, not assumption.</div>
+    </div>
+  </div>
+</div>
 
-<div class="result-box" id="result-box" style="display:none">
-  <div class="result-title">Your competitive landscape summary</div>
-  <div class="result-line" id="r-line">Fill in the fields above and click Compile.</div>
-  <div class="result-sub" id="r-details"></div>
+<button onclick="compile()" style="width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">Calculate my differentiation score →</button>
+
+<div id="results" style="display:none">
+
+  <div class="metric-card">
+    <div class="metric-top">
+      <div>
+        <div class="metric-name">Differentiation advantage</div>
+        <div class="metric-value" id="m-delta">-</div>
+      </div>
+      <div class="metric-badge" id="b-delta-badge">-</div>
+    </div>
+    <div class="bench-scale">
+      <div style="width:33%;background:var(--red-bg);border:1px solid var(--red-border)"></div>
+      <div style="width:34%;background:var(--amber-bg);border:1px solid var(--amber-border)"></div>
+      <div style="width:33%;background:var(--green-bg);border:1px solid var(--green-border)"></div>
+    </div>
+    <div class="bench-labels"><span>≤ 0: no clear edge</span><span>0–1: modest edge</span><span>&gt; 1: clear edge</span></div>
+    <div class="metric-read" id="r-delta"></div>
+    <div class="path-box" id="path-delta" style="display:none"></div>
+    <div class="metric-formula">Advantage = your average score − competitors' average score (each out of 5)</div>
+  </div>
+
+  <div class="narrative-box">
+    <div class="narrative-title">What to put on your slide</div>
+    <div class="narrative-text" id="r-narrative"></div>
+  </div>
+
 </div>
 
 <div class="evidence">
   <div class="evidence-icon">✦</div>
-  <div><strong>What this needs to include:</strong> direct and indirect alternatives named specifically, a founder-market fit argument, and one or two sharp, customer-relevant differentiators.</div>
+  <div><strong>What this needs to include:</strong> honest scores based on real customer feedback or trials, not internal assumptions, on at least two named competitors, and a clear statement of the one dimension you're actively closing the gap on.</div>
 </div>
 
 </div>
@@ -143,38 +240,97 @@ textarea{resize:vertical;line-height:1.65}
 </button>
 
 <script>
-function addRow(containerId, cls, placeholder){
-  const row = document.createElement('div');
-  row.className = cls;
-  if(cls==='row-3'){
-    row.innerHTML = `<input type="text" placeholder="${placeholder[0]}"><input type="text" placeholder="${placeholder[1]}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  } else {
-    row.innerHTML = `<input type="text" placeholder="${placeholder}"><button class="rm-remove" onclick="this.parentElement.remove()">×</button>`;
-  }
-  document.getElementById(containerId).appendChild(row);
-}
+function num(id){ const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; }
 function val(id){ const e=document.getElementById(id); return e? e.value.trim() : ''; }
 
-
-function compile(){
-  const alts = [];
-  document.querySelectorAll('#alt-rows .row-2 input').forEach(i => { if (i.value.trim()) alts.push(i.value.trim()); });
-  const fit = val('c-fit');
-  const diff = val('c-diff');
-
-  const line = `${alts.length||0} alternative(s) mapped against our founder-market fit.`;
-  document.getElementById('r-line').innerHTML = line;
-
-  let details = '';
-  if (alts.length) details += `<div><strong>Alternatives:</strong> ${alts.join(' &nbsp;·&nbsp; ')}</div>`;
-  if (fit) details += `<div style="margin-top:8px"><strong>Founder-market fit:</strong> ${fit}</div>`;
-  if (diff) details += `<div style="margin-top:8px"><strong>Differentiators:</strong> ${diff}</div>`;
-  document.getElementById('r-details').innerHTML = details;
-
-  document.getElementById('result-box').style.display = 'block';
-  document.getElementById('result-box').scrollIntoView({behavior:'smooth', block:'center'});
+function setBadge(el, level, text){
+  el.className = 'metric-badge ' + level;
+  el.textContent = text;
 }
 
+function fmt1(n){ return (Math.round(n*10)/10).toString(); }
+
+function showPath(id, ok, title, html, note){
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.className = 'path-box' + (ok ? ' ok' : '');
+  el.innerHTML = `<div class="path-title">${title}</div>${html}` + (note ? `<div class="path-note">${note}</div>` : '');
+}
+
+function compile(){
+  const yourName = val('d-yourname') || 'your product';
+  const c1Name = val('d-c1name') || 'Competitor 1';
+  const c2Name = val('d-c2name') || 'Competitor 2';
+
+  const dims = ['price','ease','features','support'];
+  const dimLabels = {price:'Price/value', ease:'Ease of use', features:'Feature completeness', support:'Speed of support'};
+
+  const you = {}, c1 = {}, c2 = {};
+  let complete = true;
+  dims.forEach(d=>{
+    you[d] = num('d-you-'+d);
+    c1[d] = num('d-c1-'+d);
+    c2[d] = num('d-c2-'+d);
+    if (you[d]===null || c1[d]===null || c2[d]===null) complete = false;
+  });
+
+  document.getElementById('results').style.display = 'block';
+
+  const deltaEl = document.getElementById('m-delta');
+  const deltaBadge = document.getElementById('b-delta-badge');
+  const deltaRead = document.getElementById('r-delta');
+  let yourAvg = null, compAvg = null, delta = null, weakestDim = null, weakestScore = null;
+
+  if (complete) {
+    yourAvg = dims.reduce((s,d)=>s+you[d],0) / dims.length;
+    const c1Avg = dims.reduce((s,d)=>s+c1[d],0) / dims.length;
+    const c2Avg = dims.reduce((s,d)=>s+c2[d],0) / dims.length;
+    compAvg = (c1Avg + c2Avg) / 2;
+    delta = yourAvg - compAvg;
+
+    let minScore = Infinity;
+    dims.forEach(d=>{ if (you[d] < minScore){ minScore = you[d]; weakestDim = d; } });
+    weakestScore = minScore;
+
+    deltaEl.textContent = (delta>=0?'+':'') + fmt1(delta);
+    deltaRead.innerHTML = `${yourName}'s average score is <strong>${fmt1(yourAvg)}/5</strong> against a competitor average of <strong>${fmt1(compAvg)}/5</strong> (${c1Name} at ${fmt1(c1Avg)}/5, ${c2Name} at ${fmt1(c2Avg)}/5). That's an advantage of <strong>${(delta>=0?'+':'')+fmt1(delta)}</strong> points.`;
+
+    if (delta <= 0) {
+      setBadge(deltaBadge, 'red', 'No clear edge yet');
+    } else if (delta <= 1) {
+      setBadge(deltaBadge, 'amber', 'Modest edge');
+    } else {
+      setBadge(deltaBadge, 'green', 'Clear differentiation');
+    }
+
+    if (delta <= 1) {
+      showPath('path-delta', false, 'What investors want to see, and how to get there',
+        `<div>Your weakest dimension is <strong>${dimLabels[weakestDim]}</strong> at <strong>${fmt1(weakestScore)}/5</strong>. That's the one dragging your average down the most, so it's the one to close first.</div>
+        <ul class="path-levers">
+          <li>Bring ${dimLabels[weakestDim]} up to at least <strong>${fmt1(Math.max(weakestScore+1,3))}/5</strong> through targeted product or process changes</li>
+          <li>Validate the improvement with the same customers who scored you low, not new ones</li>
+        </ul>`,
+        'Combining smaller moves on two dimensions is usually more realistic than trying to force one dimension all the way to best-in-class.');
+    } else {
+      showPath('path-delta', true, 'Why this works for investors',
+        `<div>An advantage above 1 point on average is a real, defensible edge, not noise. Keep restating which specific dimension drives it, since a named dimension is more credible than a general "we're better" claim.</div>`);
+    }
+  } else {
+    deltaEl.textContent = '-';
+    setBadge(deltaBadge, 'amber', 'Fill in all scores');
+    deltaRead.textContent = 'Enter all four scores for your product and both competitors above to calculate this.';
+    document.getElementById('path-delta').style.display = 'none';
+  }
+
+  let narrative = '';
+  if (delta !== null) {
+    narrative += `${yourName} scores <strong>${fmt1(yourAvg)}/5</strong> on average against a competitor average of <strong>${fmt1(compAvg)}/5</strong>, an advantage of <strong>${(delta>=0?'+':'')+fmt1(delta)}</strong>. `;
+    narrative += `Our weakest dimension is <strong>${dimLabels[weakestDim]}</strong> at <strong>${fmt1(weakestScore)}/5</strong>, which is what we're actively closing.`;
+  }
+  document.getElementById('r-narrative').innerHTML = narrative || 'Fill in the fields above to generate your slide-ready summary.';
+
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+}
 
 (function(){
   const SB_URL='https://fyswympbcriibpewkxnh.supabase.co';
