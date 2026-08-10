@@ -80,6 +80,19 @@ textarea{resize:vertical;line-height:1.65}
 .narrative-text{font-size:13px;line-height:1.7;color:var(--ink)}
 .narrative-text strong{color:var(--brand)}
 
+.path-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;margin-top:12px;font-size:12px;color:#78350f;line-height:1.7}
+.path-box.ok{background:var(--soft);border-color:var(--border);color:#333}
+.path-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#b45309;margin-bottom:7px}
+.path-box.ok .path-title{color:var(--brand)}
+.path-box strong{color:#7c2d12}
+.path-box.ok strong{color:var(--ink)}
+.path-levers{margin:6px 0 6px 0;padding-left:0;list-style:none}
+.path-levers li{margin-bottom:4px;padding-left:14px;position:relative}
+.path-levers li::before{content:'→';position:absolute;left:0;color:#b45309}
+.path-box.ok .path-levers li::before{color:var(--brand)}
+.path-note{font-size:11px;color:#92400e;margin-top:6px;font-style:italic}
+.path-box.ok .path-note{color:var(--muted)}
+
 .evidence{display:flex;align-items:flex-start;gap:8px;padding:12px 16px;background:var(--soft);border-radius:8px;border:1px solid var(--border);font-size:11px;color:#444;line-height:1.6;margin-top:24px}
 .evidence-icon{color:var(--brand);font-size:14px;flex-shrink:0;margin-top:1px}
 
@@ -161,6 +174,7 @@ textarea{resize:vertical;line-height:1.65}
     </div>
     <div class="bench-labels"><span>&lt; 1: losing money</span><span>1–3: weak</span><span>3+: healthy</span></div>
     <div class="metric-read" id="r-ratio"></div>
+    <div class="path-box" id="path-ratio" style="display:none"></div>
     <div class="metric-formula">LTV : CAC = (price × tenure) ÷ CAC</div>
   </div>
 
@@ -179,6 +193,7 @@ textarea{resize:vertical;line-height:1.65}
     </div>
     <div class="bench-labels"><span>&lt; 12mo: healthy</span><span>12–18mo: workable</span><span>&gt; 18mo: slow</span></div>
     <div class="metric-read" id="r-payback"></div>
+    <div class="path-box" id="path-payback" style="display:none"></div>
     <div class="metric-formula">Payback = CAC ÷ monthly price</div>
   </div>
 
@@ -197,6 +212,7 @@ textarea{resize:vertical;line-height:1.65}
     </div>
     <div class="bench-labels"><span>&lt; 9mo: tight</span><span>9–15mo: workable</span><span>15mo+: comfortable</span></div>
     <div class="metric-read" id="r-runway"></div>
+    <div class="path-box" id="path-runway" style="display:none"></div>
     <div class="metric-formula">Runway = raise ÷ monthly burn</div>
   </div>
 
@@ -229,6 +245,15 @@ function setBadge(el, level, text){
   el.textContent = text;
 }
 
+function fmt1(n){ return (Math.round(n*10)/10).toString(); }
+
+function showPath(id, ok, title, html, note){
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.className = 'path-box' + (ok ? ' ok' : '');
+  el.innerHTML = `<div class="path-title">${title}</div>${html}` + (note ? `<div class="path-note">${note}</div>` : '');
+}
+
 function compile(){
   const price = num('b-price');
   const customers = num('b-customers');
@@ -259,10 +284,28 @@ function compile(){
       setBadge(ratioBadge, 'green', 'At or above benchmark');
       ratioRead.innerHTML = `LTV of <strong>${fmtEUR(ltv)}</strong> against CAC of <strong>${fmtEUR(cac)}</strong> gives you a ${ratio.toFixed(1)}:1 ratio, at or above the 3:1 benchmark investors look for. If this ratio is above 8-10:1 this early, double-check your CAC: it may be undercounting real acquisition spend, since Pre-Seed CAC calculated on a handful of customers is easy to underestimate.`;
     }
+
+    if (ratio < 3) {
+      const cacTarget = ltv / 3;
+      const priceTarget = (3 * cac) / tenure;
+      const tenureTarget = (3 * cac) / price;
+      showPath('path-ratio', false, 'What investors want to see, and how to get there',
+        `<div>Investors want <strong>3:1 or higher</strong>. From today's numbers, any <strong>one</strong> of these alone would get you there:</div>
+        <ul class="path-levers">
+          <li>Cut CAC from ${fmtEUR(cac)} to <strong>${fmtEUR(cacTarget)}</strong> (cheaper channel, better targeting)</li>
+          <li>Raise price from €${price}/mo to <strong>€${fmt1(priceTarget)}/mo</strong></li>
+          <li>Extend average tenure from ${fmt1(tenure)} to <strong>${fmt1(tenureTarget)} months</strong> (retention work)</li>
+        </ul>`,
+        'In practice a mix of smaller moves on two levers is usually more realistic than pushing one lever this far alone. Tenure takes real time to prove, price and CAC are the fastest to test.');
+    } else {
+      showPath('path-ratio', true, 'Why this works for investors',
+        `<div>You're at or above the 3:1 bar investors screen for. Keep restating this ratio each round as your sample grows past a handful of customers, since that's what makes the number durable rather than lucky.</div>`);
+    }
   } else {
     ratioEl.textContent = '-';
     setBadge(ratioBadge, 'amber', 'Fill in price, tenure & CAC');
     ratioRead.textContent = 'Enter price, average tenure, and CAC above to calculate this.';
+    document.getElementById('path-ratio').style.display = 'none';
   }
 
   // --- CAC payback ---
@@ -283,10 +326,26 @@ function compile(){
       setBadge(paybackBadge, 'red', 'Slow payback');
       paybackRead.innerHTML = `At <strong>${payback.toFixed(1)} months</strong>, it takes a long time for a customer to repay their own acquisition cost. This isn't disqualifying at Pre-Seed, but you should be able to name specifically what will shorten it: a cheaper channel, a higher price, or a faster path to upsell.`;
     }
+
+    if (payback >= 12) {
+      const cacTarget = 12 * price;
+      const priceTarget = cac / 12;
+      showPath('path-payback', false, 'What investors want to see, and how to get there',
+        `<div>Investors like payback <strong>under 12 months</strong>. Either of these alone would get you there:</div>
+        <ul class="path-levers">
+          <li>Cut CAC from ${fmtEUR(cac)} to <strong>${fmtEUR(cacTarget)}</strong></li>
+          <li>Raise price from €${price}/mo to <strong>€${fmt1(priceTarget)}/mo</strong></li>
+        </ul>`,
+        'Cutting CAC is usually the faster of the two to test: try a cheaper channel or tighter targeting before assuming you need a price increase.');
+    } else {
+      showPath('path-payback', true, 'Why this works for investors',
+        `<div>You're already under the 12-month bar. Keep stating which channel produces this, since "payback is healthy on average" is weaker than naming the specific channel that gets you there.</div>`);
+    }
   } else {
     paybackEl.textContent = '-';
     setBadge(paybackBadge, 'amber', 'Fill in price & CAC');
     paybackRead.textContent = 'Enter price and CAC above to calculate this.';
+    document.getElementById('path-payback').style.display = 'none';
   }
 
   // --- Runway ---
@@ -307,10 +366,26 @@ function compile(){
       setBadge(runwayBadge, 'green', 'Comfortable');
       runwayRead.innerHTML = `${fmtEUR(raise)} at a burn of ${fmtEUR(burn)}/month gives you <strong>${runway.toFixed(1)} months</strong> of runway, comfortable room to hit a real milestone before raising again. Make sure the use-of-funds ties directly to that milestone, not just to "growth."`;
     }
+
+    if (runway < 15) {
+      const burnTarget = raise / 15;
+      const raiseTarget = 15 * burn;
+      showPath('path-runway', false, 'What investors want to see, and how to get there',
+        `<div>Investors feel comfortable at <strong>15+ months</strong> of runway, since that covers a full fundraise cycle without rushing. Either of these alone would get you there:</div>
+        <ul class="path-levers">
+          <li>Cut monthly burn from ${fmtEUR(burn)} to <strong>${fmtEUR(burnTarget)}</strong></li>
+          <li>Raise ${fmtEUR(raiseTarget)} instead of ${fmtEUR(raise)}</li>
+        </ul>`,
+        'If neither is realistic right now, at minimum name the specific milestone this runway buys you, so a shorter runway reads as intentional, not underfunded.');
+    } else {
+      showPath('path-runway', true, 'Why this works for investors',
+        `<div>15+ months gives you room to hit a real milestone before you need to fundraise again. Tie your use-of-funds explicitly to that milestone so the runway reads as planned, not just banked.</div>`);
+    }
   } else {
     runwayEl.textContent = '-';
     setBadge(runwayBadge, 'amber', 'Fill in raise & burn');
     runwayRead.textContent = 'Enter raise amount and monthly burn above to calculate this.';
+    document.getElementById('path-runway').style.display = 'none';
   }
 
   // --- Narrative summary ---
