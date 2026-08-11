@@ -533,7 +533,7 @@ function compile(){
   }
   if (runway !== null) narrative += `At today's burn, that's <strong>${runway.toFixed(1)} months</strong> of runway. `;
   if (beMonths !== null) narrative += `At our current growth rate, we project break-even on recurring revenue in about <strong>${beMonths.toFixed(1)} months</strong>.`;
-  document.getElementById('r-narrative').innerHTML = narrative || 'Fill in the fields above to generate your slide-ready summary.'(;
+  document.getElementById('r-narrative').innerHTML = narrative || 'Fill in the fields above to generate your slide-ready summary.';
 
   document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
 }
