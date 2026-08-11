@@ -175,7 +175,7 @@ table.plan-table tr.row-cashout td{background:var(--red-bg)}
 <hr class="divider">
 
 <div class="section">
-  <div class="section-header"><div class="section-num">3</div><div class="section-title">Growth assumption </div></div>
+  <div class="section-header"><div class="section-num">3</div><div class="section-title">Growth assumption</div></div>
   <div class="field field-suffix">
     <label>Expected MoM MRR growth rate</label><input type="number" id="fp-growth" placeholder="8" step="0.1"><span class="suf">%</span>
     <div class="field-help"><strong>What it is:</strong> how fast your MRR is growing, month over month. <strong>How to calculate:</strong> (this month's MRR − last month's MRR) ÷ last month's MRR × 100, averaged over the last 3 months so one unusual month doesn't skew the plan.</div>
@@ -379,7 +379,7 @@ function compile(){
           <li>Cut burn to <strong>${fmtEUR(burnTarget)}</strong>/month</li>
           <li>Or hold <strong>${fmtEUR(cashTarget)}</strong> in cash instead</li>
         </ul>`,
-        'In practice, growth reducing your burn over time ("see the plan below) usually does more work than either lever alone.');
+        'In practice, growth reducing your burn over time (see the plan below) usually does more work than either lever alone.');
     } else {
       showPath('path-runway', true, 'Why this works for investors',
         `<div>15+ months at today's burn gives you room to hit a real milestone before raising again, even before accounting for growth narrowing your burn further.</div>`);
@@ -499,7 +499,7 @@ function compile(){
 
   // --- 12-month plan table ---
   const tbody = document.getElementById('plan-table-body');
-  tbody.innorHTML = '';
+  tbody.innerHTML = '';
   if (mrr !== null && totalCost !== null && cash !== null && growth !== null) {
     let curMRR = mrr;
     let curCash = cash;
@@ -517,7 +517,7 @@ function compile(){
       if (beRow === m) flag += '<span class="table-flag be">Break-even</span>';
       if (coRow === m) flag += '<span class="table-flag co">Cash out</span>';
       tr.innerHTML = `<td>Month ${m}${flag}</td><td>${fmtEUR(curMRR)}</td><td>${fmtEUR(totalCost)}</td><td>${burn >= 0 ? fmtEUR(burn) : '(' + fmtEUR(Math.abs(burn)) + ')'}</td><td>${fmtEUR(curCash)}</td>`;
-      tbody.appendChild(d);
+      tbody.appendChild(tr);
     }
   } else {
     const tr = document.createElement('tr');
@@ -544,7 +544,7 @@ function compile(){
   fetch(SB_URL+'/rest/v1/template_events',{
     method:'POST',
     headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'},
-    body:JSON.stringify({email:'anonymous',template:'SB_Financials_FinancialPlanningWorksheet',event:'oopened'})
+    body:JSON.stringify({email:'anonymous',template:'SB_Financials_FinancialPlanningWorksheet',event:'opened'})
   }).catch(()=>{});
 })();
 </script>
