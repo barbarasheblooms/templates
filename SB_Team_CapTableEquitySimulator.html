@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cap Table & Equity Split Simulator · SheBlooms</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--brand:#5B75FE;--brand-d:#3d4fa8;--ink:#0a0a08;--soft:#f5f5f2;--border:#e0e0db;--muted:#666;--amber:#b45309;--amber-bg:#fef3c7;--amber-bd:#fde68a;--good:#0f6e56;--good-bg:#e1f5ee}
+body{font-family:'DM Sans',sans-serif;background:#fafafa;color:var(--ink);font-size:15px;line-height:1.6}
+.page{max-width:760px;margin:0 auto;padding:48px 32px 120px;background:#fff}
+.header{text-align:center;margin-bottom:28px}
+.logo{font-family:'Instrument Serif',serif;font-size:26px;color:var(--brand);display:block;margin-bottom:14px}
+.tool-title{font-family:'DM Serif Display',serif;font-size:28px;color:var(--ink);margin-bottom:8px}
+.tool-sub{font-size:14px;color:var(--muted);max-width:560px;margin:0 auto}
+.divider{border-bottom:1px solid var(--border);margin:24px 0 28px}
+.callout{background:#eef0ff;border:1px solid #d0d6ff;border-radius:10px;padding:18px 20px;margin-bottom:32px;font-size:13.5px;color:#1e1b4d;line-height:1.6}
+.section{margin-bottom:36px}
+.section-head{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.section-num{width:26px;height:26px;border-radius:50%;background:var(--brand);color:#fff;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.section-title{font-family:'DM Serif Display',serif;font-size:19px;color:var(--ink)}
+.section-help{font-size:13px;color:var(--muted);margin:-8px 0 16px 36px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px 24px}
+.field{margin-bottom:4px}
+.field label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px}
+.field .input-wrap{position:relative}
+.field input{width:100%;padding:10px 40px 10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--ink)}
+.field input:focus{outline:none;border-color:var(--brand)}
+.field .unit{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--muted)}
+.field .help{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.55}
+.founder-row{display:grid;grid-template-columns:2fr 1fr auto;gap:12px;align-items:end;margin-bottom:14px}
+.remove-btn{background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:12px;padding:10px 12px;cursor:pointer}
+.remove-btn:hover{border-color:#c33;color:#c33}
+.add-btn{background:none;border:1px dashed var(--border);border-radius:8px;color:var(--brand);font-size:13px;font-weight:600;padding:10px 16px;cursor:pointer;margin-top:4px}
+.split-check{margin-top:8px;font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:6px;display:inline-block}
+.split-ok{background:var(--good-bg);color:var(--good)}
+.split-bad{background:var(--amber-bg);color:var(--amber)}
+.round-card{border:1px solid var(--border);border-radius:10px;padding:18px 20px;margin-bottom:16px}
+.round-card-title{font-weight:600;font-size:14px;margin-bottom:12px;color:var(--ink)}
+.build-btn{width:100%;background:var(--brand);color:#fff;border:none;border-radius:10px;padding:16px;font-size:15px;font-weight:700;cursor:pointer;margin:8px 0 24px;font-family:'DM Sans',sans-serif}
+.build-btn:hover{background:var(--brand-d)}
+.results{border-top:1px solid var(--border);padding-top:28px}
+.pill{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:4px 10px;border-radius:20px;background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bd)}
+.result-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px}
+table{width:100%;border-collapse:collapse;margin:16px 0 24px;font-size:13px}
+th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;padding:8px 10px;border-bottom:2px solid var(--border)}
+td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--ink)}
+tr.total-row td{font-weight:700;border-top:1px solid var(--ink)}
+.bar-wrap{background:var(--soft);border-radius:6px;height:8px;overflow:hidden;margin-top:4px}
+.bar-fill{height:100%;background:var(--brand);border-radius:6px}
+.vest-row{margin-bottom:16px}
+.vest-name{font-size:13.5px;font-weight:600;margin-bottom:4px;display:flex;justify-content:space-between}
+.vest-pct{color:var(--brand)}
+.formula-note{font-size:11.5px;color:var(--muted);font-style:italic;margin-top:-8px;margin-bottom:20px}
+.print-btn{position:fixed;bottom:28px;right:28px;background:var(--brand);color:#fff;border:none;border-radius:24px;padding:12px 20px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 14px rgba(91,117,254,.35);display:flex;align-items:center;gap:8px}
+@media print{.print-btn,.build-btn{display:none}}
+@media (max-width:600px){.grid2{grid-template-columns:1fr}.founder-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <span class="logo">SheBlooms</span>
+    <h1 class="tool-title">Cap Table &amp; Equity Split Simulator</h1>
+    <p class="tool-sub">Model your founder split, option pool, and up to three funding rounds — and see exactly how ownership and vesting move as the company grows.</p>
+  </div>
+  <div class="divider"></div>
+
+  <div class="callout">
+    <strong>Before you start:</strong> enter your real (or planned) founder split and option pool first — that's the baseline everything else dilutes from. Leave any round you haven't raised yet blank; the table below only applies rounds with both an amount and a pre-money valuation filled in.
+  </div>
+
+  <div class="section">
+    <div class="section-head"><div class="section-num">1</div><div class="section-title">Founders &amp; option pool</div></div>
+    <div id="founderRows"></div>
+    <button class="add-btn" id="addFounder" type="button">+ Add another founder</button>
+    <div id="splitCheck" class="split-check split-ok">Founder split totals 100%</div>
+
+    <div class="grid2" style="margin-top:20px">
+      <div class="field">
+        <label>Option pool (% of fully diluted, carved out before Round 1)</label>
+        <div class="input-wrap"><input type="number" id="poolPct" placeholder="10" value="10"><span class="unit">%</span></div>
+        <div class="help">Reserved for future hires. 10-15% is typical at Seed and Series A. This dilutes founders proportionally, before any investor money arrives.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><div class="section-num">2</div><div class="section-title">Funding rounds</div></div>
+    <div class="section-help">Leave amount raised at 0 to skip a round entirely.</div>
+
+    <div class="round-card">
+      <div class="round-card-title">Pre-Seed / SAFE round</div>
+      <div class="grid2">
+        <div class="field"><label>Amount raised</label><div class="input-wrap"><input type="number" id="r1_amount" placeholder="0"><span class="unit">€</span></div></div>
+        <div class="field"><label>Pre-money valuation</label><div class="input-wrap"><input type="number" id="r1_premoney" placeholder="0"><span class="unit">€</span></div></div>
+      </div>
+      <div class="grid2" style="margin-top:16px">
+        <div class="field"><label>Option pool top-up (optional)</label><div class="input-wrap"><input type="number" id="r1_pool" placeholder="0"><span class="unit">%</span></div></div>
+      </div>
+    </div>
+
+    <div class="round-card">
+      <div class="round-card-title">Seed round</div>
+      <div class="grid2">
+        <div class="field"><label>Amount raised</label><div class="input-wrap"><input type="number" id="r2_amount" placeholder="0"><span class="unit">€</span></div></div>
+        <div class="field"><label>Pre-money valuation</label><div class="input-wrap"><input type="number" id="r2_premoney" placeholder="0"><span class="unit">€</span></div></div>
+      </div>
+      <div class="grid2" style="margin-top:16px">
+        <div class="field"><label>Option pool top-up (optional)</label><div class="input-wrap"><input type="number" id="r2_pool" placeholder="0"><span class="unit">%</span></div></div>
+      </div>
+    </div>
+
+    <div class="round-card">
+      <div class="round-card-title">Series A round</div>
+      <div class="grid2">
+        <div class="field"><label>Amount raised</label><div class="input-wrap"><input type="number" id="r3_amount" placeholder="0"><span class="unit">€</span></div></div>
+        <div class="field"><label>Pre-money valuation</label><div class="input-wrap"><input type="number" id="r3_premoney" placeholder="0"><span class="unit">€</span></div></div>
+      </div>
+      <div class="grid2" style="margin-top:16px">
+        <div class="field"><label>Option pool top-up (optional)</label><div class="input-wrap"><input type="number" id="r3_pool" placeholder="0"><span class="unit">%</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><div class="section-num">3</div><div class="section-title">Vesting check</div></div>
+    <div class="section-help">Standard founder vesting is 4 years (48 months) with a 1-year cliff. Enter months since each founder's grant date to see what's actually vested today.</div>
+    <div id="vestRows"></div>
+  </div>
+
+  <button class="build-btn" id="buildBtn" type="button">Build my cap table →</button>
+
+  <div class="results">
+    <div class="result-label">Ownership across rounds</div>
+    <div id="ownershipTable"></div>
+    <div class="formula-note">Each round dilutes every existing holder proportionally by the new investor's post-money percentage; option pool top-ups dilute existing holders the same way, before the new investor percentage is added.</div>
+
+    <div class="result-label" style="margin-top:12px">Vesting status today</div>
+    <div id="vestResults"></div>
+  </div>
+</div>
+
+<button class="print-btn" onclick="window.print()">🖨 Print / Save PDF</button>
+
+<script>
+let founders = [
+  {name:'Founder A', pct:60},
+  {name:'Founder B', pct:40}
+];
+
+function renderFounderRows(){
+  const c = document.getElementById('founderRows');
+  c.innerHTML = '';
+  founders.forEach((f, i) => {
+    const row = document.createElement('div');
+    row.className = 'founder-row';
+    row.innerHTML = `
+      <div class="field"><label>${i===0?'Founder name':''}</label><input type="text" data-idx="${i}" data-field="name" value="${f.name}"></div>
+      <div class="field"><label>${i===0?'Split %':''}</label><div class="input-wrap"><input type="number" data-idx="${i}" data-field="pct" value="${f.pct}"><span class="unit">%</span></div></div>
+      <button class="remove-btn" data-idx="${i}" type="button">Remove</button>
+    `;
+    c.appendChild(row);
+  });
+  c.querySelectorAll('input').forEach(inp => {
+    inp.addEventListener('input', e => {
+      const idx = +e.target.dataset.idx;
+      const field = e.target.dataset.field;
+      founders[idx][field] = field === 'pct' ? (parseFloat(e.target.value) || 0) : e.target.value;
+      updateSplitCheck();
+      renderVestRows();
+      compute();
+    });
+  });
+  c.querySelectorAll('.remove-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const idx = +e.target.dataset.idx;
+      if (founders.length > 1) { founders.splice(idx, 1); renderFounderRows(); updateSplitCheck(); renderVestRows(); compute(); }
+    });
+  });
+  updateSplitCheck();
+}
+
+function updateSplitCheck(){
+  const total = founders.reduce((s,f)=>s+f.pct,0);
+  const el = document.getElementById('splitCheck');
+  if (Math.abs(total-100) < 0.5){
+    el.className = 'split-check split-ok';
+    el.textContent = 'Founder split totals ' + total.toFixed(0) + '%';
+  } else {
+    el.className = 'split-check split-bad';
+    el.textContent = 'Founder split totals ' + total.toFixed(1) + '% — adjust so it totals 100%';
+  }
+}
+
+document.getElementById('addFounder').addEventListener('click', () => {
+  founders.push({name:'Founder ' + String.fromCharCode(65+founders.length), pct:0});
+  renderFounderRows();
+  renderVestRows();
+  compute();
+});
+
+function renderVestRows(){
+  const c = document.getElementById('vestRows');
+  const existing = {};
+  c.querySelectorAll('input').forEach(inp => existing[inp.dataset.idx] = inp.value);
+  c.innerHTML = '';
+  founders.forEach((f, i) => {
+    const row = document.createElement('div');
+    row.className = 'field';
+    row.style.marginBottom = '14px';
+    row.innerHTML = `
+      <label>${f.name || 'Founder ' + (i+1)} — months since grant</label>
+      <div class="input-wrap" style="max-width:200px"><input type="number" data-idx="${i}" value="${existing[i] || 0}" placeholder="0"><span class="unit">mo</span></div>
+    `;
+    c.appendChild(row);
+  });
+  c.querySelectorAll('input').forEach(inp => inp.addEventListener('input', compute));
+  compute();
+}
+
+function poolPct(){ return parseFloat(document.getElementById('poolPct').value) || 0; }
+
+function getRound(n){
+  const amount = parseFloat(document.getElementById('r'+n+'_amount').value) || 0;
+  const premoney = parseFloat(document.getElementById('r'+n+'_premoney').value) || 0;
+  const pool = parseFloat(document.getElementById('r'+n+'_pool').value) || 0;
+  return {amount, premoney, pool, active: amount > 0 && premoney > 0, label: n===1?'Pre-Seed':(n===2?'Seed':'Series A')};
+}
+
+function compute(){
+  // t0: founder split minus pool carve-out
+  const pool0 = poolPct();
+  const totalFounderPct = founders.reduce((s,f)=>s+f.pct,0) || 100;
+  let holders = {};
+  founders.forEach(f => { holders[f.name || 'Founder'] = (f.pct/totalFounderPct) * (100 - pool0); });
+  holders['Option pool'] = pool0;
+
+  const stages = [{label:'Founding', holders: {...holders}}];
+
+  [1,2,3].forEach(n => {
+    const r = getRound(n);
+    if (!r.active) return;
+    // pool top-up dilutes existing holders, then gets added
+    if (r.pool > 0){
+      const scale = (100 - r.pool) / 100;
+      Object.keys(holders).forEach(k => holders[k] *= scale);
+      holders['Option pool'] = (holders['Option pool'] || 0) + r.pool;
+    }
+    const postMoney = r.premoney + r.amount;
+    const investorPct = (r.amount / postMoney) * 100;
+    const scale = (100 - investorPct) / 100;
+    Object.keys(holders).forEach(k => holders[k] *= scale);
+    holders[r.label + ' investors'] = investorPct;
+    stages.push({label: r.label, holders: {...holders}});
+  });
+
+  renderOwnershipTable(stages);
+  renderVestResults();
+}
+
+function renderOwnershipTable(stages){
+  const el = document.getElementById('ownershipTable');
+  const allKeys = [];
+  stages[stages.length-1] && Object.keys(stages[stages.length-1].holders).forEach(k => { if(!allKeys.includes(k)) allKeys.push(k); });
+  stages.forEach(s => Object.keys(s.holders).forEach(k => { if(!allKeys.includes(k)) allKeys.push(k); }));
+
+  let html = '<table><tr><th>Holder</th>';
+  stages.forEach(s => html += `<th>${s.label}</th>`);
+  html += '</tr>';
+  allKeys.forEach(k => {
+    html += `<tr><td>${k}</td>`;
+    stages.forEach(s => {
+      const v = s.holders[k];
+      html += `<td>${v !== undefined ? v.toFixed(1) + '%' : '—'}</td>`;
+    });
+    html += '</tr>';
+  });
+  const lastTotal = Object.values(stages[stages.length-1].holders).reduce((a,b)=>a+b,0);
+  html += `<tr class="total-row"><td>Total</td>`;
+  stages.forEach((s,i) => { html += `<td>${Object.values(s.holders).reduce((a,b)=>a+b,0).toFixed(1)}%</td>`; });
+  html += '</tr></table>';
+  el.innerHTML = html;
+}
+
+function renderVestResults(){
+  const el = document.getElementById('vestResults');
+  const inputs = document.querySelectorAll('#vestRows input');
+  let html = '';
+  founders.forEach((f, i) => {
+    const months = inputs[i] ? (parseFloat(inputs[i].value) || 0) : 0;
+    let vested;
+    if (months < 12) vested = 0;
+    else vested = Math.min(100, (months/48)*100);
+    html += `
+      <div class="vest-row">
+        <div class="vest-name"><span>${f.name || 'Founder ' + (i+1)}</span><span class="vest-pct">${vested.toFixed(1)}% vested</span></div>
+        <div class="bar-wrap"><div class="bar-fill" style="width:${vested}%"></div></div>
+      </div>
+    `;
+  });
+  el.innerHTML = html || '<div class="pill">Add founders above</div>';
+}
+
+document.getElementById('poolPct').addEventListener('input', compute);
+[1,2,3].forEach(n => {
+  ['amount','premoney','pool'].forEach(f => {
+    document.getElementById('r'+n+'_'+f).addEventListener('input', compute);
+  });
+});
+document.getElementById('buildBtn').addEventListener('click', () => {
+  compute();
+  document.querySelector('.results').scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+renderFounderRows();
+renderVestRows();
+compute();
+</script>
+</body>
+</html>
