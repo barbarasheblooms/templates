@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Model Canvas · SheBlooms</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#5B75FE;--ink:#0a0a08;--soft:#f5f5f2;--border:#e0e0db;--muted:#666;--good:#0f6e56;--good-bg:#e1f5ee;--amber:#b45309;--amber-bg:#fef3c7;--red:#9f1d3a;--red-bg:#fbeaf0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--soft);color:var(--ink);font-family:'DM Sans',sans-serif;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding:40px 24px 90px}
+.brand{margin-bottom:20px}
+.logo{font-family:'Instrument Serif',serif;font-size:22px;color:var(--blue)}
+.meta{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+h1{font-family:'DM Serif Display',serif;font-size:30px;line-height:1.2;margin:0 0 10px}
+.subtitle{font-size:15.5px;color:var(--muted);margin:0 0 28px;max-width:760px}
+
+.canvas{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;grid-template-rows:auto auto auto;gap:10px;
+  grid-template-areas:
+    "partners activities valueprop relationship segments"
+    "partners resources  valueprop channels     segments"
+    "cost cost cost revenue revenue";
+}
+.block{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;min-height:150px}
+.block.tall{min-height:320px}
+.block.short{min-height:150px}
+.block.bottom{min-height:190px}
+.block label{font-size:12.5px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.03em;margin-bottom:6px;display:block}
+.block .hint{font-size:12px;color:var(--muted);margin-bottom:8px}
+.block textarea{flex:1;width:100%;resize:none;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);background:transparent;line-height:1.45}
+.block textarea::placeholder{color:#b7b7b0}
+#b-partners{grid-area:partners}
+#b-activities{grid-area:activities}
+#b-resources{grid-area:resources}
+#b-valueprop{grid-area:valueprop;border-color:var(--blue);border-width:2px}
+#b-relationship{grid-area:relationship}
+#b-channels{grid-area:channels}
+#b-segments{grid-area:segments}
+#b-cost{grid-area:cost}
+#b-revenue{grid-area:revenue}
+
+@media (max-width:900px){
+  .canvas{grid-template-columns:1fr 1fr;grid-template-areas:
+    "partners activities" "partners resources" "valueprop valueprop" "relationship channels" "segments segments" "cost revenue"}
+}
+
+.actions{margin:22px 0;display:flex;gap:12px;flex-wrap:wrap}
+.btn{border:none;padding:11px 20px;border-radius:6px;font-size:14px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:600}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-secondary{background:#fff;border:1px solid var(--border);color:var(--ink)}
+
+#report{margin-top:8px}
+.score-bar-wrap{background:#fff;border:1px solid var(--border);border-radius:10px;padding:20px 22px;margin-bottom:16px}
+.score-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.score-row .big{font-family:'DM Serif Display',serif;font-size:28px}
+.bar-track{background:var(--soft);border-radius:20px;height:10px;overflow:hidden}
+.bar-fill{height:100%;border-radius:20px;background:var(--blue);transition:width .3s}
+.check{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px}
+.check .icon{flex-shrink:0;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;margin-top:1px}
+.icon-pass{background:var(--good)}
+.icon-fail{background:var(--red)}
+.icon-warn{background:var(--amber)}
+.check .txt b{display:block;font-size:14.5px;margin-bottom:2px}
+.check .txt span{font-size:13.5px;color:#444}
+.print-btn{margin-top:10px;background:var(--blue);color:#fff;border:none;padding:10px 18px;border-radius:6px;font-size:14px;font-family:'DM Sans',sans-serif;cursor:pointer}
+@media print{.actions,.print-btn{display:none}.block textarea{color:#000}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><span class="logo">SheBlooms</span></div>
+  <div class="meta">Business Model · Interactive Template</div>
+  <h1>Business Model Canvas</h1>
+  <p class="subtitle">Fill in each of the nine blocks below. Start with Customer Segments and Value Proposition, then Channels and Customer Relationships, then Revenue Streams, then the three blocks on the left, then Cost Structure. When you are done, run the check to see how complete and coherent your model is.</p>
+
+  <div class="canvas">
+    <div class="block tall" id="b-partners">
+      <label>Key Partnerships</label>
+      <div class="hint">Who do you rely on outside your team, and what do they give you?</div>
+      <textarea placeholder="e.g. Payment processor, logistics partner, distribution partner, key supplier..."></textarea>
+    </div>
+    <div class="block short" id="b-activities">
+      <label>Key Activities</label>
+      <div class="hint">The 3 to 5 things you must do every week for this to work.</div>
+      <textarea placeholder="e.g. Product development, direct sales, content production..."></textarea>
+    </div>
+    <div class="block short" id="b-resources">
+      <label>Key Resources</label>
+      <div class="hint">Assets that are hardest to replace.</div>
+      <textarea placeholder="e.g. Proprietary data, brand, patents, specialist team..."></textarea>
+    </div>
+    <div class="block tall" id="b-valueprop">
+      <label>Value Proposition</label>
+      <div class="hint">The specific problem you solve, and why your way is better.</div>
+      <textarea placeholder="e.g. Cuts reporting time from 6 hours to 20 minutes, no accounting background needed..."></textarea>
+    </div>
+    <div class="block short" id="b-relationship">
+      <label>Customer Relationship</label>
+      <div class="hint">Self-service, personal assistance, community, automated?</div>
+      <textarea placeholder="e.g. Self-service onboarding with a dedicated success manager for paid accounts..."></textarea>
+    </div>
+    <div class="block short" id="b-channels">
+      <label>Channels</label>
+      <div class="hint">How value actually reaches customers, tested so far.</div>
+      <textarea placeholder="e.g. Instagram organic, referrals, direct sales calls..."></textarea>
+    </div>
+    <div class="block tall" id="b-segments">
+      <label>Customer Segments</label>
+      <div class="hint">Who specifically you serve, not "everyone."</div>
+      <textarea placeholder="e.g. Solo founders running a service business in year 1 to 3..."></textarea>
+    </div>
+    <div class="block bottom" id="b-cost">
+      <label>Cost Structure</label>
+      <div class="hint">Fixed and variable costs behind the activities and resources above.</div>
+      <textarea placeholder="e.g. Fixed: 2 engineers, hosting. Variable: payment processing fees, customer support per account..."></textarea>
+    </div>
+    <div class="block bottom" id="b-revenue">
+      <label>Revenue Streams</label>
+      <div class="hint">How each segment pays: mechanism, price, frequency.</div>
+      <textarea placeholder="e.g. Subscription, $29/month per account, primary revenue stream today..."></textarea>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-primary" id="checkBtn">Check my model</button>
+    <button class="btn btn-secondary" id="printBtn">Print / Save as PDF</button>
+  </div>
+
+  <div id="report"></div>
+</div>
+
+<script>
+const BLOCKS = [
+  {id:'partners', name:'Key Partnerships'},
+  {id:'activities', name:'Key Activities'},
+  {id:'resources', name:'Key Resources'},
+  {id:'valueprop', name:'Value Proposition'},
+  {id:'relationship', name:'Customer Relationship'},
+  {id:'channels', name:'Channels'},
+  {id:'segments', name:'Customer Segments'},
+  {id:'cost', name:'Cost Structure'},
+  {id:'revenue', name:'Revenue Streams'},
+];
+
+const STOPWORDS = new Set(['the','a','an','and','or','of','to','for','with','on','in','at','is','are','be','your','you','our','we','that','this','it','as','by','per','from','not','just','will','can','their','them','they','who','what','how','so','but','if','when','then','than','into','over','out','up','down','all','more','most','some','each','every','without']);
+
+function words(t){ return (t||'').trim().split(/\s+/).filter(Boolean); }
+function keywordSet(t){
+  return new Set(words((t||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ')).filter(w=>w.length>3 && !STOPWORDS.has(w)));
+}
+function overlap(a,b){
+  let n=0; for(const w of a){ if(b.has(w)) n++; }
+  return n;
+}
+
+const REVENUE_MECHANISMS = ['subscription','transaction','commission','license','licensing','freemium','marketplace','one-time','one time','advertising','ads','fee','royalty','franchise'];
+
+document.getElementById('checkBtn').addEventListener('click', runCheck);
+document.getElementById('printBtn').addEventListener('click', ()=>window.print());
+
+function getValues(){
+  const v = {};
+  BLOCKS.forEach(b=>{ v[b.id] = document.querySelector('#b-'+b.id+' textarea').value; });
+  return v;
+}
+
+function runCheck(){
+  const v = getValues();
+  const checks = [];
+
+  // 1. Completeness per block
+  let filledCount = 0, thinCount = 0;
+  BLOCKS.forEach(b=>{
+    const w = words(v[b.id]).length;
+    if(w >= 12) filledCount++;
+    else if(w > 0) thinCount++;
+  });
+  const completeness = Math.round((filledCount / BLOCKS.length) * 100);
+
+  if(filledCount === BLOCKS.length){
+    checks.push({status:'pass', title:'All nine blocks are filled in with real detail', desc:'Every block has enough written to describe something specific, not just a placeholder word.'});
+  } else {
+    const missing = BLOCKS.filter(b=>words(v[b.id]).length < 12).map(b=>b.name);
+    checks.push({status:'fail', title:filledCount+' of 9 blocks have enough detail', desc:'Add more specifics to: '+missing.join(', ')+'. Aim for at least a full sentence or two per block.'});
+  }
+
+  // 2. Customer Segments specificity (not just "everyone")
+  const genericSeg = /\b(everyone|everybody|anyone|all people|general public|masses)\b/i.test(v.segments);
+  if(words(v.segments).length===0){
+    checks.push({status:'fail', title:'Customer Segments is empty', desc:'Name the specific group you serve first, everything else depends on this block.'});
+  } else if(genericSeg){
+    checks.push({status:'warn', title:'Customer Segments looks too broad', desc:'Terms like "everyone" or "the general public" are not specific enough to design a price or a channel around. Name a narrower group.'});
+  } else {
+    checks.push({status:'pass', title:'Customer Segments is specific', desc:'The segment described is narrow enough to design a value proposition and a price around.'});
+  }
+
+  // 3. Segments <-> Value Proposition both present
+  if(words(v.segments).length>0 && words(v.valueprop).length===0){
+    checks.push({status:'fail', title:'Value Proposition is missing for your Customer Segment', desc:'You have named who you serve but not the specific problem you solve for them.'});
+  } else if(words(v.valueprop).length>0 && words(v.segments).length===0){
+    checks.push({status:'fail', title:'Value Proposition has no Customer Segment behind it', desc:'A value proposition needs a specific "for whom." Fill in Customer Segments.'});
+  }
+
+  // 4. Channels <-> Customer Relationship consistency
+  const channelsFilled = words(v.channels).length>0;
+  const relFilled = words(v.relationship).length>0;
+  if(channelsFilled !== relFilled){
+    checks.push({status:'warn', title:'Channels and Customer Relationship are out of sync', desc:'One of these two blocks is filled in and the other is not. They describe two sides of the same customer journey, fill in both.'});
+  } else if(channelsFilled && relFilled){
+    const selfServiceClaim = /self.?service|automated/i.test(v.relationship);
+    const manualChannel = /sales call|direct sales|cold (email|call|outreach)|personal outreach/i.test(v.channels);
+    if(selfServiceClaim && manualChannel){
+      checks.push({status:'warn', title:'Self-service claim may not match your Channels', desc:'Customer Relationship describes a self-service or automated model, but Channels mentions manual sales activity. Make sure these describe the same buying motion.'});
+    } else {
+      checks.push({status:'pass', title:'Channels and Customer Relationship are both filled in', desc:'Both sides of how you reach and keep customers are described.'});
+    }
+  }
+
+  // 5. Revenue Streams: has a concrete number
+  const hasNumber = /(\$|r\$|€|£)\s?\d|\d+\s?(%|percent)|\d+\s?(per|\/)\s?(month|year|user|transaction|deal)/i.test(v.revenue);
+  if(words(v.revenue).length===0){
+    checks.push({status:'fail', title:'Revenue Streams is empty', desc:'This is the block investors read most closely. Add a mechanism, a price, and a frequency.'});
+  } else if(!hasNumber){
+    checks.push({status:'warn', title:'Revenue Streams has no concrete price or number', desc:'Add an actual price point, percentage, or frequency, for example "$29 per month" rather than describing the mechanism only.'});
+  } else {
+    checks.push({status:'pass', title:'Revenue Streams includes a concrete number', desc:'A specific price or rate is stated, which is what investors look for first in this block.'});
+  }
+
+  // 6. Revenue Streams: single primary mechanism, not a grab-bag
+  const rLower = (v.revenue||'').toLowerCase();
+  const mechanismsFound = REVENUE_MECHANISMS.filter(m=>rLower.includes(m));
+  const distinctMechanisms = new Set(mechanismsFound.map(m=> m==='one-time'||m==='one time' ? 'one-time' : m==='ads'?'advertising':m));
+  const hasPrimaryWord = /primary|main revenue|core revenue/i.test(v.revenue);
+  if(distinctMechanisms.size >= 3 && !hasPrimaryWord){
+    checks.push({status:'warn', title:'Revenue Streams lists several mechanisms with no clear primary one', desc:'Mentioning '+Array.from(distinctMechanisms).join(', ')+' without saying which is primary today can read as undecided. Name the one that drives most of your revenue now.'});
+  }
+
+  // 7. Cost Structure connects to Key Activities / Key Resources
+  if(words(v.cost).length===0){
+    checks.push({status:'fail', title:'Cost Structure is empty', desc:'List the fixed and variable costs behind the activities and resources you described.'});
+  } else {
+    const costKw = keywordSet(v.cost);
+    const actKw = keywordSet(v.activities);
+    const resKw = keywordSet(v.resources);
+    const linkScore = overlap(costKw, actKw) + overlap(costKw, resKw);
+    if(linkScore === 0 && (actKw.size>0 || resKw.size>0)){
+      checks.push({status:'warn', title:'Cost Structure does not clearly connect to Key Activities or Key Resources', desc:'None of the words in Cost Structure match what you wrote in Key Activities or Key Resources. Make sure your biggest costs are the ones tied to what you said you actually do.'});
+    } else {
+      checks.push({status:'pass', title:'Cost Structure connects to your Key Activities and Resources', desc:'The costs described trace back to the activities and resources named earlier in the canvas.'});
+    }
+  }
+
+  // 8. Key Partnerships specificity
+  if(words(v.partners).length===0){
+    checks.push({status:'warn', title:'Key Partnerships is empty', desc:'If you truly have no external dependencies yet, that is fine to state, but write that explicitly rather than leaving it blank.'});
+  }
+
+  // 9. Key Activities count sanity check
+  const actCount = (v.activities||'').split(/,|\n|;/).map(s=>s.trim()).filter(Boolean).length;
+  if(actCount > 6){
+    checks.push({status:'warn', title:'Key Activities lists a lot of items', desc:'A long list of activities often means the business is not yet focused. Try narrowing to the 3 to 5 things that matter most.'});
+  }
+
+  renderReport(completeness, checks);
+}
+
+function renderReport(completeness, checks){
+  const passCount = checks.filter(c=>c.status==='pass').length;
+  const failCount = checks.filter(c=>c.status==='fail').length;
+  const warnCount = checks.filter(c=>c.status==='warn').length;
+  let overall, overallColor;
+  if(failCount>0){ overall='Needs work before this is pitch-ready'; overallColor='var(--red)'; }
+  else if(warnCount>0){ overall='Mostly coherent, a few gaps to tighten'; overallColor='var(--amber)'; }
+  else { overall='Coherent and complete'; overallColor='var(--good)'; }
+
+  let html = '<div class="score-bar-wrap">'
+    + '<div class="score-row"><div class="big">'+completeness+'% complete</div>'
+    + '<div style="color:'+overallColor+';font-weight:700">'+overall+'</div></div>'
+    + '<div class="bar-track"><div class="bar-fill" style="width:'+completeness+'%"></div></div>'
+    + '</div>';
+
+  checks.forEach(c=>{
+    const iconClass = c.status==='pass' ? 'icon-pass' : c.status==='warn' ? 'icon-warn' : 'icon-fail';
+    const icon = c.status==='pass' ? '✓' : c.status==='warn' ? '!' : '×';
+    html += '<div class="check"><div class="icon '+iconClass+'">'+icon+'</div><div class="txt"><b>'+escapeHtml(c.title)+'</b><span>'+escapeHtml(c.desc)+'</span></div></div>';
+  });
+
+  document.getElementById('report').innerHTML = html;
+  document.getElementById('report').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function escapeHtml(s){
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+</body>
+</html>
